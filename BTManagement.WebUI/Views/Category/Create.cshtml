@@ -1,0 +1,29 @@
+﻿@model Categories
+
+@{
+    ViewData["Title"] = "Kategori Ekle";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button> &nbsp;&nbsp;&nbsp;
+                @* <a href="/Category/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
+                <a href="/kategoriler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

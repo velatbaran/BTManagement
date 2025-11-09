@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<div class="row text-center">
+    <div class="col-md-12 grid-margin transparent">
+        <div class="row mt-4">
+            <div class="col-md-4 stretch-card transparent">
+                <div class="card card-tale">
+                    <div class="card-body">
+                        <h3 class="mb-4">Toplam AIO Sayısı</h3>
+                        <h4 class="fs-30 mb-2">@ViewData["AIO"]</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card transparent">
+                <div class="card card-dark-blue">
+                    <div class="card-body">
+                        <h3 class="mb-4">Toplam Laptop Sayısı</h3>
+                        <h4 class="fs-30 mb-2">@ViewData["LAPTOP"]</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card transparent">
+                <div class="card card-light-ol">
+                    <div class="card-body">
+                        <h3 class="mb-4">Toplam Masaüstü Sayısı</h3>
+                        <h4 class="fs-30 mb-2">@ViewData["MASAÜSTÜ"]</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4 mt-4">
+            <div class="col-md-4 stretch-card transparent">
+                <div class="card card-light-danger">
+                    <div class="card-body">
+                        <h3 class="mb-4">Toplam Network Yazıcı Sayısı</h3>
+                        <h4 class="fs-30 mb-2">@ViewData["NETWORK YAZICI"]</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card transparent">
+                <div class="card card-tale">
+                    <div class="card-body">
+                        <h3 class="mb-4">Toplam Tablet Sayısı</h3>
+                        <h4 class="fs-30 mb-2">@ViewData["TABLET"]</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

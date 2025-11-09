@@ -1,0 +1,90 @@
+﻿@model Firm
+
+@{
+    ViewData["Title"] = "Firma Ekle";
+}
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Authorized" class="control-label"></label>
+                <input asp-for="Authorized" class="form-control" />
+                <span asp-validation-for="Authorized" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirmKindId" class="control-label"></label>
+                <select asp-for="FirmKindId" class="form-control" asp-items="ViewBag.FirmKindId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecordNo" class="control-label"></label>
+                <input asp-for="RecordNo" class="form-control" />
+                <span asp-validation-for="RecordNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxOffice" class="control-label"></label>
+                <input asp-for="TaxOffice" class="form-control" />
+                <span asp-validation-for="TaxOffice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxNo" class="control-label"></label>
+                <input asp-for="TaxNo" class="form-control" />
+                <span asp-validation-for="TaxNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TcNo" class="control-label"></label>
+                <input type="number" asp-for="TcNo" class="form-control" />
+                <span asp-validation-for="TcNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input type="tel" asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <textarea asp-for="Address" class="form-control" cols="3" rows="3"></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Eposta" class="control-label"></label>
+                <input type="email" asp-for="Eposta" class="form-control" />
+                <span asp-validation-for="Eposta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WebAddress" class="control-label"></label>
+                <input asp-for="WebAddress" class="form-control" />
+                <span asp-validation-for="WebAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BankName" class="control-label"></label>
+                <input asp-for="BankName" class="form-control" />
+                <span asp-validation-for="BankName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IbanNo" class="control-label"></label>
+                <input asp-for="IbanNo" class="form-control" />
+                <span asp-validation-for="IbanNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button>&nbsp;&nbsp;&nbsp;
+                @* <a href="/Firms/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
+                <a href="/firmalar" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

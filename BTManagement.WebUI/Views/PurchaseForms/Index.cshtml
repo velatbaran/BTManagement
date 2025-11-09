@@ -1,0 +1,95 @@
+﻿@model IEnumerable<PurchaseForm>
+
+@{
+    ViewData["Title"] = "Satın Alma Şekilleri";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary" title="YeniEkle">
+        <i class="fa-solid fa-plus"></i> Yeni Ekle
+    </a>
+</p>
+
+<style>
+    .table {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+    }
+
+        .table th {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .table td {
+            font-size: 11px;
+        }
+
+</style>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Name)</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => item.Name)</td>
+                <td>
+                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                    </a>
+                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                    <input type="hidden" name="id" id="fileId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Modal tetikleme
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                $('#fileId').val(button.data('file-id'));
+                $('#fileName').text(button.data('file-name'));
+            });
+        });
+    </script>
+}

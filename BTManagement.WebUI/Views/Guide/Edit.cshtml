@@ -1,0 +1,51 @@
+﻿@model MyGuide
+
+@{
+    ViewData["Title"] = "Rehber Güncelle";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="Created" />
+            <div class="form-group">
+                <label asp-for="NameSurname" class="control-label"></label>
+                <input asp-for="NameSurname" class="form-control" />
+                <span asp-validation-for="NameSurname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="InternalNo" class="control-label"></label>
+                <input asp-for="InternalNo" class="form-control" />
+                <span asp-validation-for="InternalNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CepNo" class="control-label"></label>
+                <input asp-for="CepNo" class="form-control" />
+                <span asp-validation-for="CepNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Güncelle" class="btn btn-outline-success btn-rounded" title="Güncelle"><i class="fa-solid fa-pen-to-square"></i> Güncelle</button> &nbsp;&nbsp;&nbsp;
+                @* <a href="/Guide/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
+                <a href="/rehberim" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

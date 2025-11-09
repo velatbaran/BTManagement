@@ -1,0 +1,283 @@
+﻿@model IEnumerable<Purchases>
+
+@{
+    ViewData["Title"] = "Satın Alınanların Listesi";
+}
+
+<link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
+<link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+<link href="~/datatable/datatables.min.css" rel="stylesheet" />
+
+<div class="row mb-3">
+    <div class="col-md-9">
+        <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
+            <i class="fa-solid fa-plus"></i> Yeni Ekle
+        </a>
+    </div>
+    <div class="col-md-3 text-end">
+        <h4>
+            Alımların Toplamı :
+            <button id="allTotalBtn" class="btn btn-success btn-rounded" style="font-size:18px">₺</button>
+        </h4>
+    </div>
+</div>
+
+<style>
+    .table {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+    }
+
+        .table th {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .table td {
+            font-size: 11px;
+        }
+</style>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.FileNo)</th>
+            <th>@Html.DisplayNameFor(m => m.WorkingName)</th>
+            <th>@Html.DisplayNameFor(m => m.FirmId)</th>
+            <th class="text-left">@Html.DisplayNameFor(m => m.Price)</th>
+            <th>@Html.DisplayNameFor(m => m.PurchaseDate)</th>
+            <th>@Html.DisplayNameFor(m => m.PurchaseForms.Name)</th>
+            <th>@Html.DisplayNameFor(m => m.PurchaseKinds.Name)</th>
+            <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
+            <th>@Html.DisplayNameFor(m => m.Description)</th>
+            <th>@Html.DisplayNameFor(m => m.FilePath)</th>
+            <th>İşlemler</th>
+        </tr>
+        <tr>
+            <th><input type="text" placeholder="Ara Dosya No" /></th>
+            <th><input type="text" placeholder="Ara İşin Adı" /></th>
+            <th><input type="text" placeholder="Ara Firma" /></th>
+            <th class="text-left"><input type="text" placeholder="Ara Fiyat" /></th>
+            <th><input type="text" placeholder="Ara Satın Alma Tarihi" /></th>
+            <th><input type="text" placeholder="Ara Satın Alma Şekli" /></th>
+            <th><input type="text" placeholder="Ara Satın Alma Türü" /></th>
+            <th><input type="text" placeholder="Ara Satın Alma Tipi" /></th>
+            <th><input type="text" placeholder="Ara Açıklama" /></th>
+            <th><input type="text" placeholder="Ara Dosya Yolu" /></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => item.FileNo)</td>
+                <td>@Html.DisplayFor(m => item.WorkingName)</td>
+                <td>@Html.DisplayFor(m => item.Firms.Name)</td>
+                <td data-value="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="text-left">
+                    @item.Price.ToString("N2", new System.Globalization.CultureInfo("tr-TR"))
+                </td>
+                <td>@Html.DisplayFor(m => item.PurchaseDate)</td>
+                <td>@Html.DisplayFor(m => item.PurchaseForms.Name)</td>
+                <td>@Html.DisplayFor(m => item.PurchaseKinds.Name)</td>
+                <td>@Html.DisplayFor(m => item.PurchaseTypes.Name)</td>
+                <td>@Html.DisplayFor(m => item.Description)</td>
+                <td>@Html.DisplayFor(m => item.FilePath)</td>
+                <td>
+                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                    </a>
+                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-file-id="@item.Id" data-file-name="@item.WorkingName" title="Sil">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                    <a class="btn btn-outline-primary btn-sm copy-path-btn" data-path="@item.FilePath" title="Dosya Yolunu Kopyala">
+                        <i class="fa-solid fa-file"></i> Dosya Yolunu Kopyala
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="9" class="text-end">Toplam:</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
+    <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex align-items-center">
+            <i id="toastIcon" class="fa-solid fa-check me-2"></i>
+            <div class="toast-body"></div>
+            <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                    <input type="hidden" name="id" id="fileId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/datatable/datatables.min.js"></script>
+    <script src="~/datatable/datatables.responsive.min.js"></script>
+    <script src="~/datatable/datatables.buttons.min.js"></script>
+    <script src="~/datatable/buttons.html5.min.js"></script>
+    <script src="~/datatable/buttons.print.min.js"></script>
+    <script src="~/datatable/jszip.min.js"></script>
+    <script src="~/datatable/pdfmake.min.js"></script>
+    <script src="~/datatable/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Modal tetikleme
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                $('#fileId').val(button.data('file-id'));
+                $('#fileName').text(button.data('file-name'));
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var totalAll = @ViewBag.TotalAll; // Controller'dan tüm kayıtların toplamı
+
+            // Sayfa yüklendiğinde butona tüm kayıtların toplamını yaz
+            $("#allTotalBtn").text(
+                totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+            );
+
+        var table = $('#myTable').DataTable({
+            dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
+            buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+            responsive: { details: { type: 'column' } },
+            columnDefs: [
+                { className: 'control', orderable: false, targets: 0 },
+                { orderable: false, targets: -1 }
+            ],
+            order: [[1, 'asc']],
+            language: { url: '/datatable/tr.json' }
+        });
+
+            // Kolon bazlı filtreleme
+            $('#myTable thead tr:eq(1) th').each(function (i) {
+                $('input', this).on('keyup change clear', function () {
+                    var value = this.value;
+
+                    if (table.column(i).search() !== value) {
+                        table.column(i).search(value).draw();
+
+                        // Eğer herhangi bir filtre aktifse filtrelenmiş toplamı butona yaz
+                        var anyFilter = table.columns().search().reduce(function (acc, curr) {
+                            return acc || curr.length > 0;
+                        }, false);
+
+                        if (anyFilter) {
+                            // Filtrelenmiş satırların toplamını hesapla
+                            var colIndex = 3; // Price sütunu
+                            var filteredTotal = table
+                                .column(colIndex, { search: 'applied' })
+                                .nodes()
+                                .toArray()
+                                .reduce(function (a, node) {
+                                    return a + (parseFloat($(node).data('value')) || 0);
+                                }, 0);
+
+                            $("#allTotalBtn").text(
+                                filteredTotal.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+                            );
+                        } else {
+                            // Filtre yoksa tüm kayıtların toplamını göster
+                            $("#allTotalBtn").text(
+                                totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+                            );
+                        }
+                    }
+                });
+            });
+        });
+        ;
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var toastEl = document.getElementById('copyToast');
+            var toastBody = toastEl.querySelector('.toast-body');
+            var toastIcon = toastEl.querySelector('#toastIcon');
+
+            var toast = new bootstrap.Toast(toastEl, {
+                delay: 10000 // 10 saniye
+            });
+
+            document.querySelector('#myTable').addEventListener('click', function(e){
+                var btn = e.target.closest('.copy-path-btn');
+                if(!btn) return;
+
+                var path = btn.getAttribute('data-path');
+                if(!path) return;
+
+                function showToast(success){
+                    if(success){
+                        toastBody.textContent = 'Dosya yolu kopyalandı!';
+                        toastEl.classList.remove('bg-danger');
+                        toastEl.classList.add('bg-success');
+                        toastIcon.className = 'fa-solid fa-check me-2';
+                    } else {
+                        toastBody.textContent = 'Kopyalama başarısız!';
+                        toastEl.classList.remove('bg-success');
+                        toastEl.classList.add('bg-danger');
+                        toastIcon.className = 'fa-solid fa-xmark me-2';
+                    }
+                    toast.show();
+                }
+
+                // Clipboard API
+                if(navigator.clipboard){
+                    navigator.clipboard.writeText(path).then(function(){
+                        showToast(true);
+                    }).catch(function(){
+                        showToast(false);
+                    });
+                } else {
+                    var input = document.createElement('input');
+                    document.body.appendChild(input);
+                    input.value = path;
+                    input.select();
+                    var success = false;
+                    try { success = document.execCommand('copy'); } catch(e){ success = false; }
+                    document.body.removeChild(input);
+                    showToast(success);
+                }
+            });
+        });
+    </script>
+    }
+

@@ -1,0 +1,66 @@
+﻿@model WorksDoneAndImagesViewModel
+@{
+    ViewData["Title"] = "Yapılan İş Ekle";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Work" class="control-label"></label>
+                <input asp-for="Work" class="form-control" />
+                <span asp-validation-for="Work" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="State" class="control-label"></label>
+                <textarea asp-for="State" class="form-control" rows="4" cols="4"></textarea>
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Files" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="Files" class="custom-file-input" id="customFile" multiple>
+                    <label class="custom-file-label" for="customFile">Resim seçiniz (çoklu seçim yapabilirsiniz)</label>
+                </div>
+                <span asp-validation-for="Files" class="text-danger"></span>
+                <small class="form-text text-muted">Birden fazla resim seçmek için CTRL tuşuna basılı tutarak tıklayın.</small>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button> &nbsp;&nbsp;&nbsp;
+                @* <a href="/WorkDone/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
+                <a href="/yapilanisler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Dosya seçildiğinde dosya adlarını göster
+        $('.custom-file-input').on('change', function() {
+            var files = $(this)[0].files;
+            var fileNames = [];
+
+            for (var i = 0; i < files.length; i++) {
+                fileNames.push(files[i].name);
+            }
+
+            var label = $(this).next('.custom-file-label');
+            if (files.length > 1) {
+                label.html(files.length + ' dosya seçildi: ' + fileNames.join(', '));
+            } else if (files.length == 1) {
+                label.html(fileNames[0]);
+            } else {
+                label.html('Resim seçiniz (çoklu seçim yapabilirsiniz)');
+            }
+        });
+    </script>
+}

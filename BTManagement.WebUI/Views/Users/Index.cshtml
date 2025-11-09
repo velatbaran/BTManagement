@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Users>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
+        <i class="fa-solid fa-plus"></i> Yeni Ekle
+    </a>
+</p>
+
+<style>
+    .table {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+    }
+
+        .table th {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .table td {
+            font-size: 11px;
+        }
+
+</style>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.NameSurname)</th>
+            <th>@Html.DisplayNameFor(m => m.Username)</th>
+            <th>@Html.DisplayNameFor(m => m.IsAdmin)</th>
+            <th>@Html.DisplayNameFor(m => m.IsActive)</th>
+            <th>İşlemler</th>
+        </tr>
+        <tr>
+            <th><input type="text" placeholder="Ara Ad Soyad" /></th>
+            <th><input type="text" placeholder="Ara Kullanıcı Adı" /></th>
+            <th><input type="text" placeholder="Ara Admin Mi" /></th>
+            <th><input type="text" placeholder="Ara Aktif Mi" /></th>
+            <th></th> <!-- İşlemler sütunu filtre yok -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => item.NameSurname)</td>
+                <td>@Html.DisplayFor(m => item.Username)</td>
+                <td>@Html.DisplayFor(m => item.IsAdmin)</td>
+                <td>@Html.DisplayFor(m => item.IsActive)</td>
+                <td>
+                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                    </a>
+                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-file-id="@item.Id" data-file-name="@item.NameSurname" title="Sil">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                    <input type="hidden" name="id" id="fileId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
+    <script src="~/datatable/datatables.min.js"></script>
+    <script src="~/datatable/datatables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Modal tetikleme
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                $('#fileId').val(button.data('file-id'));
+                $('#fileName').text(button.data('file-name'));
+            });
+
+            // DataTable başlat
+            var table = $('#myTable').DataTable({
+          dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
+                language: { url: '/datatable/tr.json' }
+            });
+
+            // Header altındaki inputlar ile kolon bazlı filtreleme
+            $('#myTable thead tr:eq(1) th').each(function (i) {
+                $('input', this).on('keyup change clear', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i).search(this.value).draw();
+                    }
+                });
+            });
+        });
+    </script>
+}

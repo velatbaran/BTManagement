@@ -1,0 +1,245 @@
+﻿@using NToastNotify
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BT Yönetimi - @ViewData["Title"]</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/template/vendors/feather/feather.css">
+    <link rel="stylesheet" href="~/template/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/template/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/template/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/template/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="~/template/js/select.dataTables.min.css">
+    <link rel="stylesheet" href="~/template/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/template/images/dsi24.png" />
+    <style>
+            /* 🔹 Menüye tıklanınca aktif rengi (örneğin mavi) */
+            .sidebar .nav .nav-link.active {
+                color: white !important;
+                font-weight: 600;
+                background-color: #f0f8ff;
+            }
+
+            /* 🔹 Hover efekti */
+            .sidebar .nav .nav-link:hover {
+                color: black !important;
+            }
+
+    </style>
+
+</head>
+<body>
+    <div class="container-scroller">
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                @* <a class="navbar-brand brand-logo mr-5" href="/Home/Index" title="BT Yönetimi">BT Yönetimi</a> *@
+                <a class="navbar-brand brand-logo mr-5" href="/anasayfa" title="BT Yönetimi">BT Yönetimi</a>
+                @* <a class="navbar-brand brand-logo-mini" href="/Home/Index" title="Bt Yönetimi"><img src="~/template/images/dsi24.png" width="75" height="75" /></a> *@
+                <a class="navbar-brand brand-logo-mini" href="/anasayfa" title="Bt Yönetimi"><img src="~/template/images/dsi24.png" width="75" height="75" /></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="icon-menu"></span>
+                </button>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                            <img src="~/template/images/user.png" width="25" height="25"> @Context.User.Identity.Name
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                            @* <a class="dropdown-item" href="/Account/MyProfile" title="Profilim"> *@
+                            <a class="dropdown-item" href="/profilim" title="Profilim">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profilim
+                            </a>
+                            @* <a class="dropdown-item" href="/Account/ChangePassword" title="Şifremi Değiştir"> *@
+                            <a class="dropdown-item" href="/sifremidegistir" title="Şifremi Değiştir">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Şifre Değiştir
+                            </a>
+                            <a class="dropdown-item" href="/cikis" title="Çıkış">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Çıkış
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="icon-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        @* <a class="nav-link" href="/Home/Index" title="Anasayfa"> *@
+                        <a class="nav-link" href="/anasayfa" title="Anasayfa">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Anasayfa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic-1" aria-expanded="false" aria-controls="ui-basic-1" title="Envanter Yönetimi">
+                            <i class="fa-solid fa-desktop mr-2"></i>
+                            <span class="menu-title">Envanter Yönetimi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic-1">
+                            <ul class="nav flex-column sub-menu">
+                                @* <li class="nav-item"><a class="nav-link" href="/Products/Index" title="Envanter Listesi">Envanter Listesi</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/urunler" title="Envanter Listesi">Envanter Listesi</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/Category/Index" title="Kategori">Kategoriler</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/kategoriler" title="Kategori">Kategoriler</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic-2" aria-expanded="false" aria-controls="ui-basic-2" title="Rehber Yönetimi">
+                            <i class="fa-solid fa-phone mr-2"></i>
+                            <span class="menu-title">Rehber Yönetimi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic-2">
+                            <ul class="nav flex-column sub-menu">
+                                @* <li class="nav-item"><a class="nav-link" href="/Guide/Index" title="Rehber Listesi">Rehber Listesi</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/rehberim" title="Rehber Listesi">Rehber Listesi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic-3" aria-expanded="false" aria-controls="ui-basic-2" title="Alımların Yönetimi">
+                            <i class="fa-solid fa-money-bill mr-2"></i>
+                            <span class="menu-title">Alımların Yönetimi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic-3">
+                            <ul class="nav flex-column sub-menu">
+                                @* <li class="nav-item"><a class="nav-link" href="/Purchases/Index" title="Tüm Alımlar">Tüm Alımlar</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/satinalimlarim" title="Tüm Alımlar">Tüm Alımlar</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/Firms/Index" title="Firmalar">Firmalar</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/firmalar" title="Firmalar">Firmalar</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/FirmKinds/Index" title="Firma Listesi">Firma Türleri</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/firmaturleri" title="Firma Listesi">Firma Türleri</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/PurchaseKinds/Index" title="Alım Süreci">Alım Türleri</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/satinalimturleri" title="Alım Süreci">Alım Türleri</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/PurchaseForms/Index" title="Alım Şekli">Alım Şekli</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/satinalimsekilleri" title="Alım Şekli">Alım Şekli</a></li>
+                                @* <li class="nav-item"><a class="nav-link" href="/PurchaseTypes/Index" title="Alım Tipi">Alım Tipi</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/satinalimtipleri" title="Alım Tipi">Alım Tipi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic-4" aria-expanded="false" aria-controls="ui-basic-2" title="Yapılan İşlerin Yönetimi">
+                            <i class="fa-solid fa-building mr-2"></i>
+                            <span class="menu-title">Yapılan İşlerin Yönetimi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic-4">
+                            <ul class="nav flex-column sub-menu">
+                                @* <li class="nav-item"><a class="nav-link" href="/WorkDone/Index" title="Yapılan İşlerin Listesi">Yapılan İşlerin Listesi</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/yapilanisler" title="Yapılan İşlerin Listesi">Yapılan İşlerin Listesi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic-5" aria-expanded="false" aria-controls="ui-basic-2">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            <span class="menu-title">Kullanıcıların Yönetimi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse text-left" id="ui-basic-5">
+                            <ul class="nav flex-column sub-menu">
+                                @* <li class="nav-item"><a class="nav-link" href="/Users/Index" title="Kullanıcıların Listesi">Kullanıcıların Listesi</a></li> *@
+                                <li class="nav-item"><a class="nav-link" href="/kullanicilar" title="Kullanıcıların Listesi">Kullanıcıların Listesi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row mb-2">
+                        <div class="col-md-12 text-center">
+                            <h2>@ViewData["Title"]</h2>
+                        </div>
+                    </div>
+                    @RenderBody()
+                </div>
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © @DateTime.Now.Year Bilgi Teknolojileri Şube Müdürlüğü tarafından tasarlandı.</span>
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/template/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/template/vendors/chart.js/Chart.min.js"></script>
+    <script src="~/template/js/off-canvas.js"></script>
+     <script src="~/template/js/hoverable-collapse.js"></script>
+    <script src="~/template/js/template.js"></script>
+    <script src="~/template/js/settings.js"></script>
+    <script src="~/template/js/todolist.js"></script>
+    <script src="~/template/js/dashboard.js"></script>
+    <script src="~/template/js/Chart.roundedBarCharts.js"></script>
+    <script>
+        window.onload = function () {
+            // Sayfa tamamen yüklendikten sonra menüleri kapat
+            document.querySelectorAll('.collapse').forEach(function (el) {
+                el.classList.remove('show'); // HTML sınıfını kaldır
+                if (typeof bootstrap !== 'undefined') {
+                    try {
+                        var bsCollapse = bootstrap.Collapse.getInstance(el);
+                        if (bsCollapse) {
+                            bsCollapse.hide(); // Bootstrap üzerinden kapat
+                        } else {
+                            new bootstrap.Collapse(el, { toggle: false });
+                        }
+                    } catch (e) {
+                        // Eski sürümde hata verirse sessiz geç
+                    }
+                }
+            });
+
+            // aria-expanded'ları sıfırla
+            document.querySelectorAll('.nav-link[aria-expanded="true"]').forEach(function (el) {
+                el.setAttribute('aria-expanded', 'false');
+            });
+
+            // Menü tıklanınca aktif hale gelsin
+            document.querySelectorAll('.sidebar .nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+        };
+    </script>
+
+
+    @RenderSection("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
+</body>
+
+</html>
+

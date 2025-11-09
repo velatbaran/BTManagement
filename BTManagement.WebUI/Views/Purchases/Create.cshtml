@@ -1,0 +1,72 @@
+﻿@model Purchases
+
+@{
+    ViewData["Title"] = "Satın Alma Ekle";
+}
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="FileNo" class="control-label"></label>
+                <input asp-for="FileNo" class="form-control" />
+                <span asp-validation-for="FileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkingName" class="control-label"></label>
+                <input asp-for="WorkingName" class="form-control" />
+                <span asp-validation-for="WorkingName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirmId" class="control-label"></label>
+                <select asp-for="FirmId" class="form-control" asp-items="ViewBag.FirmId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseFormId" class="control-label"></label>
+                <select asp-for="PurchaseFormId" class="form-control" asp-items="ViewBag.PurchaseFormId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseKindId" class="control-label"></label>
+                <select asp-for="PurchaseKindId" class="form-control" asp-items="ViewBag.PurchaseKindId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseTypeId" class="control-label"></label>
+                <select asp-for="PurchaseTypeId" class="form-control" asp-items="ViewBag.PurchaseTypeId"></select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" cols="3" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FilePath" class="control-label"></label>
+                <input asp-for="FilePath" class="form-control" />
+                <span asp-validation-for="FilePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseDate" class="control-label"></label>
+                <input type="date" asp-for="PurchaseDate" class="form-control" />
+                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input type="number" asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button>&nbsp;&nbsp;&nbsp;
+                @* <a href="/Purchases/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
+                <a href="/satinalimlarim" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
