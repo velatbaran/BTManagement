@@ -91,6 +91,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/login");
+    return Task.CompletedTask;
+});
 
 app.MapControllerRoute(
     name: "default",

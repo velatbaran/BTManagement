@@ -8,24 +8,51 @@
             <div class="col-md-4 stretch-card transparent">
                 <div class="card card-tale">
                     <div class="card-body">
-                        <h3 class="mb-4">Toplam AIO Sayısı</h3>
-                        <h4 class="fs-30 mb-2">@ViewData["AIO"]</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="mb-4">Toplam AIO Sayısı</h3>
+                                <h4 class="fs-30 mb-2">@ViewData["TOTALAIO"]</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="mb-4">Faal : @ViewData["FAALAIO"]</span> <br />                            
+                                <span class="mb-4">Arızalı : @ViewData["ARIZALIAIO"]</span>  <br />
+                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSAIO"]</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 stretch-card transparent">
                 <div class="card card-dark-blue">
                     <div class="card-body">
-                        <h3 class="mb-4">Toplam Laptop Sayısı</h3>
-                        <h4 class="fs-30 mb-2">@ViewData["LAPTOP"]</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="mb-4">Toplam Laptop Sayısı</h3>
+                                <h4 class="fs-30 mb-2">@ViewData["TOTALLAPTOP"]</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="mb-4">Faal : @ViewData["FAALLAPTOP"]</span> <br />
+                                <span class="mb-4">Arızalı : @ViewData["ARIZALILAPTOP"]</span>  <br />
+                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSLAPTOP"]</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 stretch-card transparent">
                 <div class="card card-light-ol">
                     <div class="card-body">
-                        <h3 class="mb-4">Toplam Masaüstü Sayısı</h3>
-                        <h4 class="fs-30 mb-2">@ViewData["MASAÜSTÜ"]</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="mb-4">Toplam Masaüstü Sayısı</h3>
+                                <h4 class="fs-30 mb-2">@ViewData["TOTALMASAÜSTÜ"]</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="mb-4">Faal : @ViewData["FAALMASAÜSTÜ"]</span> <br />
+                                <span class="mb-4">Arızalı : @ViewData["ARIZALIMASAÜSTÜ"]</span>  <br />
+                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSMASAÜSTÜ"]</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,8 +69,17 @@
             <div class="col-md-4 stretch-card transparent">
                 <div class="card card-tale">
                     <div class="card-body">
-                        <h3 class="mb-4">Toplam Tablet Sayısı</h3>
-                        <h4 class="fs-30 mb-2">@ViewData["TABLET"]</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="mb-4">Toplam Tablet Sayısı</h3>
+                                <h4 class="fs-30 mb-2">@ViewData["TOTALTABLET"]</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="mb-4">Faal : @ViewData["FAALTABLET"]</span> <br />
+                                <span class="mb-4">Arızalı : @ViewData["ARIZALITABLET"]</span>  <br />
+                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSTABLET"]</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

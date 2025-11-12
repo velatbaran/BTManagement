@@ -167,7 +167,7 @@
 
     <script>
         $(document).ready(function () {
-            var totalAll = @ViewBag.TotalAll; // Controller'dan tüm kayıtların toplamı
+            var totalAll = @Html.Raw(Json.Serialize(ViewBag.TotalAll)); // Controller'dan tüm kayıtların toplamı
 
             // Sayfa yüklendiğinde butona tüm kayıtların toplamını yaz
             $("#allTotalBtn").text(
