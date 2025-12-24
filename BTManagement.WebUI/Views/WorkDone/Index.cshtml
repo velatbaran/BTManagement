@@ -14,20 +14,69 @@
 
 <style>
     .table {
-        font-family: Arial, sans-serif;
+        font-family: "Segoe UI", Arial, sans-serif;
         font-size: 14px;
         color: #333;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
         .table th {
-            font-weight: bold;
-            font-size: 11px;
+            background: #f0f2f5;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 10px;
+            border-bottom: 2px solid #dcdfe3;
         }
 
         .table td {
-            font-size: 11px;
+            font-size: 12px;
+            padding: 8px 10px;
+            vertical-align: middle;
         }
 
+        /* Modern input stil */
+        .table input[type="text"] {
+            width: 95%;
+            padding: 6px 10px;
+            border: 1px solid #c4c7cc;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #fff;
+            transition: all .25s ease;
+        }
+
+            /* Hover input */
+            .table input[type="text"]:hover {
+                border-color: #9ba0a8;
+                background: #fafafa;
+            }
+
+            /* Focus efekti */
+            .table input[type="text"]:focus {
+                outline: none;
+                border-color: #4a90e2;
+                box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
+                background: #fff;
+            }
+
+        /* Satır hover */
+        .table tbody tr:hover {
+            background-color: #f7faff;
+        }
+
+    /* Butonlara küçük estetik dokunuş */
+    .btn-rounded {
+        border-radius: 6px !important;
+    }
+
+    /* Tablonun üst kenarına hafif gölge */
+    #myTable {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border-radius: 8px;
+        overflow: hidden;
+    }
 </style>
 
 <table class="table table-bordered table-striped" id="myTable">

@@ -4,13 +4,13 @@
     ViewData["Title"] = "Ürün Güncelle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedDate" />
-            <input type="hidden" asp-for="Created" />
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreatedDate" />
+    <input type="hidden" asp-for="Created" />
+    <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
                 <input asp-for="Brand" class="form-control" />
@@ -41,6 +41,8 @@
                 <input asp-for="HardwareName" class="form-control" />
                 <span asp-validation-for="HardwareName" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Feature" class="control-label"></label>
                 <input asp-for="Feature" class="form-control" />
@@ -78,9 +80,10 @@
                 @* <a href="/Products/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
                 <a href="/urunler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
+
 
 @section Scripts {
     @{

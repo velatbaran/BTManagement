@@ -4,10 +4,10 @@
     ViewData["Title"] = "Ürün Ekle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
                 <input asp-for="Brand" class="form-control" />
@@ -38,6 +38,8 @@
                 <input asp-for="HardwareName" class="form-control" />
                 <span asp-validation-for="HardwareName" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Feature" class="control-label"></label>
                 <input asp-for="Feature" class="form-control" />
@@ -51,7 +53,7 @@
             <div class="form-group">
                 <label asp-for="State" class="control-label"></label>
                 <select name="State" class="form-control">
-                    <option value="Faal">Faal</option> 
+                    <option value="Faal">Faal</option>
                     <option value="Arızalı">Arızalı</option>
                     <option value="Kayıttan Düşürülmüş">Kayıttan Düşürülmüş</option>
                 </select>
@@ -75,9 +77,9 @@
                 @* <a href="/Products/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
                 <a href="/urunler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     @{

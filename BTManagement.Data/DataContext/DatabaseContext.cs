@@ -93,7 +93,7 @@ namespace BTManagement.Data.DataContext
                 {
                     TableName = entry.Metadata.GetTableName(),
                     ChangedAt = DateTime.UtcNow,
-                    UserName = "system", // burada o anki kullanıcıyı inject edebilirsin
+                    UserName = _currentUserService.Username, // burada o anki kullanıcıyı inject edebilirsin
                     Action = entry.State.ToString()
                 };
 
