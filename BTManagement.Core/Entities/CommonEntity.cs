@@ -17,9 +17,9 @@ namespace BTManagement.Core.Entities
         public int Id { get; set; }
 
         [DisplayName("Kaydeden"), StringLength(50)]
-        public string? Created { get; set; }
+        public string? Created { get; set; } 
 
         [DisplayName("Kayıt Tarihi")]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
     }
 }

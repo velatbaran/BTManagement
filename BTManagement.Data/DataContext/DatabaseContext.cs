@@ -80,6 +80,25 @@ namespace BTManagement.Data.DataContext
         private List<AuditLog> OnBeforeSaveChanges()
         {
             ChangeTracker.DetectChanges();
+            var username = _currentUserService.Username ?? "system";
+            var entriesCommon = ChangeTracker
+            .Entries<CommonEntity>()
+            .Where(e => e.State == EntityState.Added);
+
+            foreach (var entry in entriesCommon)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Created = username;
+                    entry.Entity.CreatedDate = DateTime.Now;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.Created = username;
+                    entry.Entity.CreatedDate = DateTime.Now;
+                }
+            }
+
             var auditEntries = new List<AuditLog>();
             var entries = ChangeTracker.Entries()
                 .Where(e => e.Entity is not AuditLog &&
@@ -155,6 +174,11 @@ namespace BTManagement.Data.DataContext
             foreach (var entry in ChangeTracker.Entries<CommonEntity>())
             {
                 if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Created = username;
+                    entry.Entity.CreatedDate = DateTime.Now;
+                }
+                else if (entry.State == EntityState.Modified)
                 {
                     entry.Entity.Created = username;
                     entry.Entity.CreatedDate = DateTime.Now;

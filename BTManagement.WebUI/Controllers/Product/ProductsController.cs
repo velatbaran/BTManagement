@@ -29,6 +29,7 @@ namespace BTManagement.WebUI.Controllers.Product
             _toastNotification = toastNotification;
         }
 
+        [Authorize]
         [Route("urunler")]
         public async Task<IActionResult> Index()
         {
