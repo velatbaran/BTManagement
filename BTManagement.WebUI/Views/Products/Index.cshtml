@@ -188,6 +188,23 @@
     <script src="~/datatable/vfs_fonts.js"></script>
     <script>
         $(document).ready(function () {
+
+             function normalizeTr(text) {
+            if (!text) return "";
+
+            return text.toString()
+                .toLowerCase()
+                .replace(/ı/g, "i")
+                .replace(/İ/g, "i")
+                .replace(/i̇/g, "i")
+                .replace(/ğ/g, "g")
+                .replace(/ü/g, "u")
+                .replace(/ş/g, "s")
+                .replace(/ö/g, "o")
+                .replace(/ç/g, "c");
+        }
+
+
             // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
@@ -195,31 +212,93 @@
                 $('#fileName').text(button.data('file-name'));
             });
 
-            // DataTable başlat
-            var table = $('#myTable').DataTable({
-        dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf', 'print'
-            ],
-                responsive: {
-                    details: { type: 'column' }
-                },
-                columnDefs: [
-                    { className: 'control', orderable: false, targets: 0 }, // + işareti başta
-                    { orderable: false, targets: -1 } // İşlemler sütunu
-                ],
-                order: [[1, 'asc']],
-                language: { url: '/datatable/tr.json' }
+                        // 🔹 Türkçe uyumlu custom search
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+
+                var brandInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(0) input').val());
+                var modelInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(1) input').val());
+                var serialNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(2) input').val());
+                var usernameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(3) input').val());
+                var categoryInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(4) input').val());
+                var departmentInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(5) input').val());
+                var stateInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(6) input').val());
+                var descriptionInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(7) input').val());
+                var networkAddressInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(8) input').val());
+                var networkNameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(9) input').val());
+                var hardwareNameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(10) input').val());
+                var featureInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(11) input').val());
+                var createdInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(12) input').val());
+                var createdDateInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(13) input').val());
+
+                var rowBrand = normalizeTr(data[0]);   // Personel
+                var rowModel = normalizeTr(data[1]);  // Gidilen Yer
+                var rowSerialNo = normalizeTr(data[2]);  // Varış Tarihi
+                var rowUsername = normalizeTr(data[3]);  // Aktif Ayrılış Tarihi
+                var rowCategory = normalizeTr(data[4]);  // Toplam Gün
+                var rowDepartment = normalizeTr(data[5]); // Açıklama
+                var rowState = normalizeTr(data[6]); // Tamamlandı  Mı?
+                var rowDescription = normalizeTr(data[7]); // Tamamlandı  Mı?
+                var rowNetworkAddress = normalizeTr(data[8]); // Tamamlandı  Mı?
+                var rowNetworkName = normalizeTr(data[9]); // Tamamlandı  Mı?
+                var rowHardwareName = normalizeTr(data[10]); // Tamamlandı  Mı?
+                var rowFeature = normalizeTr(data[11]); // Tamamlandı  Mı?
+                var rowCreated = normalizeTr(data[12]); // Tamamlandı  Mı?
+                var rowCreatedDate = normalizeTr(data[13]); // Tamamlandı  Mı?
+
+                if (brandInput && !rowBrand.includes(brandInput)) return false;
+                if (modelInput && !rowModel.includes(modelInput)) return false;
+                if (serialNoInput && !rowSerialNo.includes(serialNoInput)) return false;
+                if (usernameInput && !rowUsername.includes(usernameInput)) return false;
+                if (categoryInput && !rowCategory.includes(categoryInput)) return false;
+                if (departmentInput && !rowDepartment.includes(departmentInput)) return false;
+                if (stateInput && !rowState.includes(stateInput)) return false;
+                if (descriptionInput && !rowDescription.includes(descriptionInput)) return false;
+                if (networkAddressInput && !rowNetworkAddress.includes(networkAddressInput)) return false;
+                if (networkNameInput && !rowNetworkName.includes(networkNameInput)) return false;
+                if (hardwareNameInput && !rowHardwareName.includes(hardwareNameInput)) return false;
+                if (featureInput && !rowFeature.includes(featureInput)) return false;
+                if (createdInput && !rowCreated.includes(createdInput)) return false;
+                if (createdDateInput && !rowCreatedDate.includes(createdDateInput)) return false;
+
+                return true;
             });
 
-            // Header altındaki inputlar ile kolon bazlı filtreleme
-            $('#myTable thead tr:eq(1) th').each(function (i) {
-                $('input', this).on('keyup change clear', function () {
-                    if (table.column(i).search() !== this.value) {
-                        table.column(i).search(this.value).draw();
-                    }
-                });
+        var table = $('#myTable').DataTable({
+            stateSave: true,
+            stateDuration: -1,
+            dom: 'Brtip',
+            buttons: ['copy','excel','csv','pdf','print'],
+            responsive: { details: { type: 'column' } },
+            columnDefs: [
+                { className: 'control', orderable: false, targets: 0 },
+                { orderable: false, targets: -1 }
+            ],
+            order: [[1, 'asc']],
+            language: { url: '/datatable/tr.json' }
+        });
+
+        // filtre değişince kaydet
+        $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
+
+            var filters = [];
+
+            $('#myTable thead tr:eq(1) th input').each(function () {
+                filters.push($(this).val());
             });
+
+            localStorage.setItem("productFilters", JSON.stringify(filters));
+
+            table.draw();
+        });
+
+                var savedFilters = JSON.parse(localStorage.getItem("productFilters"));
+
+        if (savedFilters) {
+            $('#myTable thead tr:eq(1) th input').each(function (i) {
+                $(this).val(savedFilters[i]);
+            });
+        }
+
         });
     </script>
 }
