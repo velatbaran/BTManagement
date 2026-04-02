@@ -4,8 +4,10 @@
     ViewData["Title"] = "Rehber Listesi";
 }
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
+<link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+<link href="~/datatable/datatables.min.css" rel="stylesheet" />
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
+    <a asp-action="Create" class="btn btn-primary" title="Yeni Ekle">
         <i class="fa-solid fa-plus"></i> Yeni Ekle
     </a>
 </p>
@@ -106,10 +108,10 @@
                 <td class="text-left">@Html.DisplayFor(m => item.InternalNo)</td>
                 <td>@Html.DisplayFor(m => item.CepNo)</td>
                 <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                    <a class="btn btn-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
                         <i class="fa-solid fa-pen-to-square"></i> Güncelle
                     </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                    <button type="button" class="btn btn-danger btn-sm btn-rounded"
                             data-bs-toggle="modal" data-bs-target="#deleteModal"
                             data-file-id="@item.Id" data-file-name="@item.NameSurname" title="Sil">
                         <i class="fa-solid fa-trash"></i> Sil
@@ -157,32 +159,103 @@
     <script src="~/datatable/jszip.min.js"></script>
     <script src="~/datatable/pdfmake.min.js"></script>
     <script src="~/datatable/vfs_fonts.js"></script>
+
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
+
+            function normalizeTr(text) {
+                if (!text) return "";
+                return text.toString()
+                    .toLowerCase()
+                    .replace(/ı/g, "i")
+                    .replace(/İ/g, "i")
+                    .replace(/i̇/g, "i")
+                    .replace(/ğ/g, "g")
+                    .replace(/ü/g, "u")
+                    .replace(/ş/g, "s")
+                    .replace(/ö/g, "o")
+                    .replace(/ç/g, "c");
+            }
+
+                        // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
 
-            // DataTable başlat
             var table = $('#myTable').DataTable({
-          dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
+            stateSave: true,
+            dom: 'Brtip',
             buttons: [
-                'copy', 'excel', 'csv', 'pdf', 'print'
+                { extend: 'excel', exportOptions: { columns: ':not(:last-child)' } },
+                'copy','csv','pdf','print'
             ],
-                language: { url: '/datatable/tr.json' }
+            responsive: {
+                details: false // artık responsive detayları kapatıyoruz
+            },
+            columnDefs: [
+                { orderable: false, targets: -1 } // sadece işlemler sütunu sıralanamasın
+            ],
+            order: [[0,'asc']],
+            language: { url: '/datatable/tr.json' }
+        });
+
+        // 🔹 Türkçe uyumlu custom search
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
+            var $row = $(table.row(dataIndex).node()); // DOM satırını al
+
+            var nameSurnameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(0) input').val());
+            var titleInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(1) input').val());
+            var departmentInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(2) input').val());
+            var internalNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(3) input').val());
+            var cepNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(4) input').val());
+
+            // Child row’lar olsa bile visible td’leri alıyoruz
+            var tds = $row.children('td:visible');
+
+            var rowNameSurname = normalizeTr(data[0]);
+            var rowTitle = normalizeTr(data[1]);
+            var rowDepartment = normalizeTr(data[2]);
+            var rowInternalNo = normalizeTr(data[3]);
+            var rowCepNo = normalizeTr(data[4]);
+
+            if (nameSurnameInput && !rowNameSurname.includes(nameSurnameInput)) return false;
+            if (titleInput && !rowTitle.includes(titleInput)) return false;
+            if (departmentInput && !rowDepartment.includes(departmentInput)) return false;
+            if (internalNoInput && !rowInternalNo.includes(internalNoInput)) return false;
+            if (cepNoInput && !rowCepNo.includes(cepNoInput)) return false;
+
+            return true;
+        });
+
+                    // filtre değişince kaydet
+        $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
+
+            var filters = [];
+
+            $('#myTable thead tr:eq(1) th input').each(function () {
+                filters.push($(this).val());
             });
 
-            // Header altındaki inputlar ile kolon bazlı filtreleme
-            $('#myTable thead tr:eq(1) th').each(function (i) {
-                $('input', this).on('keyup change clear', function () {
-                    if (table.column(i).search() !== this.value) {
-                        table.column(i).search(this.value).draw();
-                    }
-                });
-            });
+            localStorage.setItem("guideFilters", JSON.stringify(filters));
+
+            table.draw(false);
         });
+
+                        $('#myTable thead input').on('click focus', function (e) {
+            e.stopPropagation();
+        });
+
+                var savedFilters = JSON.parse(localStorage.getItem("guideFilters"));
+
+        if (savedFilters) {
+            $('#myTable thead tr:eq(1) th input').each(function (i) {
+                $(this).val(savedFilters[i]);
+            });
+        }
+
+        });
+
     </script>
 }

@@ -7,7 +7,7 @@
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
+    <a asp-action="Create" class="btn btn-primary" title="Yeni Ekle">
         <i class="fa-solid fa-plus"></i> Yeni Ekle
     </a>
 </p>
@@ -135,10 +135,10 @@
                 <td>@Html.DisplayFor(m => item.Created)</td>
                 <td>@Html.DisplayFor(m => item.CreatedDate)</td>
                 <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                    <a class="btn btn-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
                         <i class="fa-solid fa-pen-to-square"></i> Güncelle
                     </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                    <button type="button" class="btn btn-danger btn-sm btn-rounded"
                             data-bs-toggle="modal" data-bs-target="#deleteModal"
                             data-file-id="@item.Id" data-file-name="@item.Brand" title="Sil">
                         <i class="fa-solid fa-trash"></i> Sil
@@ -176,8 +176,8 @@
 </div>
 
 @section Scripts {
-    @*     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
     <script src="~/datatable/datatables.buttons.min.js"></script>
@@ -288,7 +288,11 @@
 
             localStorage.setItem("productFilters", JSON.stringify(filters));
 
-            table.draw();
+            table.draw(false);
+        });
+
+                        $('#myTable thead input').on('click focus', function (e) {
+            e.stopPropagation();
         });
 
                 var savedFilters = JSON.parse(localStorage.getItem("productFilters"));
