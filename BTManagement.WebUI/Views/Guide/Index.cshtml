@@ -149,8 +149,6 @@
 </div>
 
 @section Scripts {
-    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
-    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
     <script src="~/datatable/datatables.buttons.min.js"></script>
@@ -162,6 +160,21 @@
 
     <script>
         $(document).ready(function () {
+
+           var table = $('#myTable').DataTable({
+            stateSave: true,
+            dom: 'Brtip',
+            buttons: [
+                { extend: 'excel', exportOptions: { columns: ':not(:last-child)' } },
+                'copy','csv','pdf','print'
+            ],
+            responsive: { details: { type: 'column' } },
+            columnDefs: [
+                { orderable: false, targets: -1 } // sadece işlemler sütunu sıralanamasın
+            ],
+            order: [[0,'asc']],
+            language: { url: '/datatable/tr.json' }
+        });
 
             function normalizeTr(text) {
                 if (!text) return "";
@@ -184,35 +197,29 @@
                 $('#fileName').text(button.data('file-name'));
             });
 
-            var table = $('#myTable').DataTable({
-            stateSave: true,
-            dom: 'Brtip',
-            buttons: [
-                { extend: 'excel', exportOptions: { columns: ':not(:last-child)' } },
-                'copy','csv','pdf','print'
-            ],
-            responsive: {
-                details: false // artık responsive detayları kapatıyoruz
-            },
-            columnDefs: [
-                { orderable: false, targets: -1 } // sadece işlemler sütunu sıralanamasın
-            ],
-            order: [[0,'asc']],
-            language: { url: '/datatable/tr.json' }
+            let filters = ["", "", "", "", ""];
+
+                                // filtre değişince kaydet
+        $('#myTable thead tr:eq(1) th input').on('keyup', function () {
+
+            $('#myTable thead tr:eq(1) th input').each(function (i) {
+                filters[i] = $(this).val();
+            });
+
+            localStorage.setItem("guideFilters", JSON.stringify(filters));
+
+            table.draw(false);
         });
 
-        // 🔹 Türkçe uyumlu custom search
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
-            var $row = $(table.row(dataIndex).node()); // DOM satırını al
 
-            var nameSurnameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(0) input').val());
-            var titleInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(1) input').val());
-            var departmentInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(2) input').val());
-            var internalNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(3) input').val());
-            var cepNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(4) input').val());
+            if (settings.nTable.id !== 'myTable') return true;
 
-            // Child row’lar olsa bile visible td’leri alıyoruz
-            var tds = $row.children('td:visible');
+            var nameSurnameInput = normalizeTr(filters[0]);
+            var titleInput = normalizeTr(filters[1]);
+            var departmentInput = normalizeTr(filters[2]);
+            var internalNoInput = normalizeTr(filters[3]);
+            var cepNoInput = normalizeTr(filters[4]);
 
             var rowNameSurname = normalizeTr(data[0]);
             var rowTitle = normalizeTr(data[1]);
@@ -229,33 +236,21 @@
             return true;
         });
 
-                    // filtre değişince kaydet
-        $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
 
-            var filters = [];
-
-            $('#myTable thead tr:eq(1) th input').each(function () {
-                filters.push($(this).val());
-            });
-
-            localStorage.setItem("guideFilters", JSON.stringify(filters));
-
-            table.draw(false);
-        });
-
-                        $('#myTable thead input').on('click focus', function (e) {
+         $('#myTable thead input').on('click focus', function (e) {
             e.stopPropagation();
         });
 
-                var savedFilters = JSON.parse(localStorage.getItem("guideFilters"));
+        var savedFilters = JSON.parse(localStorage.getItem("guideFilters"));
 
         if (savedFilters) {
+            filters = savedFilters;
+
             $('#myTable thead tr:eq(1) th input').each(function (i) {
-                $(this).val(savedFilters[i]);
+                $(this).val(filters[i]);
             });
         }
 
         });
-
     </script>
 }

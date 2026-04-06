@@ -176,8 +176,6 @@
 </div>
 
 @section Scripts {
-    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
-    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
     <script src="~/datatable/datatables.buttons.min.js"></script>
@@ -188,6 +186,20 @@
     <script src="~/datatable/vfs_fonts.js"></script>
     <script>
         $(document).ready(function () {
+
+            var table = $('#myTable').DataTable({
+            stateSave: true,
+            stateDuration: -1,
+            dom: 'Brtip',
+            buttons: ['copy','excel','csv','pdf','print'],
+            responsive: { details: { type: 'column' } },
+            columnDefs: [
+                { className: 'control', orderable: false, targets: 0 },
+                { orderable: false, targets: -1 }
+            ],
+            order: [[1, 'asc']],
+            language: { url: '/datatable/tr.json' }
+        });
 
              function normalizeTr(text) {
             if (!text) return "";
@@ -212,6 +224,18 @@
                 $('#fileName').text(button.data('file-name'));
             });
 
+        let filters = ["", "", "", "", ""];
+                                // filtre değişince kaydet
+        $('#myTable thead tr:eq(1) th input').on('keyup', function () {
+
+            $('#myTable thead tr:eq(1) th input').each(function (i) {
+                filters[i] = $(this).val();
+            });
+
+            localStorage.setItem("guideFilters", JSON.stringify(filters));
+
+            table.draw(false);
+        });
                         // 🔹 Türkçe uyumlu custom search
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
 
@@ -262,34 +286,6 @@
 
                 return true;
             });
-
-        var table = $('#myTable').DataTable({
-            stateSave: true,
-            stateDuration: -1,
-            dom: 'Brtip',
-            buttons: ['copy','excel','csv','pdf','print'],
-            responsive: { details: { type: 'column' } },
-            columnDefs: [
-                { className: 'control', orderable: false, targets: 0 },
-                { orderable: false, targets: -1 }
-            ],
-            order: [[1, 'asc']],
-            language: { url: '/datatable/tr.json' }
-        });
-
-        // filtre değişince kaydet
-        $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
-
-            var filters = [];
-
-            $('#myTable thead tr:eq(1) th input').each(function () {
-                filters.push($(this).val());
-            });
-
-            localStorage.setItem("productFilters", JSON.stringify(filters));
-
-            table.draw(false);
-        });
 
                         $('#myTable thead input').on('click focus', function (e) {
             e.stopPropagation();
