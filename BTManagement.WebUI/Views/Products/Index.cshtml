@@ -224,7 +224,8 @@
                 $('#fileName').text(button.data('file-name'));
             });
 
-        let filters = ["", "", "", "", ""];
+            let filters = ["", "", "", "", ""];
+
                                 // filtre değişince kaydet
         $('#myTable thead tr:eq(1) th input').on('keyup', function () {
 
@@ -232,9 +233,9 @@
                 filters[i] = $(this).val();
             });
 
-            localStorage.setItem("guideFilters", JSON.stringify(filters));
+            localStorage.setItem("productFilters", JSON.stringify(filters));
 
-            table.draw(false);
+            table.draw(false);  
         });
                         // 🔹 Türkçe uyumlu custom search
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -287,17 +288,19 @@
                 return true;
             });
 
-                        $('#myTable thead input').on('click focus', function (e) {
-            e.stopPropagation();
-        });
+              $('#myTable thead input').on('click focus', function (e) {
+                   e.stopPropagation();
+               });
 
-                var savedFilters = JSON.parse(localStorage.getItem("productFilters"));
+               var savedFilters = JSON.parse(localStorage.getItem("productFilters"));
 
-        if (savedFilters) {
-            $('#myTable thead tr:eq(1) th input').each(function (i) {
-                $(this).val(savedFilters[i]);
-            });
-        }
+               if (savedFilters) {
+                   filters = savedFilters;
+
+                   $('#myTable thead tr:eq(1) th input').each(function (i) {
+                       $(this).val(filters[i]);
+                   });
+               }
 
         });
     </script>
