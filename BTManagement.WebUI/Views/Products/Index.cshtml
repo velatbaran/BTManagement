@@ -3,16 +3,36 @@
 @{
     ViewData["Title"] = "Ürün Listesi";
 }
+
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-<p>
-    <a asp-action="Create" class="btn btn-primary" title="Yeni Ekle">
-        <i class="fa-solid fa-plus"></i> Yeni Ekle
-    </a>
-</p>
 
 <style>
+/* Buttons kapsayıcısını sağa hizala */
+div.dt-buttons {
+    float: right;
+    margin-bottom: 10px;
+}
+
+/* Excel butonu stili */
+.dt-btn-custom-excel {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #28a745 !important; /* yeşil */
+    color: white !important;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.dt-btn-custom-excel:hover {
+    background-color: #218838 !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
     .table {
         font-family: "Segoe UI", Arial, sans-serif;
         font-size: 14px;
@@ -36,9 +56,12 @@
             vertical-align: middle;
         }
 
-        /* Modern input stil */
+        .table tbody tr:hover {
+            background-color: #f7faff;
+        }
+
         .table input[type="text"] {
-            width: 95%;
+            width: 100%;
             padding: 6px 10px;
             border: 1px solid #c4c7cc;
             border-radius: 6px;
@@ -47,13 +70,11 @@
             transition: all .25s ease;
         }
 
-            /* Hover input */
             .table input[type="text"]:hover {
                 border-color: #9ba0a8;
                 background: #fafafa;
             }
 
-            /* Focus efekti */
             .table input[type="text"]:focus {
                 outline: none;
                 border-color: #4a90e2;
@@ -61,91 +82,201 @@
                 background: #fff;
             }
 
-        /* Satır hover */
-        .table tbody tr:hover {
-            background-color: #f7faff;
-        }
-
-    /* Butonlara küçük estetik dokunuş */
     .btn-rounded {
         border-radius: 6px !important;
     }
 
-    /* Tablonun üst kenarına hafif gölge */
     #myTable {
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         border-radius: 8px;
         overflow: hidden;
+        width: 100% !important;
     }
+
+    .filters-row th {
+        padding: 8px !important;
+        background: #f8f9fa !important;
+    }
+
+    .child-table {
+        width: 100%;
+        background-color: #f8f9fa;
+        margin: 5px 0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+        .child-table td {
+            padding: 8px 12px;
+            border: none;
+            font-size: 12px;
+        }
+
+        .child-table .details-title {
+            font-weight: 600;
+            width: 35%;
+            background-color: #e9ecef;
+        }
+
+        .child-table .details-data {
+            width: 65%;
+            background-color: #fff;
+        }
+
+    tr.shown td {
+        background-color: #f1f3f5;
+    }
+
+    td.control:before {
+        display: none !important;
+    }
+
+    td.details-control {
+        text-align: center !important;
+        vertical-align: middle !important;
+        cursor: pointer;
+    }
+
+        td.details-control span.detail-toggle {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            line-height: 26px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+            td.details-control span.detail-toggle:hover {
+                background-color: #218838;
+                transform: scale(1.15);
+            }
+
+    tr.shown td.details-control span.detail-toggle {
+        background-color: #dc3545;
+        transform: rotate(90deg);
+    }
+
+    .detail-container {
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-export {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-excel {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-excel:hover {
+            background-color: #218838;
+        }
+
+    .btn-copy {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+        .btn-copy:hover {
+            background-color: #138496;
+        }
+
+    .btn-print {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-print:hover {
+            background-color: #5a6268;
+        }
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
+<!-- Butonlar -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <a asp-action="Create" class="btn btn-primary" id="btnCreate" title="Yeni Ekle">
+            <i class="fa-solid fa-plus"></i> Yeni Ekle
+        </a>
+    </div>
+    <div class="btn-group-custom">
+        <button type="button" id="clearAllFilters" class="btn btn-secondary btn-rounded" title="Tüm Filtreleri Temizle">
+            <i class="fa-solid fa-eraser"></i> Tüm Filtreleri Temizle
+        </button>
+    </div>
+</div>
+
+<!-- Tablo -->
+<table class="table table-bordered table-striped" id="myTable" style="width:100%">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(m => m.Brand)</th>
-            <th>@Html.DisplayNameFor(m => m.Model)</th>
-            <th>@Html.DisplayNameFor(m => m.SerialNo)</th>
-            <th>@Html.DisplayNameFor(m => m.Username)</th>
-            <th>@Html.DisplayNameFor(m => m.CategoryId)</th>
-            <th>@Html.DisplayNameFor(m => m.DepartmentId)</th>
-            <th>@Html.DisplayNameFor(m => m.State)</th>
-            <th>@Html.DisplayNameFor(m => m.Description)</th>
-            <th>@Html.DisplayNameFor(m => m.NetworkAddress)</th>
-            <th>@Html.DisplayNameFor(m => m.NetworkName)</th>
-            <th>@Html.DisplayNameFor(m => m.HardwareName)</th>
-            <th>@Html.DisplayNameFor(m => m.Feature)</th>
-            <th>@Html.DisplayNameFor(m => m.Created)</th>
-            <th>@Html.DisplayNameFor(m => m.CreatedDate)</th>
+            <th style="width: 40px;"></th>
+            <th>Marka</th>
+            <th>Model</th>
+            <th>Seri No</th>
+            <th>Kullanıcı</th>
+            <th>Kategori</th>
+            <th>Departman</th>
+            <th>Durum</th>
+            <th>Açıklama</th>
+            <th>Ağ Adresi</th>
+            <th>Ağ Adı</th>
+            <th>Donanım Adı</th>
+            <th>Özellik</th>
+            <th>Oluşturan</th>
+            <th>Oluşturma Tarihi</th>
             <th>İşlemler</th>
         </tr>
-        <tr>
-            <th><input type="text" placeholder="Ara Marka" /></th>
-            <th><input type="text" placeholder="Ara Model" /></th>
-            <th><input type="text" placeholder="Ara Seri No" /></th>
-            <th><input type="text" placeholder="Ara Kullanıcı" /></th>
-            <th><input type="text" placeholder="Ara Kategori" /></th>
-            <th><input type="text" placeholder="Ara Departman" /></th>
-            <th><input type="text" placeholder="Ara Durum" /></th>
-            <th><input type="text" placeholder="Ara Açıklama" /></th>
-            <th><input type="text" placeholder="Ara Ağ Adresi" /></th>
-            <th><input type="text" placeholder="Ara Ağ Adı" /></th>
-            <th><input type="text" placeholder="Ara Donanım Adı" /></th>
-            <th><input type="text" placeholder="Ara Özellik" /></th>
-            <th><input type="text" placeholder="Ara Oluşturan" /></th>
-            <th><input type="text" placeholder="Ara Tarih" /></th>
-            <th></th> <!-- İşlemler sütunu filtre yok -->
+        <tr class="filters-row">
+            <th></th>
+            <th><input type="text" class="column-filter" placeholder="Marka ara..." data-column="1"></th>
+            <th><input type="text" class="column-filter" placeholder="Model ara..." data-column="2"></th>
+            <th><input type="text" class="column-filter" placeholder="Seri No ara..." data-column="3"></th>
+            <th><input type="text" class="column-filter" placeholder="Kullanıcı ara..." data-column="4"></th>
+            <th><input type="text" class="column-filter" placeholder="Kategori ara..." data-column="5"></th>
+            <th><input type="text" class="column-filter" placeholder="Departman ara..." data-column="6"></th>
+            <th><input type="text" class="column-filter" placeholder="Durum ara..." data-column="7"></th>
+            <th><input type="text" class="column-filter" placeholder="Açıklama ara..." data-column="8"></th>
+            <th><input type="text" class="column-filter" placeholder="Ağ Adresi ara..." data-column="9"></th>
+            <th><input type="text" class="column-filter" placeholder="Ağ Adı ara..." data-column="10"></th>
+            <th><input type="text" class="column-filter" placeholder="Donanım Adı ara..." data-column="11"></th>
+            <th><input type="text" class="column-filter" placeholder="Özellik ara..." data-column="12"></th>
+            <th><input type="text" class="column-filter" placeholder="Oluşturan ara..." data-column="13"></th>
+            <th><input type="text" class="column-filter" placeholder="Tarih ara..." data-column="14"></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.Brand)</td>
-                <td>@Html.DisplayFor(m => item.Model)</td>
-                <td>@Html.DisplayFor(m => item.SerialNo)</td>
-                <td>@Html.DisplayFor(m => item.Username)</td>
-                <td>@Html.DisplayFor(m => item.Category.Name)</td>
-                <td>@Html.DisplayFor(m => item.Department.Name)</td>
-                <td>@Html.DisplayFor(m => item.State)</td>
-                <td>@Html.DisplayFor(m => item.Description)</td>
-                <td>@Html.DisplayFor(m => item.NetworkAddress)</td>
-                <td>@Html.DisplayFor(m => item.NetworkName)</td>
-                <td>@Html.DisplayFor(m => item.HardwareName)</td>
-                <td>@Html.DisplayFor(m => item.Feature)</td>
-                <td>@Html.DisplayFor(m => item.Created)</td>
-                <td>@Html.DisplayFor(m => item.CreatedDate)</td>
-                <td>
-                    <a class="btn btn-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.Brand" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
     </tbody>
 </table>
 
@@ -155,18 +286,18 @@
         <div class="modal-content">
             <form method="post" asp-action="Delete">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                    <h3 class="modal-title" id="deleteModalLabel">Silme Onayı</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                    <strong id="fileName"></strong> kullanıcısını silmek istediğinize emin misiniz?
                     <input type="hidden" name="id" id="fileId" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" title="İptal">
+                        <i class="fa-solid fa-xmark"></i> İptal
                     </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Sil">
                         <i class="fa-solid fa-trash"></i> Sil
                     </button>
                 </div>
@@ -176,132 +307,270 @@
 </div>
 
 @section Scripts {
-    <script src="~/datatable/datatables.min.js"></script>
-    <script src="~/datatable/datatables.responsive.min.js"></script>
-    <script src="~/datatable/datatables.buttons.min.js"></script>
-    <script src="~/datatable/buttons.html5.min.js"></script>
-    <script src="~/datatable/buttons.print.min.js"></script>
-    <script src="~/datatable/jszip.min.js"></script>
-    <script src="~/datatable/pdfmake.min.js"></script>
-    <script src="~/datatable/vfs_fonts.js"></script>
-    <script>
-        $(document).ready(function () {
+        <script src="~/datatable/datatables.min.js"></script>
+        <script src="~/datatable/datatables.responsive.min.js"></script>
+        <script src="~/datatable/datatables.min.js"></script>
+        <script src="~/datatable/datatables.responsive.min.js"></script>
+        <script src="~/datatable/datatables.buttons.min.js"></script>
+        <script src="~/datatable/buttons.html5.min.js"></script>
+        <script src="~/datatable/buttons.print.min.js"></script>
+        <script src="~/datatable/jszip.min.js"></script>
+        <script src="~/datatable/pdfmake.min.js"></script>
+        <script src="~/datatable/vfs_fonts.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Önceki instance varsa yok et
+                if ($.fn.dataTable.isDataTable('#myTable')) {
+                    $('#myTable').DataTable().destroy();
+                    $('#myTable tbody').empty();
+                }
 
-            var table = $('#myTable').DataTable({
-            stateSave: true,
-            stateDuration: -1,
-            dom: 'Brtip',
-            buttons: ['copy','excel','csv','pdf','print'],
-            responsive: { details: { type: 'column' } },
-            columnDefs: [
-                { className: 'control', orderable: false, targets: 0 },
-                { orderable: false, targets: -1 }
-            ],
-            order: [[1, 'asc']],
-            language: { url: '/datatable/tr.json' }
-        });
+                $('#myTable').off();
+                $('#myTable').removeData();
 
-             function normalizeTr(text) {
-            if (!text) return "";
+                // Filtreleri sessionStorage'a kaydet
+                function saveFiltersToSession(filters) {
+                    sessionStorage.setItem('returnFilters', JSON.stringify(filters));
+                    sessionStorage.setItem('returnFromPage', window.location.pathname);
+                }
 
-            return text.toString()
-                .toLowerCase()
-                .replace(/ı/g, "i")
-                .replace(/İ/g, "i")
-                .replace(/i̇/g, "i")
-                .replace(/ğ/g, "g")
-                .replace(/ü/g, "u")
-                .replace(/ş/g, "s")
-                .replace(/ö/g, "o")
-                .replace(/ç/g, "c");
+                // SessionStorage'dan filtreleri al
+                function getFiltersFromSession() {
+                    var filters = sessionStorage.getItem('returnFilters');
+                    var returnFrom = sessionStorage.getItem('returnFromPage');
+                    if (filters && returnFrom === window.location.pathname) {
+                        sessionStorage.removeItem('returnFilters');
+                        sessionStorage.removeItem('returnFromPage');
+                        return JSON.parse(filters);
+                    }
+                    return null;
+                }
+
+                var previousPage = document.referrer;
+                var isComingFromActionPage = previousPage.includes('/Edit') ||
+                                             previousPage.includes('/Delete') ||
+                                             previousPage.includes('/Create');
+
+                var savedFilters = isComingFromActionPage ? getFiltersFromSession() : null;
+
+                // DataTable'ı başlat
+                var table = $('#myTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: {
+                        details: {
+                            type: 'column',
+                            target: 0
+                        }
+                    },
+                    stateSave: true,
+                    stateDuration: -1,
+                    pageLength: 25,
+                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tümü"]],
+                    order: [],
+                     searching: true, // Global arama kutusunu kapat
+                    ajax: {
+                        url: '/urunler/LoadData',
+                        type: 'POST',
+                        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                        dataType: 'json',
+                        data: function(d) {
+                            $('.column-filter').each(function() {
+                                var columnIndex = $(this).data('column');
+                                d['columns[' + columnIndex + '][search][value]'] = $(this).val();
+                            });
+                            return d;
+                        },
+                        error: function(xhr) {
+                            alert("Veri yüklenirken hata oluştu!");
+                        }
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            className: 'details-control',
+                            orderable: false,
+                            searchable: false,
+                            defaultContent: '<span class="detail-toggle">+</span>',
+                            width: '40px'
+                        },
+                        { data: "brand", name: "Brand" },
+                        { data: "model", name: "Model" },
+                        { data: "serialNo", name: "SerialNo" },
+                        { data: "username", name: "Username" },
+                        { data: "categoryName", name: "CategoryName" },
+                        { data: "departmentName", name: "DepartmentName" },
+                        { data: "state", name: "State" },
+                        { data: "description", name: "Description" },
+                        { data: "networkAddress", name: "NetworkAddress" },
+                        { data: "networkName", name: "NetworkName" },
+                        { data: "hardwareName", name: "HardwareName" },
+                        { data: "feature", name: "Feature" },
+                        { data: "created", name: "Created" },
+                        { data: "createdDate", name: "CreatedDate" },
+                        {
+                            data: null,
+                            orderable: false,
+                            searchable: false,
+                            render: function(data) {
+                                if (!data) return '';
+                                return `
+                                    <a class="btn btn-warning btn-sm btn-edit" href="/urunguncelle/${data.id}" title="Düzenle">
+                                        <i class="fa-solid fa-pen-to-square"></i> Düzenle
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-file-id="${data.id}" data-file-name="${data.brand}" title="Sil">
+                                        <i class="fa-solid fa-trash"></i> Sil
+                                    </button>
+                                `;
+                            }
+                        }
+                    ],
+                    dom: 'Blrtip',
+                                          buttons: [
+        {
+            extend: 'excel',
+                    text: '<i class="fa-regular fa-file-excel"></i> Export Excel',
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            },
+                className: 'dt-btn-custom-excel',
+                    init: function(api, node, config) {
+                    $(node).attr('title', 'Export Excel'); // Hover tooltip
+            }
         }
+    ],
+                    language: {
+                        url: '/datatable/tr.json',
+                        processing: "<div class='spinner-border text-primary'></div>"
+                    }
+                });
 
+                // State yüklendikten sonra inputları doldur
+                table.on('stateLoaded', function() {
+                    var state = table.state.loaded();
+                    if (state && state.columns) {
+                        for (var i = 0; i < state.columns.length; i++) {
+                            var searchValue = state.columns[i].search.search;
+                            if (searchValue && i > 0 && i <= 14) {
+                                $('.column-filter[data-column="' + i + '"]').val(searchValue);
+                            }
+                        }
+                    }
+                });
 
-            // Modal tetikleme
-            $('#deleteModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                $('#fileId').val(button.data('file-id'));
-                $('#fileName').text(button.data('file-name'));
-            });
+                // Session'dan gelen filtreleri uygula
+                if (savedFilters && Object.keys(savedFilters).length > 0) {
+                    for (var col in savedFilters) {
+                        $('.column-filter[data-column="' + col + '"]').val(savedFilters[col]);
+                        table.column(parseInt(col)).search(savedFilters[col]);
+                    }
+                    table.draw();
+                }
 
-            let filters = ["", "", "", "", ""];
+                // Filtreleme işlemleri
+                $('.column-filter').on('keyup change', function() {
+                    var columnIndex = $(this).data('column');
+                    table.column(columnIndex).search($(this).val()).draw();
+                });
 
-                                // filtre değişince kaydet
-        $('#myTable thead tr:eq(1) th input').on('keyup', function () {
+                $('#clearAllFilters').on('click', function() {
+                    $('.column-filter').val('');
+                    table.columns().search('').draw();
+                    sessionStorage.removeItem('returnFilters');
+                    sessionStorage.removeItem('returnFromPage');
+                    table.state.clear();
+                });
 
-            $('#myTable thead tr:eq(1) th input').each(function (i) {
-                filters[i] = $(this).val();
-            });
+                // İşlem butonlarına tıklandığında filtreleri kaydet
+                $('#btnCreate, #myTable tbody').on('click', '.btn-edit, .btn-delete, #btnCreate', function(e) {
+                    var filters = {};
+                    $('.column-filter').each(function() {
+                        var val = $(this).val();
+                        if (val) filters[$(this).data('column')] = val;
+                    });
+                    saveFiltersToSession(filters);
+                });
 
-            localStorage.setItem("productFilters", JSON.stringify(filters));
+                // Detay format
+                function format(rowData) {
+                    return `
+                        <div class="detail-container">
+                            <table style="width:100%; background:#fff; border:1px solid #dee2e6;">
+                                <tr><td style="padding:8px; background:#e9ecef; width:25%"><strong>Marka</strong></td><td style="padding:8px">${rowData.brand || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef; width:25%"><strong>Model</strong></td><td style="padding:8px">${rowData.model || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Seri No</strong></td><td style="padding:8px">${rowData.serialNo || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Kullanıcı</strong></td><td style="padding:8px">${rowData.username || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Kategori</strong></td><td style="padding:8px">${rowData.categoryName || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Departman</strong></td><td style="padding:8px">${rowData.departmentName || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Durum</strong></td><td style="padding:8px">${rowData.state || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Açıklama</strong></td><td style="padding:8px">${rowData.description || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Ağ Adresi</strong></td><td style="padding:8px">${rowData.networkAddress || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Ağ Adı</strong></td><td style="padding:8px">${rowData.networkName || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Donanım Adı</strong></td><td style="padding:8px">${rowData.hardwareName || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Özellik</strong></td><td style="padding:8px">${rowData.feature || '-'}</td>
+                                </tr>
+                                <tr><td style="padding:8px; background:#e9ecef"><strong>Oluşturan</strong></td><td style="padding:8px">${rowData.created || '-'}</td>
+                                <td style="padding:8px; background:#e9ecef"><strong>Oluşturma Tarihi</strong></td><td style="padding:8px">${rowData.createdDate || '-'}</td>
+                                </tr>
+                                <tr><td colspan="4" style="padding:10px; text-align:center">
+                                        <a class="btn btn-warning btn-sm" href="/urunguncelle/${rowData.id}" title="Düzenle"><i class="fa-solid fa-pen-to-square"></i> Düzenle</a>
+                                            <button class="btn btn-danger btn-sm btn-delete-detail" data-file-id="${rowData.id}" data-file-name="${rowData.username}" title="Sil"><i class="fa-solid fa-trash"></i> Sil</button>
+                                </td>
+                                </tr>
+                            </table>
+                        </div>
+                    `;
+                }
 
-            table.draw(false);  
+        // Detay aç/kapat
+        $('#myTable tbody').on('click', 'td.details-control .detail-toggle', function(e) {
+            e.stopPropagation();
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            // Eğer row yoksa return et
+            if (!row.node()) return;
+
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                $(this).text('+').css('background', '#28a745');
+            } else {
+                // Önceden açılmış row'ları kapat
+                table.rows('.shown').every(function() {
+                    this.child.hide();
+                    $(this.node()).removeClass('shown');
+                    $(this.node()).find('.detail-toggle').text('+').css('background', '#28a745');
+                });
+
+                // Child row'u aç
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                $(this).text('-').css('background', '#dc3545');
+            }
         });
-                        // 🔹 Türkçe uyumlu custom search
-            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
 
-                var brandInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(0) input').val());
-                var modelInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(1) input').val());
-                var serialNoInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(2) input').val());
-                var usernameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(3) input').val());
-                var categoryInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(4) input').val());
-                var departmentInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(5) input').val());
-                var stateInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(6) input').val());
-                var descriptionInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(7) input').val());
-                var networkAddressInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(8) input').val());
-                var networkNameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(9) input').val());
-                var hardwareNameInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(10) input').val());
-                var featureInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(11) input').val());
-                var createdInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(12) input').val());
-                var createdDateInput = normalizeTr($('#myTable thead tr:eq(1) th:eq(13) input').val());
-
-                var rowBrand = normalizeTr(data[0]);   // Personel
-                var rowModel = normalizeTr(data[1]);  // Gidilen Yer
-                var rowSerialNo = normalizeTr(data[2]);  // Varış Tarihi
-                var rowUsername = normalizeTr(data[3]);  // Aktif Ayrılış Tarihi
-                var rowCategory = normalizeTr(data[4]);  // Toplam Gün
-                var rowDepartment = normalizeTr(data[5]); // Açıklama
-                var rowState = normalizeTr(data[6]); // Tamamlandı  Mı?
-                var rowDescription = normalizeTr(data[7]); // Tamamlandı  Mı?
-                var rowNetworkAddress = normalizeTr(data[8]); // Tamamlandı  Mı?
-                var rowNetworkName = normalizeTr(data[9]); // Tamamlandı  Mı?
-                var rowHardwareName = normalizeTr(data[10]); // Tamamlandı  Mı?
-                var rowFeature = normalizeTr(data[11]); // Tamamlandı  Mı?
-                var rowCreated = normalizeTr(data[12]); // Tamamlandı  Mı?
-                var rowCreatedDate = normalizeTr(data[13]); // Tamamlandı  Mı?
-
-                if (brandInput && !rowBrand.includes(brandInput)) return false;
-                if (modelInput && !rowModel.includes(modelInput)) return false;
-                if (serialNoInput && !rowSerialNo.includes(serialNoInput)) return false;
-                if (usernameInput && !rowUsername.includes(usernameInput)) return false;
-                if (categoryInput && !rowCategory.includes(categoryInput)) return false;
-                if (departmentInput && !rowDepartment.includes(departmentInput)) return false;
-                if (stateInput && !rowState.includes(stateInput)) return false;
-                if (descriptionInput && !rowDescription.includes(descriptionInput)) return false;
-                if (networkAddressInput && !rowNetworkAddress.includes(networkAddressInput)) return false;
-                if (networkNameInput && !rowNetworkName.includes(networkNameInput)) return false;
-                if (hardwareNameInput && !rowHardwareName.includes(hardwareNameInput)) return false;
-                if (featureInput && !rowFeature.includes(featureInput)) return false;
-                if (createdInput && !rowCreated.includes(createdInput)) return false;
-                if (createdDateInput && !rowCreatedDate.includes(createdDateInput)) return false;
-
-                return true;
+                // Detay sil butonu
+            $('#myTable tbody').on('click', '.btn-delete, .btn-delete-detail', function () {
+                $('#fileId').val($(this).data('file-id'));
+                $('#fileName').text($(this).data('file-name'));
+                $('#deleteModal').modal('show');
             });
 
-              $('#myTable thead input').on('click focus', function (e) {
-                   e.stopPropagation();
-               });
+                // // Modal
+                // $('#deleteModal').on('show.bs.modal', function(event) {
+                //     var button = $(event.relatedTarget);
+                //     $('#fileId').val(button.data('file-id'));
+                //     $('#fileName').text(button.data('file-name'));
+                // });
 
-               var savedFilters = JSON.parse(localStorage.getItem("productFilters"));
-
-               if (savedFilters) {
-                   filters = savedFilters;
-
-                   $('#myTable thead tr:eq(1) th input').each(function (i) {
-                       $(this).val(filters[i]);
-                   });
-               }
-
-        });
-    </script>
+            });
+        </script>
 }

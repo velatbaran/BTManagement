@@ -18,6 +18,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
+
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "BTManagement.Session";
@@ -80,6 +81,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
