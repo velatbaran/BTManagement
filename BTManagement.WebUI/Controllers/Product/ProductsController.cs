@@ -280,7 +280,7 @@ namespace BTManagement.WebUI.Controllers.Product
 
                     _repoProducts.Add(products);
                     await _repoProducts.SaveChangesAsync();
-                    _toastNotification.AddSuccessToastMessage("Kayıt işlemi başarılı", new ToastrOptions { Title = "Başarılı" });
+                    _toastNotification.AddSuccessToastMessage("Kayıt işlemi başarılı bir şekilde gerçekleşti", new ToastrOptions { Title = "Başarılı" });
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -349,7 +349,7 @@ namespace BTManagement.WebUI.Controllers.Product
 
                     _repoProducts.Update(product);
                     await _repoProducts.SaveChangesAsync();
-                    _toastNotification.AddSuccessToastMessage("Güncelleme işlemi başarılı", new ToastrOptions { Title = "Başarılı" });
+                    _toastNotification.AddSuccessToastMessage("Güncelleme işlemi başarılı bir şekilde gerçekleşti.", new ToastrOptions { Title = "Başarılı" });
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -383,7 +383,7 @@ namespace BTManagement.WebUI.Controllers.Product
             }
 
             await _repoProducts.SaveChangesAsync();
-            _toastNotification.AddSuccessToastMessage("Silme işlemi başarılı", new ToastrOptions { Title = "Başarılı" });
+            _toastNotification.AddSuccessToastMessage("Silme işlemi başarılı bir şekilde gerçekleşti", new ToastrOptions { Title = "Başarılı" });
             return RedirectToAction(nameof(Index));
         }
 
@@ -391,7 +391,6 @@ namespace BTManagement.WebUI.Controllers.Product
         {
             return _repoProducts.GetQueryable().Any(e => e.Id == id);
         }
-
 
     }
 }
