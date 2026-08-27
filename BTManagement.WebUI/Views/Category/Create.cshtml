@@ -1,24 +1,139 @@
 ﻿@model Categories
 
 @{
-    ViewData["Title"] = "Kategori Ekle";
+    ViewData["Title"] = "Yeni Kategori Ekle";
 }
 
+<style>
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .form-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+    .form-card-body {
+        padding: 24px;
+    }
+
+    .custom-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .custom-input {
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: #4B49AC;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-custom-save {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-custom-save:hover {
+            background-color: #059669;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.25);
+        }
+
+    .btn-custom-cancel {
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-custom-cancel:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+</style>
+
 <div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="col-md-8 col-lg-6">
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="fa-solid fa-folder-plus fs-5"></i>
+                <h5>Yeni Kategori Ekle</h5>
             </div>
-            <div class="form-group">
-                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button> &nbsp;&nbsp;&nbsp;
-                @* <a href="/Category/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/kategoriler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+            <div class="form-card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="custom-label">Kategori Adı</label>
+                        <input asp-for="Name" class="form-control custom-input" placeholder="Kategori adını giriniz..." />
+                        <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-custom-save" title="Kaydet">
+                            <i class="fa-solid fa-floppy-disk"></i> Kaydet
+                        </button>
+                        <a href="/kategoriler" class="btn-custom-cancel" title="İptal">
+                            <i class="fa-solid fa-ban"></i> İptal
+                        </a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

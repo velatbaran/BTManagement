@@ -4,76 +4,78 @@
     ViewData["Title"] = "Satın Alma Tipleri";
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
+<link href="~/css/custom-theme.css" rel="stylesheet" />
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="m-0 font-weight-bold text-dark"></h4>
+    <a asp-action="Create" class="btn-theme-primary" title="Yeni Ekle">
         <i class="fa-solid fa-plus"></i> Yeni Ekle
     </a>
-</p>
+</div>
 
-<style>
-    .table {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-    }
+<div class="main-card mb-4">
+    <div class="main-card-header">
+        <h5>
+            <i class="fa-solid fa-layer-group"></i> Satın Alma Tipleri Listesi
+        </h5>
+    </div>
+    <div class="main-card-body">
+        <div class="custom-table-container">
+            <table class="table table-hover align-middle mb-0" id="myTable">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.Name)</th>
+                        <th class="text-end" style="width: 200px;">İşlemler</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="filter-input" placeholder="Ara Satın Alma Tipi..." /></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark">@Html.DisplayFor(m => item.Name)</td>
+                            <td class="text-end">
+                                <a class="btn-action-edit me-1" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                                    <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                                </a>
+                                <button type="button" class="btn-action-delete"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
+                                    <i class="fa-solid fa-trash"></i> Sil
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-        .table th {
-            font-weight: bold;
-            font-size: 11px;
-        }
-
-        .table td {
-            font-size: 11px;
-        }
-
-</style>
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.Name)</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.Name)</td>
-                <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<!-- Delete Modal -->
+<!-- Modern Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 12px; overflow: hidden;">
             <form method="post" asp-action="Delete">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header text-white" style="background-color: #ef4444;">
+                    <h5 class="modal-title fs-6" id="deleteModalLabel">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>Silme Onayı
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div class="modal-body p-4">
+                    <p class="mb-0 text-secondary">
+                        <strong id="fileName" class="text-dark"></strong> kaydını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+                    </p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
-                    </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
+                <div class="modal-footer bg-light px-4 py-3">
+                    <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-sm btn-danger px-3">
+                        <i class="fa-solid fa-trash me-1"></i> Evet, Sil
                     </button>
                 </div>
             </form>
@@ -82,13 +84,30 @@
 </div>
 
 @section Scripts {
+    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
+    <script src="~/datatable/datatables.min.js"></script>
+    <script src="~/datatable/datatables.responsive.min.js"></script>
+
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
+            });
+
+            var table = $('#myTable').DataTable({
+                dom: 'Brtip',
+                language: { url: '/datatable/tr.json' }
+            });
+
+            $('#myTable thead tr:eq(1) th').each(function (i) {
+                $('input', this).on('keyup change clear', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i).search(this.value).draw();
+                    }
+                });
             });
         });
     </script>

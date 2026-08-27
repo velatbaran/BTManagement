@@ -1,45 +1,169 @@
-﻿@model Users
+﻿@model UserEditViewModel
 @{
     ViewData["Title"] = "Kullanıcı Güncelle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="CreatedDate" />
-    <input type="hidden" asp-for="Created" />
-            <div class="form-group">
-                <label asp-for="NameSurname" class="control-label"></label>
-                <input asp-for="NameSurname" class="form-control" />
-                <span asp-validation-for="NameSurname" class="text-danger"></span>
+<style>
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+    }
+
+        .form-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .form-card-body {
+        padding: 28px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    /* Switch Style Checkbox */
+    .custom-switch-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 12px 16px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-submit {
+        background-color: #4B49AC;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #3f3da0;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(75, 73, 172, 0.25);
+        }
+
+    .btn-cancel {
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+</style>
+
+<div class="row justify-content-start mb-5">
+    <div class="col-lg-8">
+        <div class="form-card">
+            <div class="form-card-header">
+                <h5>
+                    <i class="fa-solid fa-user-pen"></i> Kullanıcı Bilgilerini Güncelle
+                </h5>
             </div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+
+            <div class="form-card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-4">
+                        <label asp-for="NameSurname" class="form-label">Ad Soyad</label>
+                        <input asp-for="NameSurname" class="form-control" placeholder="Ad ve soyad giriniz..." />
+                        <span asp-validation-for="NameSurname" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Username" class="form-label">Kullanıcı Adı</label>
+                        <input asp-for="Username" class="form-control" placeholder="Kullanıcı adı giriniz..." />
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label">Şifre</label>
+                        <input asp-for="Password" type="text" class="form-control" placeholder="Şifrenizi güncelleyin..." />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-2 mb-md-0">
+                            <div class="custom-switch-box">
+                                <input class="form-check-input mt-0" asp-for="IsAdmin" id="IsAdmin" />
+                                <label class="form-check-label fw-semibold text-secondary" for="IsAdmin">
+                                    @Html.DisplayNameFor(model => model.IsAdmin)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="custom-switch-box">
+                                <input class="form-check-input mt-0 " asp-for="IsActive" id="IsActive" />
+                                <label class="form-check-label fw-semibold text-secondary" for="IsActive">
+                                    @Html.DisplayNameFor(model => model.IsActive)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 pt-2">
+                        <button type="submit" class="btn-submit" title="Güncelle">
+                            <i class="fa-solid fa-floppy-disk"></i> Güncelle
+                        </button>
+                        <a href="/kullanicilar" class="btn-cancel" title="İptal">
+                            <i class="fa-solid fa-xmark"></i> İptal
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAdmin" /> @Html.DisplayNameFor(model => model.IsAdmin)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Güncelle" class="btn btn-outline-success btn-rounded" title="Güncelle"><i class="fa-solid fa-pen-to-square"></i> Güncelle</button>&nbsp;&nbsp;&nbsp;
-                @* <a href="/Users/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/kullanicilar" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

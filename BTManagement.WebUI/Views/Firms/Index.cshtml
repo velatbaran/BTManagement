@@ -3,167 +3,297 @@
 @{
     ViewData["Title"] = "Firma Listesi";
 }
+
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
-        <i class="fa-solid fa-plus"></i> Yeni Ekle
-    </a>
-</p>
 
 <style>
-    .table {
-        font-family: "Segoe UI", Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-        border-collapse: separate;
-        border-spacing: 0;
+    /* Kart Yapısı */
+    .table-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden !important;
     }
 
-        .table th {
-            background: #f0f2f5;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            padding: 10px;
-            border-bottom: 2px solid #dcdfe3;
+    .table-card-header {
+        padding: 16px 20px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .btn-add-new {
+        background-color: #4B49AC;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-add-new:hover {
+            background-color: #3f3d91;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(75, 73, 172, 0.3);
         }
 
-        .table td {
-            font-size: 12px;
-            padding: 8px 10px;
+    /* Tablo Tasarımı */
+    .custom-table {
+        font-family: inherit;
+        font-size: 0.85rem;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        border-collapse: separate !important;
+        border-spacing: 0;
+        width: 100% !important;
+    }
+
+        .custom-table thead tr:first-child th {
+            background-color: #4B49AC !important;
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-top: none !important;
+            border-bottom: 2px solid #3f3d91;
+            padding: 12px;
             vertical-align: middle;
         }
 
-        /* Modern input stil */
-        .table input[type="text"] {
-            width: 95%;
-            padding: 6px 10px;
-            border: 1px solid #c4c7cc;
-            border-radius: 6px;
-            font-size: 12px;
-            background: #fff;
-            transition: all .25s ease;
+        .custom-table thead tr:nth-child(2) th {
+            background-color: #f8fafc !important;
+            padding: 6px 8px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-            /* Hover input */
-            .table input[type="text"]:hover {
-                border-color: #9ba0a8;
-                background: #fafafa;
-            }
-
-            /* Focus efekti */
-            .table input[type="text"]:focus {
-                outline: none;
-                border-color: #4a90e2;
-                box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
-                background: #fff;
-            }
-
-        /* Satır hover */
-        .table tbody tr:hover {
-            background-color: #f7faff;
+        .custom-table tbody tr {
+            transition: background-color 0.2s ease;
         }
 
-    /* Butonlara küçük estetik dokunuş */
-    .btn-rounded {
-        border-radius: 6px !important;
+            .custom-table tbody tr:hover {
+                background-color: #f1f5f9 !important;
+            }
+
+        .custom-table td {
+            padding: 10px 12px;
+            vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+    /* Arama Inputları */
+    .search-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        background: #ffffff;
+        transition: all 0.2s ease;
     }
 
-    /* Tablonun üst kenarına hafif gölge */
-    #myTable {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border-radius: 8px;
+        .search-input:focus {
+            outline: none;
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 2px rgba(75, 73, 172, 0.15);
+        }
+
+    /* Action Butonları */
+    .action-btn-group {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+        .action-btn-group .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border-radius: 6px !important;
+            border: 1px solid transparent;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .action-btn-group .btn-edit {
+            background-color: #fffbe8;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+            .action-btn-group .btn-edit:hover {
+                background-color: #d97706;
+                color: #ffffff;
+                border-color: #d97706;
+            }
+
+        .action-btn-group .btn-delete {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+            .action-btn-group .btn-delete:hover {
+                background-color: #dc2626;
+                color: #ffffff;
+                border-color: #dc2626;
+            }
+
+    /* DataTables Export Buton Stilleri */
+    .dt-buttons {
+        padding: 12px 20px !important;
+        border-bottom: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+    }
+
+    .dt-button {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        color: #475569 !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        padding: 5px 12px !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+        .dt-button:hover {
+            background-color: #4B49AC !important;
+            color: #ffffff !important;
+            border-color: #4B49AC !important;
+        }
+
+    /* Modal Stili */
+    .custom-modal .modal-content {
+        border-radius: 12px;
+        border: none;
         overflow: hidden;
+    }
+
+    .custom-modal .modal-header {
+        background-color: #dc2626;
+        color: #ffffff;
+    }
+
+    .custom-modal .btn-close {
+        filter: brightness(0) invert(1);
     }
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.Authorized)</th>
-            <th>@Html.DisplayNameFor(m => m.FirmKinds.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.RecordNo)</th>
-            <th>@Html.DisplayNameFor(m => m.TaxOffice)</th>
-            <th>@Html.DisplayNameFor(m => m.TaxNo)</th>
-            <th>@Html.DisplayNameFor(m => m.TcNo)</th>
-            <th>@Html.DisplayNameFor(m => m.Phone)</th>
-            <th>@Html.DisplayNameFor(m => m.Address)</th>
-            <th>@Html.DisplayNameFor(m => m.Eposta)</th>
-            <th>@Html.DisplayNameFor(m => m.WebAddress)</th>
-            <th>@Html.DisplayNameFor(m => m.BankName)</th>
-            <th>@Html.DisplayNameFor(m => m.IbanNo)</th>
-            <th>İşlemler</th>
-        </tr>
-        <tr>
-            <th><input type="text" placeholder="Ara Ad" /></th>
-            <th><input type="text" placeholder="Ara Yetkili" /></th>
-            <th><input type="text" placeholder="Ara Firma Türü" /></th>
-            <th><input type="text" placeholder="Ara Sicil No" /></th>
-            <th><input type="text" placeholder="Ara Vergi Dairesi" /></th>
-            <th><input type="text" placeholder="Ara Vergi No" /></th>
-            <th><input type="text" placeholder="Ara Tc No" /></th>
-            <th><input type="text" placeholder="Ara Telefon" /></th>
-            <th><input type="text" placeholder="Ara Adres" /></th>
-            <th><input type="text" placeholder="Ara Eposta" /></th>
-            <th><input type="text" placeholder="Ara Web Adresi" /></th>
-            <th><input type="text" placeholder="Ara Banka Adı" /></th>
-            <th><input type="text" placeholder="Ara İban No" /></th>
-            <th></th> <!-- İşlemler sütunu filtre yok -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.Name)</td>
-                <td>@Html.DisplayFor(m => item.Authorized)</td>
-                <td>@Html.DisplayFor(m => item.FirmKinds.Name)</td>
-                <td>@Html.DisplayFor(m => item.RecordNo)</td>
-                <td>@Html.DisplayFor(m => item.TaxOffice)</td>
-                <td>@Html.DisplayFor(m => item.TaxNo)</td>
-                <td>@Html.DisplayFor(m => item.TcNo)</td>
-                <td>@Html.DisplayFor(m => item.Phone)</td>
-                <td>@Html.DisplayFor(m => item.Address)</td>
-                <td>@Html.DisplayFor(m => item.Eposta)</td>
-                <td>@Html.DisplayFor(m => item.WebAddress)</td>
-                <td>@Html.DisplayFor(m => item.BankName)</td>
-                <td>@Html.DisplayFor(m => item.IbanNo)</td>
-                <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="table-card mb-4">
+    <div class="table-card-header">
+        <h5 class="m-0 font-weight-bold text-dark" style="font-size: 1rem;">Firma Listesi</h5>
+        <a asp-action="Create" class="btn-add-new" title="Yeni Ekle">
+            <i class="fa-solid fa-plus"></i> Yeni Ekle
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table custom-table" id="myTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Authorized)</th>
+                    <th>@Html.DisplayNameFor(m => m.FirmKinds.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.RecordNo)</th>
+                    <th>@Html.DisplayNameFor(m => m.TaxOffice)</th>
+                    <th>@Html.DisplayNameFor(m => m.TaxNo)</th>
+                    <th>@Html.DisplayNameFor(m => m.TcNo)</th>
+                    <th>@Html.DisplayNameFor(m => m.Phone)</th>
+                    <th>@Html.DisplayNameFor(m => m.Address)</th>
+                    <th>@Html.DisplayNameFor(m => m.Eposta)</th>
+                    <th>@Html.DisplayNameFor(m => m.WebAddress)</th>
+                    <th>@Html.DisplayNameFor(m => m.BankName)</th>
+                    <th>@Html.DisplayNameFor(m => m.IbanNo)</th>
+                    <th style="min-width: 170px;">İşlemler</th>
+                </tr>
+                <tr>
+                    <th><input type="text" class="search-input" placeholder="Ara Ad" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Yetkili" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Firma Türü" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Sicil No" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Vergi Dairesi" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Vergi No" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Tc No" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Telefon" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Adres" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Eposta" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Web Adresi" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara Banka Adı" /></th>
+                    <th><input type="text" class="search-input" placeholder="Ara İban No" /></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(m => item.Name)</td>
+                        <td>@Html.DisplayFor(m => item.Authorized)</td>
+                        <td>@Html.DisplayFor(m => item.FirmKinds.Name)</td>
+                        <td>@Html.DisplayFor(m => item.RecordNo)</td>
+                        <td>@Html.DisplayFor(m => item.TaxOffice)</td>
+                        <td>@Html.DisplayFor(m => item.TaxNo)</td>
+                        <td>@Html.DisplayFor(m => item.TcNo)</td>
+                        <td>@Html.DisplayFor(m => item.Phone)</td>
+                        <td>@Html.DisplayFor(m => item.Address)</td>
+                        <td>@Html.DisplayFor(m => item.Eposta)</td>
+                        <td>@Html.DisplayFor(m => item.WebAddress)</td>
+                        <td>@Html.DisplayFor(m => item.BankName)</td>
+                        <td>@Html.DisplayFor(m => item.IbanNo)</td>
+                        <td>
+                            <div class="action-btn-group">
+                                <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                                    <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                                </a>
+                                <button type="button" class="btn btn-delete"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
+                                    <i class="fa-solid fa-trash"></i> Sil
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div class="modal fade custom-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
             <form method="post" asp-action="Delete">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title fs-6" id="deleteModalLabel"><i class="fa-solid fa-triangle-exclamation me-2"></i>Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div class="modal-body p-4">
+                    <p class="mb-0"><strong id="fileName" class="text-danger"></strong> isimli firmayı silmek istediğinize emin misiniz?</p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-2" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i> İptal
                     </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
+                    <button type="submit" class="btn btn-danger btn-sm rounded-2">
                         <i class="fa-solid fa-trash"></i> Sil
                     </button>
                 </div>
@@ -173,8 +303,6 @@
 </div>
 
 @section Scripts {
-    @*     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
     <script src="~/datatable/datatables.buttons.min.js"></script>
@@ -185,31 +313,26 @@
     <script src="~/datatable/vfs_fonts.js"></script>
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
 
-            // DataTable başlat
             var table = $('#myTable').DataTable({
-        dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf', 'print'
-            ],
+                dom: 'Brtip',
+                buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
                 responsive: {
                     details: { type: 'column' }
                 },
                 columnDefs: [
-                    { className: 'control', orderable: false, targets: 0 }, // + işareti başta
-                    { orderable: false, targets: -1 } // İşlemler sütunu
+                    { className: 'control', orderable: false, targets: 0 },
+                    { orderable: false, targets: -1 }
                 ],
                 order: [[1, 'asc']],
                 language: { url: '/datatable/tr.json' }
             });
 
-            // Header altındaki inputlar ile kolon bazlı filtreleme
             $('#myTable thead tr:eq(1) th').each(function (i) {
                 $('input', this).on('keyup change clear', function () {
                     if (table.column(i).search() !== this.value) {

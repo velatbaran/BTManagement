@@ -3,144 +3,249 @@
 @{
     ViewData["Title"] = "Yapılan Çalışmaların Listesi";
 }
+
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
-        <i class="fa-solid fa-plus"></i> Yeni Ekle
-    </a>
-</p>
 
 <style>
-    .table {
-        font-family: "Segoe UI", Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-        border-collapse: separate;
-        border-spacing: 0;
+    /* Ana Kart Yapısı */
+    .main-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
     }
 
-        .table th {
-            background: #f0f2f5;
+    .main-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .main-card-header h5 {
+            margin: 0;
             font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            padding: 10px;
-            border-bottom: 2px solid #dcdfe3;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .table td {
-            font-size: 12px;
-            padding: 8px 10px;
-            vertical-align: middle;
-        }
-
-        /* Modern input stil */
-        .table input[type="text"] {
-            width: 95%;
-            padding: 6px 10px;
-            border: 1px solid #c4c7cc;
-            border-radius: 6px;
-            font-size: 12px;
-            background: #fff;
-            transition: all .25s ease;
-        }
-
-            /* Hover input */
-            .table input[type="text"]:hover {
-                border-color: #9ba0a8;
-                background: #fafafa;
-            }
-
-            /* Focus efekti */
-            .table input[type="text"]:focus {
-                outline: none;
-                border-color: #4a90e2;
-                box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
-                background: #fff;
-            }
-
-        /* Satır hover */
-        .table tbody tr:hover {
-            background-color: #f7faff;
-        }
-
-    /* Butonlara küçük estetik dokunuş */
-    .btn-rounded {
-        border-radius: 6px !important;
+    .main-card-body {
+        padding: 24px;
     }
 
-    /* Tablonun üst kenarına hafif gölge */
-    #myTable {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* Tablo Stilleri */
+    .custom-table-container {
+        border: 1px solid #e2e8f0;
         border-radius: 8px;
         overflow: hidden;
     }
+
+    .table {
+        margin-bottom: 0;
+        font-family: inherit;
+        font-size: 13px;
+        color: #334155;
+        border-collapse: collapse !important;
+    }
+
+        /* Sadece ana başlık satırı mor olsun */
+        .table thead tr:first-child th {
+            background-color: #4B49AC;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px;
+            border-bottom: 2px solid #3f3da0;
+        }
+
+        /* Filtreleme inputlarının yer aldığı 2. satır beyaz kalsın */
+        .table thead tr:nth-child(2) th {
+            background-color: #ffffff;
+            padding: 8px 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 12px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+    /* Filtre Input Stilleri */
+    .filter-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 12px;
+        background: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    /* Buton Tasarımları */
+    .btn-theme-primary {
+        background-color: #4B49AC;
+        color: #ffffff;
+        border: 1px solid #4B49AC;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-theme-primary:hover {
+            background-color: #3f3da0;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(75, 73, 172, 0.25);
+        }
+
+    .btn-action-gallery {
+        background-color: #f1f5f9;
+        color: #4B49AC;
+        border: 1px solid #e2e8f0;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-action-gallery:hover {
+            background-color: #4B49AC;
+            color: #ffffff;
+            border-color: #4B49AC;
+        }
+
+    .btn-action-delete {
+        background-color: #fef2f2;
+        color: #ef4444;
+        border: 1px solid #fee2e2;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-action-delete:hover {
+            background-color: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+        }
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.DepartmentId)</th>
-            <th>@Html.DisplayNameFor(m => m.Work)</th>
-            <th>@Html.DisplayNameFor(m => m.State)</th>
-            <th>@Html.DisplayNameFor(m => m.Created)</th>
-            <th>@Html.DisplayNameFor(m => m.CreatedDate)</th>
-            <th>İşlemler</th>
-        </tr>
-        <tr>
-            <th><input type="text" placeholder="Ara Şube" /></th>
-            <th><input type="text" placeholder="Ara Yapılan İş" /></th>
-            <th><input type="text" placeholder="Ara Durum" /></th>
-            <th><input type="text" placeholder="Ara Oluşturan" /></th>
-            <th><input type="text" placeholder="Ara Tarih" /></th>
-            <th></th> <!-- İşlemler sütunu filtre yok -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.Department.Name)</td>
-                <td>@Html.DisplayFor(m => item.Work)</td>
-                <td>@Html.DisplayFor(m => item.State)</td>
-                <td>@Html.DisplayFor(m => item.Created)</td>
-                <td>@Html.DisplayFor(m => item.CreatedDate)</td>
-                <td>
-                    <a href="/resimler/@item.Id" class="btn btn-outline-primary btn-sm btn-rounded" title="Resimlere Git">
-                        <i class="fa-regular fa-images"></i> Resimlere Git
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.Work" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-action="Create" class="btn-theme-primary" title="Yeni Ekle">
+        <i class="fa-solid fa-plus"></i> Yeni Ekle
+    </a>
+</div>
 
-<!-- Delete Modal -->
+<div class="main-card mb-4">
+    <div class="main-card-header">
+        <h5>
+            <i class="fa-solid fa-list-check"></i> Çalışma Listesi
+        </h5>
+    </div>
+    <div class="main-card-body">
+        <div class="custom-table-container">
+            <table class="table table-hover align-middle mb-0" id="myTable">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.DepartmentId)</th>
+                        <th>@Html.DisplayNameFor(m => m.Work)</th>
+                        <th>@Html.DisplayNameFor(m => m.State)</th>
+                        <th>@Html.DisplayNameFor(m => m.Created)</th>
+                        <th>@Html.DisplayNameFor(m => m.CreatedDate)</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                    <tr class="bg-light">
+                        <th><input type="text" class="filter-input" placeholder="Ara Şube..." /></th>
+                        <th><input type="text" class="filter-input" placeholder="Ara Yapılan İş..." /></th>
+                        <th><input type="text" class="filter-input" placeholder="Ara Durum..." /></th>
+                        <th><input type="text" class="filter-input" placeholder="Ara Oluşturan..." /></th>
+                        <th><input type="text" class="filter-input" placeholder="Ara Tarih..." /></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark">@Html.DisplayFor(m => item.Department.Name)</td>
+                            <td>@Html.DisplayFor(m => item.Work)</td>
+                            <td>@Html.DisplayFor(m => item.State)</td>
+                            <td>@Html.DisplayFor(m => item.Created)</td>
+                            <td>@Html.DisplayFor(m => item.CreatedDate)</td>
+                            <td class="text-end">
+                                <a href="/resimler/@item.Id" class="btn-action-gallery" title="Resimlere Git">
+                                    <i class="fa-regular fa-images"></i> Görseller
+                                </a>
+                                <button type="button" class="btn-action-delete ms-1"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        data-file-id="@item.Id" data-file-name="@item.Work" title="Sil">
+                                    <i class="fa-solid fa-trash"></i> Sil
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 12px; overflow: hidden;">
             <form method="post" asp-action="Delete">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header text-white" style="background-color: #ef4444;">
+                    <h5 class="modal-title fs-6" id="deleteModalLabel">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>Silme Onayı
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div class="modal-body p-4">
+                    <p class="mb-0 text-secondary">
+                        <strong id="fileName" class="text-dark"></strong> kaydını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+                    </p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
-                    </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
+                <div class="modal-footer bg-light px-4 py-3">
+                    <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-sm btn-danger px-3">
+                        <i class="fa-solid fa-trash me-1"></i> Evet, Sil
                     </button>
                 </div>
             </form>
@@ -159,31 +264,24 @@
     <script src="~/datatable/vfs_fonts.js"></script>
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
 
-            // DataTable başlat
             var table = $('#myTable').DataTable({
-        dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf', 'print'
-            ],
-                responsive: {
-                    details: { type: 'column' }
-                },
+                dom: 'Brtip',
+                buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+                responsive: { details: { type: 'column' } },
                 columnDefs: [
-                    { className: 'control', orderable: false, targets: 0 }, // + işareti başta
-                    { orderable: false, targets: -1 } // İşlemler sütunu
+                    { className: 'control', orderable: false, targets: 0 },
+                    { orderable: false, targets: -1 }
                 ],
                 order: [[1, 'asc']],
                 language: { url: '/datatable/tr.json' }
             });
 
-            // Header altındaki inputlar ile kolon bazlı filtreleme
             $('#myTable thead tr:eq(1) th').each(function (i) {
                 $('input', this).on('keyup change clear', function () {
                     if (table.column(i).search() !== this.value) {

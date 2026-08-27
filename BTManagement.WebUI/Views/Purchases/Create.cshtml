@@ -4,66 +4,175 @@
     ViewData["Title"] = "Satın Alma Ekle";
 }
 
-<form asp-action="Create">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="FileNo" class="control-label"></label>
-                <input asp-for="FileNo" class="form-control" />
-                <span asp-validation-for="FileNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkingName" class="control-label"></label>
-                <input asp-for="WorkingName" class="form-control" />
-                <span asp-validation-for="WorkingName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirmId" class="control-label"></label>
-                <select asp-for="FirmId" class="form-control" asp-items="ViewBag.FirmId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseFormId" class="control-label"></label>
-                <select asp-for="PurchaseFormId" class="form-control" asp-items="ViewBag.PurchaseFormId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseKindId" class="control-label"></label>
-                <select asp-for="PurchaseKindId" class="form-control" asp-items="ViewBag.PurchaseKindId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseTypeId" class="control-label"></label>
-                <select asp-for="PurchaseTypeId" class="form-control" asp-items="ViewBag.PurchaseTypeId"></select>
-            </div>
+
+<style>
+
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .page-header-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .form-label {
+        font-size: 0.825rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 6px;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.875rem;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+    .form-btn-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .btn-save {
+        background-color: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 8px 16px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-save:hover {
+            background-color: #10b981;
+            color: #ffffff;
+            border-color: #10b981;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+        }
+
+    .btn-cancel {
+        background-color: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 8px 16px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background-color: #64748b;
+            color: #ffffff;
+            border-color: #64748b;
+        }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- Sayfa Başlığı -->
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="page-header-icon bg-primary-subtle text-primary">
+            <i class="fa-solid fa-cart-plus"></i>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" cols="3" rows="3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FilePath" class="control-label"></label>
-                <input asp-for="FilePath" class="form-control" />
-                <span asp-validation-for="FilePath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input type="date" asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input type="number" asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button>&nbsp;&nbsp;&nbsp;
-                @* <a href="/Purchases/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/satinalimlarim" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
+        <div>
+            <h4 class="mb-0 fw-bold text-dark">Yeni Satın Alma Ekle</h4>
+            <p class="text-muted small mb-0">Sisteme yeni bir satın alma kaydı eklemek için formu doldurun.</p>
         </div>
     </div>
-</form>
+
+    <!-- Form Kartı -->
+    <div class="card form-card">
+        <div class="card-body p-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                <div class="row g-3">
+                    <!-- Sol Kolon -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="FileNo" class="form-label"></label>
+                            <input asp-for="FileNo" class="form-control" placeholder="Dosya No giriniz..." />
+                            <span asp-validation-for="FileNo" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="WorkingName" class="form-label"></label>
+                            <input asp-for="WorkingName" class="form-control" placeholder="İşin adını giriniz..." />
+                            <span asp-validation-for="WorkingName" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="FirmId" class="form-label"></label>
+                            <select asp-for="FirmId" class="form-select" asp-items="ViewBag.FirmId"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PurchaseFormId" class="form-label"></label>
+                            <select asp-for="PurchaseFormId" class="form-select" asp-items="ViewBag.PurchaseFormId"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PurchaseKindId" class="form-label"></label>
+                            <select asp-for="PurchaseKindId" class="form-select" asp-items="ViewBag.PurchaseKindId"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PurchaseTypeId" class="form-label"></label>
+                            <select asp-for="PurchaseTypeId" class="form-select" asp-items="ViewBag.PurchaseTypeId"></select>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Kolon -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Açıklama giriniz..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="FilePath" class="form-label"></label>
+                            <input asp-for="FilePath" class="form-control" placeholder="Dosya yolu giriniz..." />
+                            <span asp-validation-for="FilePath" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PurchaseDate" class="form-label"></label>
+                            <input type="date" asp-for="PurchaseDate" class="form-control" />
+                            <span asp-validation-for="PurchaseDate" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label"></label>
+                            <input type="number" step="0.01" asp-for="Price" class="form-control" placeholder="0.00" />
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="form-btn-group mt-4 pt-2">
+                            <button type="submit" class="btn btn-save">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Kaydet
+                            </button>
+                            <a href="/satinalimlarim" class="btn btn-cancel">
+                                <i class="fa-solid fa-ban me-1"></i> İptal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{

@@ -119,7 +119,6 @@ namespace BTManagement.WebUI.Controllers.Product
                 var createdFilter = NormalizeString(Request.Form["columns[13][search][value]"].FirstOrDefault());
                 var createdDateFilter = NormalizeString(Request.Form["columns[14][search][value]"].FirstOrDefault());
 
-                // Kolon filtrelerini uygula (normalize edilmiş değerlerle)
                 if (!string.IsNullOrEmpty(brandFilter))
                     query = query.Where(p => p.Brand.ToLower().Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u").Replace("ş", "s").Replace("ö", "o").Replace("ç", "c").Contains(brandFilter));
 

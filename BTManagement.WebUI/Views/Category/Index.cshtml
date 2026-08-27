@@ -4,76 +4,248 @@
     ViewData["Title"] = "Kategori Listesi";
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
-        <i class="fa-solid fa-plus"></i> Yeni Ekle
-    </a>
-</p>
+<!-- DataTables Stil Bağlantıları -->
+<link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
+<link href="~/datatable/datatables.min.css" rel="stylesheet" />
 
-<style>
-    .table {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-    }
+<<style>
+     /* Kart ve Sayfa Yapısı */
+     .table-card {
+         background: #ffffff;
+         border: 1px solid #e2e8f0;
+         border-radius: 12px;
+         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+         overflow: hidden !important; /* Başlığın kartın üst kavislerine tam oturmasını sağlar */
+         padding-top: 0 !important;
+     }
 
-        .table th {
-            font-weight: bold;
-            font-size: 11px;
-        }
+         .table-card .card-body {
+             padding-top: 0 !important;
+         }
 
-        .table td {
-            font-size: 11px;
-        }
+     .table-responsive {
+         padding-top: 0 !important;
+         margin-top: 0 !important;
+     }
 
+     .page-header-icon {
+         width: 44px;
+         height: 44px;
+         background: #eef2ff;
+         color: #4f46e5;
+         border-radius: 10px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 1.25rem;
+     }
+
+     /* Tablo Tasarımı */
+     .custom-table {
+         font-family: inherit;
+         font-size: 0.85rem;
+         margin-top: 0 !important;
+         margin-bottom: 0 !important;
+         border-collapse: separate !important;
+         border-spacing: 0;
+         border-top: none !important;
+     }
+
+         .custom-table thead tr:first-child th {
+             background-color: #4B49AC !important;
+             color: #ffffff;
+             font-weight: 600;
+             text-transform: uppercase;
+             font-size: 0.75rem;
+             letter-spacing: 0.05em;
+             border-top: none !important; /* Üstteki beyaz çizgiyi ve kenarlığı tamamen kaldırır */
+             border-bottom: 2px solid #3f3d91; /* Alt kenarlığı uyumlu koyu tona çeker */
+             padding: 12px;
+         }
+
+         .custom-table thead tr:nth-child(2) th {
+             background-color: #ffffff;
+             border-bottom: 2px solid #cbd5e1;
+             padding: 6px 8px;
+         }
+
+         .custom-table tbody tr {
+             transition: background-color 0.2s ease;
+         }
+
+             .custom-table tbody tr:hover {
+                 background-color: #f1f5f9 !important;
+             }
+
+         .custom-table td {
+             padding: 10px 12px;
+             vertical-align: middle;
+             color: #334155;
+             border-bottom: 1px solid #f1f5f9;
+         }
+
+     /* Filtreleme Input Formatı */
+     .filter-input {
+         width: 100%;
+         padding: 5px 8px;
+         border: 1px solid #cbd5e1;
+         border-radius: 6px;
+         font-size: 0.78rem;
+         background-color: #f8fafc;
+         transition: all 0.2s ease;
+     }
+
+         .filter-input:focus {
+             outline: none;
+             border-color: #4f46e5;
+             background-color: #ffffff;
+             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+         }
+
+     /* Modern İşlem Buton Grubu */
+     .action-btn-group {
+         display: inline-flex;
+         gap: 6px;
+         align-items: center;
+         justify-content: center;
+     }
+
+         .action-btn-group .btn {
+             display: inline-flex;
+             align-items: center;
+             gap: 6px;
+             padding: 6px 12px;
+             font-size: 0.78rem;
+             font-weight: 500;
+             border-radius: 6px !important;
+             border: 1px solid transparent;
+             transition: all 0.2s ease-in-out;
+             white-space: nowrap;
+         }
+
+         /* Güncelle Butonu (Amber / Sarı Soft Stil) */
+         .action-btn-group .btn-edit {
+             background-color: #fffbe8;
+             color: #b45309;
+             border-color: #fde68a;
+         }
+
+             .action-btn-group .btn-edit:hover {
+                 background-color: #d97706;
+                 color: #ffffff;
+                 border-color: #d97706;
+                 box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
+             }
+
+         /* Sil Butonu (Kırmızı Soft Stil) */
+         .action-btn-group .btn-delete {
+             background-color: #fef2f2;
+             color: #dc2626;
+             border-color: #fecaca;
+         }
+
+             .action-btn-group .btn-delete:hover {
+                 background-color: #dc2626;
+                 color: #ffffff;
+                 border-color: #dc2626;
+                 box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+             }
+
+     /* DataTables Alt Sayfalama Alanı */
+     .dataTables_wrapper .dataTables_info,
+     .dataTables_wrapper .dataTables_paginate {
+         padding: 12px 16px;
+         font-size: 0.825rem;
+     }
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.Name)</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.Name)</td>
-                <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.Name" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container-fluid px-0">
+    <!-- Sayfa Üst Alanı (Başlık ve Ekle Butonu) -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="page-header-icon">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+                <h4 class="mb-0 fw-bold text-dark">Kategori Listesi</h4>
+                <p class="text-muted small mb-0">Sistemdeki kategorileri inceleyin ve yönetin.</p>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-primary btn-sm fw-medium px-3 rounded-2" title="Yeni Ekle">
+                <i class="fa-solid fa-plus me-1"></i> Yeni Ekle
+            </a>
+        </div>
+    </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <!-- Tablo Kart Yapısı -->
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table custom-table align-middle w-100" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => m.Name)</th>
+                            <th class="text-center" style="width: 200px;">İşlemler</th>
+                        </tr>
+                        <tr>
+                            <th><input type="text" class="filter-input" placeholder="Kategori Adı..." /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-medium text-dark">@Html.DisplayFor(m => item.Name)</td>
+                                <td class="text-center">
+                                    <div class="action-btn-group">
+                                        <!-- Güncelle -->
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit" title="Güncelle">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>Güncelle</span>
+                                        </a>
+
+                                        <!-- Sil -->
+                                        <button type="button" class="btn btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-file-id="@item.Id" data-file-name="@item.Name"
+                                                title="Sil">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span>Sil</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Modalı -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3">
             <form method="post" asp-action="Delete">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Silme Onayı
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div class="modal-body py-2">
+                    <p class="mb-0 text-secondary">
+                        <strong id="fileName" class="text-dark"></strong> kategorisini silmek istediğinizden emin misiniz?
+                    </p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
-                    </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
+                <div class="modal-footer border-top-0 pt-3">
+                    <button type="button" class="btn btn-light btn-sm fw-medium border" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger btn-sm fw-medium">
+                        <i class="fa-solid fa-trash me-1"></i> Sil
                     </button>
                 </div>
             </form>
@@ -82,25 +254,36 @@
 </div>
 
 @section Scripts {
-    <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
-    <link href="~/datatable/datatables.min.css" rel="stylesheet" />
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
+
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
+            // Silme modalı veri aktarımı
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
+
+        // DataTables Kurulumu
+        var table = $('#myTable').DataTable({
+            dom: 'rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>', // 'f' harfi kaldırıldı
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: -1 } // İşlemler sütunu sıralanamaz
+            ],
+            order: [[0, 'asc']],
+            language: { url: '/datatable/tr.json' }
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                language: {
-                    url: '/datatable/tr.json'
+
+            // Sütun Filtreleme
+            $('#myTable thead tr:eq(1) th input').on('keyup change clear', function () {
+                var colIndex = $(this).parent().index();
+                var value = this.value;
+
+                if (table.column(colIndex).search() !== value) {
+                    table.column(colIndex).search(value).draw();
                 }
             });
         });

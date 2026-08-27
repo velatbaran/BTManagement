@@ -4,189 +4,304 @@
     ViewData["Title"] = "Satın Alınanların Listesi";
 }
 
+<!-- DataTables Stil Bağlantıları -->
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
 
-<div class="row mb-3">
-    <div class="col-md-9">
-        <a asp-action="Create" class="btn btn-outline-primary" title="Yeni Ekle">
-            <i class="fa-solid fa-plus"></i> Yeni Ekle
-        </a>
-    </div>
-    <div class="col-md-3 text-end">
-        <h4>
-            Alımların Toplamı :
-            <button id="allTotalBtn" class="btn btn-success btn-rounded" style="font-size:18px">₺</button>
-        </h4>
-    </div>
-</div>
-
 <style>
-    .table {
-        font-family: "Segoe UI", Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-        border-collapse: separate;
+    /* Kart ve Genel Sayfa Düzeni */
+    .table-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .page-header-icon {
+        width: 44px;
+        height: 44px;
+        background: #eef2ff;
+        color: #4f46e5;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    /* Tablo Mimarisi */
+    .custom-table {
+        font-family: inherit;
+        font-size: 0.85rem;
+        margin-bottom: 0 !important;
+        border-collapse: separate !important;
         border-spacing: 0;
     }
 
-        .table th {
-            background: #f0f2f5;
+        .custom-table thead tr:first-child th {
+            background-color: #4B49AC;
+            color: #ffffff;
             font-weight: 600;
-            font-size: 12px;
             text-transform: uppercase;
-            padding: 10px;
-            border-bottom: 2px solid #dcdfe3;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 12px;
+            white-space: nowrap;
         }
 
-        .table td {
-            font-size: 12px;
-            padding: 8px 10px;
+        .custom-table thead tr:nth-child(2) th {
+            background-color: #ffffff;
+            border-bottom: 2px solid #cbd5e1;
+            padding: 6px 8px;
+        }
+
+        .custom-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: #f1f5f9 !important;
+            }
+
+        .custom-table td {
+            padding: 10px 12px;
             vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        /* Modern input stil */
-        .table input[type="text"] {
-            width: 95%;
-            padding: 6px 10px;
-            border: 1px solid #c4c7cc;
-            border-radius: 6px;
-            font-size: 12px;
-            background: #fff;
-            transition: all .25s ease;
+    /* Filtreleme Inputları */
+    .filter-input {
+        width: 100%;
+        padding: 5px 8px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-            /* Hover input */
-            .table input[type="text"]:hover {
-                border-color: #9ba0a8;
-                background: #fafafa;
-            }
-
-            /* Focus efekti */
-            .table input[type="text"]:focus {
-                outline: none;
-                border-color: #4a90e2;
-                box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
-                background: #fff;
-            }
-
-        /* Satır hover */
-        .table tbody tr:hover {
-            background-color: #f7faff;
-        }
-
-    /* Butonlara küçük estetik dokunuş */
-    .btn-rounded {
+    /* DataTables Ekstra Özelleştirmeleri */
+    .dt-buttons .btn {
+        font-size: 0.8rem !important;
         border-radius: 6px !important;
+        margin-right: 4px;
+        padding: 4px 10px !important;
     }
 
-    /* Tablonun üst kenarına hafif gölge */
-    #myTable {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border-radius: 8px;
-        overflow: hidden;
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        padding: 12px 16px;
+        font-size: 0.825rem;
     }
+
+    /* Modern İşlem Buton Grubu */
+    .action-btn-group {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .action-btn-group .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border-radius: 6px !important;
+            border: 1px solid transparent;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+        }
+
+        /* Güncelle Butonu (Amber / Sarı Soft Stil) */
+        .action-btn-group .btn-edit {
+            background-color: #fffbe8;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+            .action-btn-group .btn-edit:hover {
+                background-color: #d97706;
+                color: #ffffff;
+                border-color: #d97706;
+                box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
+            }
+
+        /* Sil Butonu (Kırmızı Soft Stil) */
+        .action-btn-group .btn-delete {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+            .action-btn-group .btn-delete:hover {
+                background-color: #dc2626;
+                color: #ffffff;
+                border-color: #dc2626;
+                box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+            }
+
+        /* Kopyala Butonu (Mavi Soft Stil) */
+        .action-btn-group .btn-copy {
+            background-color: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+            .action-btn-group .btn-copy:hover {
+                background-color: #2563eb;
+                color: #ffffff;
+                border-color: #2563eb;
+                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+            }
+       
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.FileNo)</th>
-            <th>@Html.DisplayNameFor(m => m.WorkingName)</th>
-            <th>@Html.DisplayNameFor(m => m.FirmId)</th>
-            <th class="text-left">@Html.DisplayNameFor(m => m.Price)</th>
-            <th>@Html.DisplayNameFor(m => m.PurchaseDate)</th>
-            <th>@Html.DisplayNameFor(m => m.PurchaseForms.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.PurchaseKinds.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.Description)</th>
-            <th>@Html.DisplayNameFor(m => m.FilePath)</th>
-            <th>İşlemler</th>
-        </tr>
-        <tr>
-            <th><input type="text" placeholder="Ara Dosya No" /></th>
-            <th><input type="text" placeholder="Ara İşin Adı" /></th>
-            <th><input type="text" placeholder="Ara Firma" /></th>
-            <th class="text-left"><input type="text" placeholder="Ara Fiyat" /></th>
-            <th><input type="text" placeholder="Ara Satın Alma Tarihi" /></th>
-            <th><input type="text" placeholder="Ara Satın Alma Şekli" /></th>
-            <th><input type="text" placeholder="Ara Satın Alma Türü" /></th>
-            <th><input type="text" placeholder="Ara Satın Alma Tipi" /></th>
-            <th><input type="text" placeholder="Ara Açıklama" /></th>
-            <th><input type="text" placeholder="Ara Dosya Yolu" /></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.FileNo)</td>
-                <td>@Html.DisplayFor(m => item.WorkingName)</td>
-                <td>@Html.DisplayFor(m => item.Firms.Name)</td>
-                <td data-value="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="text-left">
-                    @item.Price.ToString("N2", new System.Globalization.CultureInfo("tr-TR"))
-                </td>
-                <td>@Html.DisplayFor(m => item.PurchaseDate)</td>
-                <td>@Html.DisplayFor(m => item.PurchaseForms.Name)</td>
-                <td>@Html.DisplayFor(m => item.PurchaseKinds.Name)</td>
-                <td>@Html.DisplayFor(m => item.PurchaseTypes.Name)</td>
-                <td>@Html.DisplayFor(m => item.Description)</td>
-                <td>@Html.DisplayFor(m => item.FilePath)</td>
-                <td>
-                    <a class="btn btn-outline-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.WorkingName" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                    <a class="btn btn-outline-primary btn-sm copy-path-btn" data-path="@item.FilePath" title="Dosya Yolunu Kopyala">
-                        <i class="fa-solid fa-file"></i> Dosya Yolunu Kopyala
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="9" class="text-end">Toplam:</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </tfoot>
-</table>
-<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
-    <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex align-items-center">
-            <i id="toastIcon" class="fa-solid fa-check me-2"></i>
-            <div class="toast-body"></div>
-            <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="container-fluid px-0">
+    <!-- Sayfa Üst Alanı (Başlık, Buton ve Toplam Göstergesi) -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="page-header-icon">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <div>
+                <h4 class="mb-0 fw-bold text-dark">Satın Alınanların Listesi</h4>
+                <p class="text-muted small mb-0">Kurum bünyesinde gerçekleştirilen alımları inceleyin ve yönetin.</p>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 ms-auto">
+            <a asp-action="Create" class="btn btn-primary btn-sm fw-medium px-3 rounded-2">
+                <i class="fa-solid fa-plus me-1"></i> Yeni Ekle
+            </a>
+            <div class="bg-white border rounded-3 px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
+                <span class="text-muted small fw-semibold">Alımların Toplamı:</span>
+                <span id="allTotalBtn" class="badge bg-success fs-6 fw-bold px-3 py-2 rounded-2">₺0,00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablo Kart Yapısı -->
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table custom-table align-middle w-100" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => m.FileNo)</th>
+                            <th>@Html.DisplayNameFor(m => m.WorkingName)</th>
+                            <th>@Html.DisplayNameFor(m => m.FirmId)</th>
+                            <th class="text-end">@Html.DisplayNameFor(m => m.Price)</th>
+                            <th>@Html.DisplayNameFor(m => m.PurchaseDate)</th>
+                            <th>@Html.DisplayNameFor(m => m.PurchaseForms.Name)</th>
+                            <th>@Html.DisplayNameFor(m => m.PurchaseKinds.Name)</th>
+                            <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
+                            <th>@Html.DisplayNameFor(m => m.Description)</th>
+                            <th>@Html.DisplayNameFor(m => m.FilePath)</th>
+                            <th class="text-center" style="min-width: 130px;">İşlemler</th>
+                        </tr>
+                        <tr>
+                            <th><input type="text" class="filter-input" placeholder="Dosya No..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="İşin Adı..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Firma..." /></th>
+                            <th><input type="text" class="filter-input text-end" placeholder="Fiyat..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tarih..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Şekil..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tür..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tip..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Açıklama..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Dosya Yolu..." /></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-medium text-dark">@Html.DisplayFor(m => item.FileNo)</td>
+                                <td>@Html.DisplayFor(m => item.WorkingName)</td>
+                                <td>@Html.DisplayFor(m => item.Firms.Name)</td>
+                                <td data-value="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="text-end fw-bold text-dark">
+                                    @item.Price.ToString("N2", new System.Globalization.CultureInfo("tr-TR")) ₺
+                                </td>
+                                <td>@Html.DisplayFor(m => item.PurchaseDate)</td>
+                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseForms.Name)</span></td>
+                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseKinds.Name)</span></td>
+                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseTypes.Name)</span></td>
+                                <td class="text-truncate" style="max-width: 150px;" title="@item.Description">@Html.DisplayFor(m => item.Description)</td>
+                                <td class="text-truncate" style="max-width: 120px;" title="@item.FilePath">@Html.DisplayFor(m => item.FilePath)</td>
+                                <td class="text-center">
+                                    <div class="action-btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit" title="Güncelle" data-bs-toggle="tooltip">
+                                            <i class="fa-solid fa-pen-to-square mr-2"></i> Güncelle
+                                        </a>
+                                        <button type="button" class="btn btn-delete mr-2"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-file-id="@item.Id" data-file-name="@item.WorkingName"
+                                                title="Sil">
+                                            <i class="fa-solid fa-trash-can"></i> Sil
+                                        </button>
+                                        <button type="button" class="btn btn-copy copy-path-btn" data-path="@item.FilePath" title="Dosya Yolunu Kopyala">
+                                            <i class="fa-regular fa-copy"></i> Dosya Yolunu Kopyala
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<!-- Toast Bildirimi -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+    <div id="copyToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i id="toastIcon" class="fa-solid fa-check"></i>
+                <span id="toastMessage">Kopyalandı!</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Modalı -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3">
             <form method="post" asp-action="Delete">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Silme Onayı
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div class="modal-body py-2">
+                    <p class="mb-0 text-secondary">
+                        <strong id="fileName" class="text-dark"></strong> kaydını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                    </p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i> İptal
-                    </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">
-                        <i class="fa-solid fa-trash"></i> Sil
+                <div class="modal-footer border-top-0 pt-3">
+                    <button type="button" class="btn btn-light btn-sm fw-medium border" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger btn-sm fw-medium">
+                        <i class="fa-solid fa-trash me-1"></i> Sil
                     </button>
                 </div>
             </form>
@@ -206,128 +321,110 @@
 
     <script>
         $(document).ready(function () {
-            // Modal tetikleme
+            // Silme modalı veri aktarımı
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            var totalAll = @Html.Raw(Json.Serialize(ViewBag.TotalAll)); // Controller'dan tüm kayıtların toplamı
+            var totalAll = @Html.Raw(Json.Serialize(ViewBag.TotalAll ?? 0));
 
-            // Sayfa yüklendiğinde butona tüm kayıtların toplamını yaz
+            // Başlangıç genel toplamı
             $("#allTotalBtn").text(
                 totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
             );
 
-        var table = $('#myTable').DataTable({
-            dom: 'Brtip', // 'f' yani global search kaldırıldı, sadece tablo ve butonlar kalıyor. // B sondaysa butonlar altta
-            buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
-            responsive: { details: { type: 'column' } },
-            columnDefs: [
-                { className: 'control', orderable: false, targets: 0 },
-                { orderable: false, targets: -1 }
-            ],
-            order: [[1, 'asc']],
-            language: { url: '/datatable/tr.json' }
-        });
-
-            // Kolon bazlı filtreleme
-            $('#myTable thead tr:eq(1) th').each(function (i) {
-                $('input', this).on('keyup change clear', function () {
-                    var value = this.value;
-
-                    if (table.column(i).search() !== value) {
-                        table.column(i).search(value).draw();
-
-                        // Eğer herhangi bir filtre aktifse filtrelenmiş toplamı butona yaz
-                        var anyFilter = table.columns().search().reduce(function (acc, curr) {
-                            return acc || curr.length > 0;
-                        }, false);
-
-                        if (anyFilter) {
-                            // Filtrelenmiş satırların toplamını hesapla
-                            var colIndex = 3; // Price sütunu
-                            var filteredTotal = table
-                                .column(colIndex, { search: 'applied' })
-                                .nodes()
-                                .toArray()
-                                .reduce(function (a, node) {
-                                    return a + (parseFloat($(node).data('value')) || 0);
-                                }, 0);
-
-                            $("#allTotalBtn").text(
-                                filteredTotal.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
-                            );
-                        } else {
-                            // Filtre yoksa tüm kayıtların toplamını göster
-                            $("#allTotalBtn").text(
-                                totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
-                            );
-                        }
-                    }
-                });
-            });
-        });
-        ;
-
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function(){
-            var toastEl = document.getElementById('copyToast');
-            var toastBody = toastEl.querySelector('.toast-body');
-            var toastIcon = toastEl.querySelector('#toastIcon');
-
-            var toast = new bootstrap.Toast(toastEl, {
-                delay: 10000 // 10 saniye
+            // DataTables İlklendirme
+            var table = $('#myTable').DataTable({
+                dom: '<"d-flex flex-wrap justify-content-between align-items-center p-3 border-bottom"B>rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>',
+                buttons: [
+                    { extend: 'copy', className: 'btn btn-outline-secondary' },
+                    { extend: 'excel', className: 'btn btn-outline-success' },
+                    { extend: 'pdf', className: 'btn btn-outline-danger' },
+                    { extend: 'print', className: 'btn btn-outline-dark' }
+                ],
+                responsive: true,
+                columnDefs: [
+                    { orderable: false, targets: -1 } // İşlemler sütunu sıralanamaz
+                ],
+                order: [[0, 'desc']],
+                language: { url: '/datatable/tr.json' }
             });
 
-            document.querySelector('#myTable').addEventListener('click', function(e){
-                var btn = e.target.closest('.copy-path-btn');
-                if(!btn) return;
+            // Sütun Filtreleme ve Dinamik Toplam Hesaplama
+            $('#myTable thead tr:eq(1) th input').on('keyup change clear', function () {
+                var colIndex = $(this).parent().index();
+                var value = this.value;
 
-                var path = btn.getAttribute('data-path');
-                if(!path) return;
+                if (table.column(colIndex).search() !== value) {
+                    table.column(colIndex).search(value).draw();
 
-                function showToast(success){
-                    if(success){
-                        toastBody.textContent = 'Dosya yolu kopyalandı!';
-                        toastEl.classList.remove('bg-danger');
-                        toastEl.classList.add('bg-success');
-                        toastIcon.className = 'fa-solid fa-check me-2';
+                    var anyFilter = table.columns().search().reduce(function (acc, curr) {
+                        return acc || curr.length > 0;
+                    }, false);
+
+                    if (anyFilter) {
+                        var priceColIndex = 3; // Price sütununun indeksi
+                        var filteredTotal = table
+                            .column(priceColIndex, { search: 'applied' })
+                            .nodes()
+                            .toArray()
+                            .reduce(function (a, node) {
+                                return a + (parseFloat($(node).data('value')) || 0);
+                            }, 0);
+
+                        $("#allTotalBtn").text(
+                            filteredTotal.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+                        );
                     } else {
-                        toastBody.textContent = 'Kopyalama başarısız!';
-                        toastEl.classList.remove('bg-success');
-                        toastEl.classList.add('bg-danger');
-                        toastIcon.className = 'fa-solid fa-xmark me-2';
+                        $("#allTotalBtn").text(
+                            totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+                        );
+                    }
+                }
+            });
+
+            // Pano / Clipboard Etkileşimi ve Toast Bildirimi
+            var toastEl = document.getElementById('copyToast');
+            var toastMessage = document.getElementById('toastMessage');
+            var toastIcon = document.getElementById('toastIcon');
+            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+
+            $('#myTable').on('click', '.copy-path-btn', function (e) {
+                e.preventDefault();
+                var path = $(this).data('path');
+                if (!path) return;
+
+                function notify(success) {
+                    if (success) {
+                        toastMessage.textContent = 'Dosya yolu panoya kopyalandı!';
+                        toastEl.className = 'toast align-items-center text-white bg-success border-0 shadow-lg';
+                        toastIcon.className = 'fa-solid fa-check me-1';
+                    } else {
+                        toastMessage.textContent = 'Kopyalama başarısız oldu!';
+                        toastEl.className = 'toast align-items-center text-white bg-danger border-0 shadow-lg';
+                        toastIcon.className = 'fa-solid fa-xmark me-1';
                     }
                     toast.show();
                 }
 
-                // Clipboard API
-                if(navigator.clipboard){
-                    navigator.clipboard.writeText(path).then(function(){
-                        showToast(true);
-                    }).catch(function(){
-                        showToast(false);
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(path).then(function () {
+                        notify(true);
+                    }).catch(function () {
+                        notify(false);
                     });
                 } else {
-                    var input = document.createElement('input');
-                    document.body.appendChild(input);
-                    input.value = path;
-                    input.select();
+                    var $temp = $("<input>");
+                    $("body").append($temp);
+                    $temp.val(path).select();
                     var success = false;
-                    try { success = document.execCommand('copy'); } catch(e){ success = false; }
-                    document.body.removeChild(input);
-                    showToast(success);
+                    try { success = document.execCommand("copy"); } catch (err) { success = false; }
+                    $temp.remove();
+                    notify(success);
                 }
             });
         });
     </script>
-    }
-
+}

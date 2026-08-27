@@ -3,144 +3,297 @@
 @{
     ViewData["Title"] = "Rehber Listesi";
 }
+
+<!-- DataTables & FontAwesome CSS -->
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-<p>
-    <a asp-action="Create" class="btn btn-primary" title="Yeni Ekle">
-        <i class="fa-solid fa-plus"></i> Yeni Ekle
-    </a>
-</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    .table {
-        font-family: "Segoe UI", Arial, sans-serif;
-        font-size: 14px;
-        color: #333;
-        border-collapse: separate;
-        border-spacing: 0;
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        background-color: #f8fafc !important;
+        color: #334155;
     }
 
-        .table th {
-            background: #f0f2f5;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            padding: 10px;
-            border-bottom: 2px solid #dcdfe3;
-        }
-
-        .table td {
-            font-size: 12px;
-            padding: 8px 10px;
-            vertical-align: middle;
-        }
-
-        /* Modern input stil */
-        .table input[type="text"] {
-            width: 95%;
-            padding: 6px 10px;
-            border: 1px solid #c4c7cc;
-            border-radius: 6px;
-            font-size: 12px;
-            background: #fff;
-            transition: all .25s ease;
-        }
-
-            /* Hover input */
-            .table input[type="text"]:hover {
-                border-color: #9ba0a8;
-                background: #fafafa;
-            }
-
-            /* Focus efekti */
-            .table input[type="text"]:focus {
-                outline: none;
-                border-color: #4a90e2;
-                box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
-                background: #fff;
-            }
-
-        /* Satır hover */
-        .table tbody tr:hover {
-            background-color: #f7faff;
-        }
-
-    /* Butonlara küçük estetik dokunuş */
-    .btn-rounded {
-        border-radius: 6px !important;
+    /* Modern Card Layout */
+    .app-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
     }
 
-    /* Tablonun üst kenarına hafif gölge */
-    #myTable {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border-radius: 8px;
+    .app-card-header {
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.25rem 1.5rem;
+        border-radius: 14px 14px 0 0;
+    }
+
+    /* Table Stilleri */
+    .table-responsive-wrapper {
+        padding: 1.25rem;
+    }
+
+    table.dataTable {
+        width: 100% !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        margin-top: 0 !important;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
         overflow: hidden;
     }
+
+        table.dataTable thead tr:nth-child(1) th {
+            background-color: #4B49AC !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            border: none !important;
+        }
+
+        table.dataTable thead tr:nth-child(2) th {
+            background-color: #f8fafc !important;
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        table.dataTable tbody td {
+            padding: 12px 14px !important;
+            font-size: 0.875rem;
+            color: #1e293b;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: #f1f5f9 !important;
+        }
+
+    /* Filter Input Stilleri */
+    .table-filter-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        background-color: #ffffff;
+        color: #0f172a;
+        transition: all 0.2s ease;
+    }
+
+        .table-filter-input:focus {
+            outline: none;
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    /* Modern Buton Tasarımları */
+    .btn-modern-primary {
+        background: #4B49AC;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(75, 73, 172, 0.25);
+        text-decoration: none;
+    }
+
+        .btn-modern-primary:hover {
+            background: #3f3da3;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(75, 73, 172, 0.35);
+        }
+
+    /* DataTables Export Butonları */
+    .dt-buttons {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 6px;
+    }
+
+    .dt-button {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        transition: all 0.2s ease !important;
+    }
+
+        .dt-button:hover {
+            background: #f1f5f9 !important;
+            border-color: #94a3b8 !important;
+            color: #0f172a !important;
+        }
+
+    /* Modern Aksiyon Butonları */
+    .btn-action-edit {
+        background-color: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-action-edit:hover {
+            background-color: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+            transform: translateY(-1px);
+        }
+
+    .btn-action-delete {
+        background-color: #fef2f2;
+        color: #ef4444;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-action-delete:hover {
+            background-color: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+            transform: translateY(-1px);
+        }
 </style>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(m => m.NameSurname)</th>
-            <th>@Html.DisplayNameFor(m => m.Title)</th>
-            <th>@Html.DisplayNameFor(m => m.DepartmentId)</th>
-            <th class="text-left">@Html.DisplayNameFor(m => m.InternalNo)</th>
-            <th>@Html.DisplayNameFor(m => m.CepNo)</th>
-            <th>İşlemler</th>
-        </tr>
-        <tr>
-            <th><input type="text" placeholder="Ara Ad Soyad" /></th>
-            <th><input type="text" placeholder="Ara Unvan" /></th>
-            <th><input type="text" placeholder="Ara Şube" /></th>
-            <th class="text-left"><input type="text" placeholder="Ara Dahili No" /></th>
-            <th><input type="text" placeholder="Ara Cep No" /></th>
-            <th></th> <!-- İşlemler sütunu filtre yok -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(m => item.NameSurname)</td>
-                <td>@Html.DisplayFor(m => item.Title)</td>
-                <td>@Html.DisplayFor(m => item.Department.Name)</td>
-                <td class="text-left">@Html.DisplayFor(m => item.InternalNo)</td>
-                <td>@Html.DisplayFor(m => item.CepNo)</td>
-                <td>
-                    <a class="btn btn-warning btn-sm btn-rounded" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
-                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
-                    </a>
-                    <button type="button" class="btn btn-danger btn-sm btn-rounded"
-                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-file-id="@item.Id" data-file-name="@item.NameSurname" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="post" asp-action="Delete">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<div class="container-fluid px-0">
+    <!-- Header Kartı -->
+    <div class="card app-card mb-3">
+        <div class="card-body app-card-header d-flex align-items-center justify-content-between py-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="p-2 rounded-3" style="background: #eef2ff; color: #4B49AC;">
+                    <i class="fa-solid fa-address-book fa-lg"></i>
                 </div>
-                <div class="modal-body">
-                    <strong id="fileName"></strong> silmek istediğine emin misin?
+                <div>
+                    <h5 class="mb-0 fw-bold" style="color: #0f172a;">Rehber Listesi</h5>
+                    <p class="text-muted small mb-0">Kurum içi iletişim ve rehber kayıtlarını yönetin.</p>
+                </div>
+            </div>
+            <a asp-action="Create" class="btn btn-modern-primary d-inline-flex align-items-center gap-2" title="Yeni Ekle">
+                <i class="fa-solid fa-plus"></i> Yeni Ekle
+            </a>
+        </div>
+    </div>
+
+    <!-- Tablo Kartı -->
+    <div class="card app-card">
+        <div class="table-responsive-wrapper">
+            <table class="table table-hover align-middle" id="myTable">
+                <thead>
+                    <tr>
+                        <th><i class="fa-solid fa-user me-1"></i> @Html.DisplayNameFor(m => m.NameSurname)</th>
+                        <th><i class="fa-solid fa-id-card me-1"></i> @Html.DisplayNameFor(m => m.Title)</th>
+                        <th><i class="fa-solid fa-building me-1"></i> @Html.DisplayNameFor(m => m.DepartmentId)</th>
+                        <th class="text-start"><i class="fa-solid fa-phone me-1"></i> @Html.DisplayNameFor(m => m.InternalNo)</th>
+                        <th><i class="fa-solid fa-mobile-screen-button me-1"></i> @Html.DisplayNameFor(m => m.CepNo)</th>
+                        <th class="text-center" style="width: 160px;">İşlemler</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="table-filter-input" placeholder="Ara Ad Soyad..." /></th>
+                        <th><input type="text" class="table-filter-input" placeholder="Ara Unvan..." /></th>
+                        <th><input type="text" class="table-filter-input" placeholder="Ara Şube..." /></th>
+                        <th><input type="text" class="table-filter-input" placeholder="Ara Dahili No..." /></th>
+                        <th><input type="text" class="table-filter-input" placeholder="Ara Cep No..." /></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-medium">
+                                <i class="fa-solid fa-user-circle text-secondary me-2"></i>@Html.DisplayFor(m => item.NameSurname)
+                            </td>
+                            <td>
+                                <i class="fa-solid fa-user-tie text-muted me-2"></i>@Html.DisplayFor(m => item.Title)
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fa-solid fa-building me-1 text-muted"></i>@Html.DisplayFor(m => item.Department.Name)
+                                </span>
+                            </td>
+                            <td class="text-start font-monospace">
+                                <i class="fa-solid fa-phone-flip text-primary me-2 opacity-75"></i>@Html.DisplayFor(m => item.InternalNo)
+                            </td>
+                            <td class="font-monospace">
+                                <i class="fa-solid fa-mobile-screen text-success me-2 opacity-75"></i>@Html.DisplayFor(m => item.CepNo)
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn-action-edit" asp-action="Edit" asp-route-id="@item.Id" title="Güncelle">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <span>Düzenle</span>
+                                    </a>
+                                    <button type="button" class="btn-action-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-file-id="@item.Id" data-file-name="@item.NameSurname" title="Sil">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                        <span>Sil</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
+            <form method="post" asp-action="Delete">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-danger d-flex align-items-center gap-2" id="deleteModalLabel">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Silme Onayı
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <p class="mb-0 text-secondary">
+                        <strong id="fileName" class="text-dark"></strong> kişisini rehberden silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+                    </p>
                     <input type="hidden" name="id" id="fileId" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm btn-rounded" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark" title="İptal"></i> İptal
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-2 px-3 fw-medium" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark me-1"></i> İptal
                     </button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded" title="Sil">
-                        <i class="fa-solid fa-trash"></i> Sil
+                    <button type="submit" class="btn btn-danger rounded-2 px-3 fw-medium">
+                        <i class="fa-solid fa-trash me-1"></i> Evet, Sil
                     </button>
                 </div>
             </form>
@@ -161,20 +314,27 @@
     <script>
         $(document).ready(function () {
 
-           var table = $('#myTable').DataTable({
-            stateSave: true,
-            dom: 'Blrtip',
-            buttons: [
-                { extend: 'excel', exportOptions: { columns: ':not(:last-child)' } },
-                'copy','csv','pdf','print'
-            ],
-            responsive: { details: { type: 'column' } },
-            columnDefs: [
-                { orderable: false, targets: -1 } // sadece işlemler sütunu sıralanamasın
-            ],
-            order: [[0,'asc']],
-            language: { url: '/datatable/tr.json' }
-        });
+            var table = $('#myTable').DataTable({
+                stateSave: true,
+                dom: '<"d-flex align-items-center justify-content-between mb-3"Bf>rtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa-solid fa-file-excel text-success me-1"></i> Excel',
+                        exportOptions: { columns: ':not(:last-child)' }
+                    },
+                    { extend: 'copy', text: '<i class="fa-solid fa-copy me-1"></i> Kopyala' },
+                    { extend: 'csv', text: '<i class="fa-solid fa-file-csv me-1"></i> CSV' },
+                    { extend: 'pdf', text: '<i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF' },
+                    { extend: 'print', text: '<i class="fa-solid fa-print me-1"></i> Yazdır' }
+                ],
+                responsive: { details: { type: 'column' } },
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ],
+                order: [[0, 'asc']],
+                language: { url: '/datatable/tr.json' }
+            });
 
             function normalizeTr(text) {
                 if (!text) return "";
@@ -190,7 +350,7 @@
                     .replace(/ç/g, "c");
             }
 
-                        // Modal tetikleme
+            // Modal tetikleme
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
@@ -199,58 +359,51 @@
 
             let filters = ["", "", "", "", ""];
 
-                                // filtre değişince kaydet
-        $('#myTable thead tr:eq(1) th input').on('keyup', function () {
+            // Filtre değişince kaydet
+            $('#myTable thead tr:eq(1) th input').on('keyup', function () {
+                $('#myTable thead tr:eq(1) th input').each(function (i) {
+                    filters[i] = $(this).val();
+                });
 
-            $('#myTable thead tr:eq(1) th input').each(function (i) {
-                filters[i] = $(this).val();
+                localStorage.setItem("guideFilters", JSON.stringify(filters));
+                table.draw(false);
             });
 
-            localStorage.setItem("guideFilters", JSON.stringify(filters));
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
+                if (settings.nTable.id !== 'myTable') return true;
 
-            table.draw(false);
-        });
+                var nameSurnameInput = normalizeTr(filters[0]);
+                var titleInput = normalizeTr(filters[1]);
+                var departmentInput = normalizeTr(filters[2]);
+                var internalNoInput = normalizeTr(filters[3]);
+                var cepNoInput = normalizeTr(filters[4]);
 
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
+                var rowNameSurname = normalizeTr(data[0]);
+                var rowTitle = normalizeTr(data[1]);
+                var rowDepartment = normalizeTr(data[2]);
+                var rowInternalNo = normalizeTr(data[3]);
+                var rowCepNo = normalizeTr(data[4]);
 
-            if (settings.nTable.id !== 'myTable') return true;
+                if (nameSurnameInput && !rowNameSurname.includes(nameSurnameInput)) return false;
+                if (titleInput && !rowTitle.includes(titleInput)) return false;
+                if (departmentInput && !rowDepartment.includes(departmentInput)) return false;
+                if (internalNoInput && !rowInternalNo.includes(internalNoInput)) return false;
+                if (cepNoInput && !rowCepNo.includes(cepNoInput)) return false;
 
-            var nameSurnameInput = normalizeTr(filters[0]);
-            var titleInput = normalizeTr(filters[1]);
-            var departmentInput = normalizeTr(filters[2]);
-            var internalNoInput = normalizeTr(filters[3]);
-            var cepNoInput = normalizeTr(filters[4]);
-
-            var rowNameSurname = normalizeTr(data[0]);
-            var rowTitle = normalizeTr(data[1]);
-            var rowDepartment = normalizeTr(data[2]);
-            var rowInternalNo = normalizeTr(data[3]);
-            var rowCepNo = normalizeTr(data[4]);
-
-            if (nameSurnameInput && !rowNameSurname.includes(nameSurnameInput)) return false;
-            if (titleInput && !rowTitle.includes(titleInput)) return false;
-            if (departmentInput && !rowDepartment.includes(departmentInput)) return false;
-            if (internalNoInput && !rowInternalNo.includes(internalNoInput)) return false;
-            if (cepNoInput && !rowCepNo.includes(cepNoInput)) return false;
-
-            return true;
-        });
-
-
-         $('#myTable thead input').on('click focus', function (e) {
-            e.stopPropagation();
-        });
-
-        var savedFilters = JSON.parse(localStorage.getItem("guideFilters"));
-
-        if (savedFilters) {
-            filters = savedFilters;
-
-            $('#myTable thead tr:eq(1) th input').each(function (i) {
-                $(this).val(filters[i]);
+                return true;
             });
-        }
 
+            $('#myTable thead input').on('click focus', function (e) {
+                e.stopPropagation();
+            });
+
+            var savedFilters = JSON.parse(localStorage.getItem("guideFilters"));
+            if (savedFilters) {
+                filters = savedFilters;
+                $('#myTable thead tr:eq(1) th input').each(function (i) {
+                    $(this).val(filters[i]);
+                });
+            }
         });
     </script>
 }

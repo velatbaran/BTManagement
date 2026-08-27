@@ -4,21 +4,198 @@
     ViewData["Title"] = "Yapılan Çalışmayla İlgili Resimler";
 }
 
-<div class="row mb-4">
-        <div class="section-title mt-2">
-        <h4 class="m-0 font-weight-bold">@ViewData["WorksDoneName"]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (@Model.Count() Adet) </h4>
-            <hr />
-        </div>
-        @foreach (var item in Model)
-        {
-        <div class="col-lg-3">
-            <p class="mt-2">
-                <img src="@Url.Action("ViewImage", new { id = item.Id })" class="card-img-top" width="200" height="200">
-            </p>
-            <a asp-action="Download" asp-route-id="@item.Id" class="btn btn-primary btn-sm" title="İndir"><i class="fa-solid fa-download"></i> İndir</a>
-        </div>
+<style>
+    /* Galeri Ana Kartı */
+    .gallery-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .gallery-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .gallery-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+    .gallery-badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .gallery-card-body {
+        padding: 24px;
+    }
+
+    /* Görsel Kartı */
+    .image-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+        .image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+
+    .image-wrapper {
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        background-color: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+    .image-card:hover .image-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .image-card-footer {
+        padding: 12px;
+        background-color: #ffffff;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-download {
+        background-color: #f8fafc;
+        color: #4B49AC;
+        border: 1px solid #e2e8f0;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        width: 100%;
+        justify-content: center;
+    }
+
+        .btn-download:hover {
+            background-color: #4B49AC;
+            color: #ffffff;
+            border-color: #4B49AC;
+        }
+
+    /* Boş Durum Tasarımı */
+    .empty-gallery {
+        text-align: center;
+        padding: 48px 20px;
+        color: #64748b;
+    }
+
+        .empty-gallery i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+    /* Geri Dön Butonu */
+    .btn-custom-back {
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-custom-back:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+</style>
+
+<div class="gallery-card mb-4">
+    <div class="gallery-card-header">
+        <h5>
+            <i class="fa-solid fa-images fs-5"></i>
+            @ViewData["WorksDoneName"]
+        </h5>
+        <span class="gallery-badge">
+            <i class="fa-solid fa-photo-film me-1"></i> @Model.Count() Adet
+        </span>
+    </div>
+
+    <div class="gallery-card-body">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="image-card">
+                            <div class="image-wrapper">
+                                <img src="@Url.Action("ViewImage", new { id = item.Id })" alt="Çalışma Görseli" loading="lazy">
+                            </div>
+                            <div class="image-card-footer">
+                                <a asp-action="Download" asp-route-id="@item.Id" class="btn-download" title="İndir">
+                                    <i class="fa-solid fa-download"></i> İndir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-gallery">
+                <i class="fa-regular fa-image"></i>
+                <p class="mb-0">Bu çalışmaya ait yüklenmiş herhangi bir resim bulunamadı.</p>
+            </div>
+        }
+    </div>
 </div>
-<div>
-    <a href="/yapilanisler"><i class="fa-solid fa-backward"></i> Listeye Geri Dön</a>
+
+<div class="mb-4">
+    <a href="/yapilanisler" class="btn-custom-back">
+        <i class="fa-solid fa-arrow-left"></i> Listeye Geri Dön
+    </a>
 </div>

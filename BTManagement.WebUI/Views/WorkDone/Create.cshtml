@@ -3,39 +3,188 @@
     ViewData["Title"] = "Yapılan İş Ekle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+<style>
+    /* Form Kartı */
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+    }
+
+        .form-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .form-card-body {
+        padding: 28px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+        margin-bottom: 6px;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    /* Özel Dosya Yükleme Alanı */
+    .file-upload-wrapper {
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 24px;
+        text-align: center;
+        background-color: #f8fafc;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+        .file-upload-wrapper:hover {
+            border-color: #4B49AC;
+            background-color: #f1f5f9;
+        }
+
+    .file-upload-icon {
+        font-size: 2rem;
+        color: #4B49AC;
+        margin-bottom: 8px;
+    }
+
+    .file-upload-text {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Form Butonları */
+    .btn-submit {
+        background-color: #4B49AC;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #3f3da0;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(75, 73, 172, 0.25);
+        }
+
+    .btn-cancel {
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+</style>
+
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-8">
+        <div class="form-card">
+            <div class="form-card-header">
+                <h5>
+                    <i class="fa-solid fa-folder-plus"></i> Yeni Yapılan İş Ekle
+                </h5>
             </div>
-            <div class="form-group">
-                <label asp-for="Work" class="control-label"></label>
-                <input asp-for="Work" class="form-control" />
-                <span asp-validation-for="Work" class="text-danger"></span>
+
+            <div class="form-card-body">
+                <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="DepartmentId" class="form-label">Şube / Birim</label>
+                        <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId"></select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Work" class="form-label">Yapılan İş Başlığı</label>
+                        <input asp-for="Work" class="form-control" placeholder="Yapılan işin tanımını giriniz..." />
+                        <span asp-validation-for="Work" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="State" class="form-label">Açıklama / Durum Detayı</label>
+                        <textarea asp-for="State" class="form-control" rows="4" placeholder="İşle ilgili detayları veya mevcut durumu açıklayınız..."></textarea>
+                        <span asp-validation-for="State" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Çalışma Görselleri</label>
+                        <div class="file-upload-wrapper">
+                            <i class="fa-solid fa-cloud-arrow-up file-upload-icon"></i>
+                            <div class="file-upload-text fw-semibold" id="fileLabel">Resim seçmek için tıklayın veya buraya sürükleyin</div>
+                            <small class="text-muted d-block">CTRL tuşuna basılı tutarak birden fazla resim seçebilirsiniz.</small>
+                            <input asp-for="Files" class="file-upload-input" id="customFile" multiple accept="image/*">
+                        </div>
+                        <span asp-validation-for="Files" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 pt-2">
+                        <button type="submit" class="btn-submit" title="Ekle">
+                            <i class="fa-solid fa-floppy-disk"></i> Kaydet
+                        </button>
+                        <a href="/yapilanisler" class="btn-cancel" title="İptal">
+                            <i class="fa-solid fa-xmark"></i> İptal
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label"></label>
-                <textarea asp-for="State" class="form-control" rows="4" cols="4"></textarea>
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Files" class="control-label"></label>
-                <div class="custom-file">
-                    <input asp-for="Files" class="custom-file-input" id="customFile" multiple>
-                    <label class="custom-file-label" for="customFile">Resim seçiniz (çoklu seçim yapabilirsiniz)</label>
-                </div>
-                <span asp-validation-for="Files" class="text-danger"></span>
-                <small class="form-text text-muted">Birden fazla resim seçmek için CTRL tuşuna basılı tutarak tıklayın.</small>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button> &nbsp;&nbsp;&nbsp;
-                @* <a href="/WorkDone/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/yapilanisler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -44,22 +193,16 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // Dosya seçildiğinde dosya adlarını göster
-        $('.custom-file-input').on('change', function() {
+        $('#customFile').on('change', function() {
             var files = $(this)[0].files;
-            var fileNames = [];
+            var label = $('#fileLabel');
 
-            for (var i = 0; i < files.length; i++) {
-                fileNames.push(files[i].name);
-            }
-
-            var label = $(this).next('.custom-file-label');
             if (files.length > 1) {
-                label.html(files.length + ' dosya seçildi: ' + fileNames.join(', '));
-            } else if (files.length == 1) {
-                label.html(fileNames[0]);
+                label.html('<span class="text-primary fw-bold">' + files.length + ' dosya seçildi</span>');
+            } else if (files.length === 1) {
+                label.html('<span class="text-primary fw-bold">' + files[0].name + '</span>');
             } else {
-                label.html('Resim seçiniz (çoklu seçim yapabilirsiniz)');
+                label.html('Resim seçmek için tıklayın veya buraya sürükleyin');
             }
         });
     </script>

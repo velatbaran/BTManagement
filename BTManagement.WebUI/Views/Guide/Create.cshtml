@@ -4,40 +4,93 @@
     ViewData["Title"] = "Rehber Ekle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NameSurname" class="control-label"></label>
-                <input asp-for="NameSurname" class="form-control" />
-                <span asp-validation-for="NameSurname" class="text-danger"></span>
+<style>
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-header-icon {
+        width: 44px;
+        height: 44px;
+        background: #eef2ff;
+        color: #4f46e5;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 0.35rem;
+    }
+
+    .input-group-text {
+        background-color: #f8fafc;
+        border-color: #cbd5e1;
+        color: #64748b;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+
+    .form-control, .form-select {
+        border-color: #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        padding: 0.55rem 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- Sayfa Üst Başlığı -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="form-header-icon">
+                <i class="fa-solid fa-address-book"></i>
             </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <div>
+                <h4 class="mb-0 fw-bold text-dark">Yeni Rehber Kaydı</h4>
+                <p class="text-muted small mb-0">Kurum rehberine yeni kişi eklemek için alanları doldurun.</p>
             </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+        </div>
+        <a href="/rehberim" class="btn btn-outline-secondary btn-sm rounded-2 px-3 fw-medium">
+            <i class="fa-solid fa-arrow-left me-1"></i> Listeye Dön
+        </a>
+    </div>
+
+    <!-- Form Kartı -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card form-card">
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        @await Html.PartialAsync("_GuideForm", Model)
+
+                        <!-- Alt Butonlar -->
+                        <div class="pt-3 mt-4 border-top d-flex align-items-center justify-content-end gap-2">
+                            <a href="/rehberim" class="btn btn-light btn-sm fw-medium px-3 border">
+                                <i class="fa-solid fa-ban me-1"></i> İptal
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-sm fw-medium px-4">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="InternalNo" class="control-label"></label>
-                <input asp-for="InternalNo" class="form-control" />
-                <span asp-validation-for="InternalNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CepNo" class="control-label"></label>
-                <input asp-for="CepNo" class="form-control" />
-                <span asp-validation-for="CepNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Ekle" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-floppy-disk"></i> Ekle</button> &nbsp;&nbsp;&nbsp;
-                @* <a href="/Guide/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/rehberim" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

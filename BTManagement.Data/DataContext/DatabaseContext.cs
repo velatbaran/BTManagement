@@ -59,6 +59,7 @@ namespace BTManagement.Data.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // çalışan dll içinden configuration class ları bul
+            modelBuilder.UseCollation("Turkish_CI_AI");
             base.OnModelCreating(modelBuilder);
         }
 

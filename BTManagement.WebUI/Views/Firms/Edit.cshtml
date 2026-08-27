@@ -4,88 +4,216 @@
     ViewData["Title"] = "Firma Güncelle";
 }
 
-<form asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="CreatedDate" />
-    <input type="hidden" asp-for="Created" />
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Authorized" class="control-label"></label>
-                <input asp-for="Authorized" class="form-control" />
-                <span asp-validation-for="Authorized" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirmKindId" class="control-label"></label>
-                <select asp-for="FirmKindId" class="form-control" asp-items="ViewBag.FirmKindId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RecordNo" class="control-label"></label>
-                <input asp-for="RecordNo" class="form-control" />
-                <span asp-validation-for="RecordNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TaxOffice" class="control-label"></label>
-                <input asp-for="TaxOffice" class="form-control" />
-                <span asp-validation-for="TaxOffice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TaxNo" class="control-label"></label>
-                <input asp-for="TaxNo" class="form-control" />
-                <span asp-validation-for="TaxNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TcNo" class="control-label"></label>
-                <input type="number" asp-for="TcNo" class="form-control" />
-                <span asp-validation-for="TcNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input type="tel" asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <textarea asp-for="Address" class="form-control" cols="3" rows="3"></textarea>
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Eposta" class="control-label"></label>
-                <input type="email" asp-for="Eposta" class="form-control" />
-                <span asp-validation-for="Eposta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WebAddress" class="control-label"></label>
-                <input asp-for="WebAddress" class="form-control" />
-                <span asp-validation-for="WebAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BankName" class="control-label"></label>
-                <input asp-for="BankName" class="form-control" />
-                <span asp-validation-for="BankName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IbanNo" class="control-label"></label>
-                <input asp-for="IbanNo" class="form-control" />
-                <span asp-validation-for="IbanNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Güncelle" class="btn btn-outline-success btn-rounded" title="Güncelle"><i class="fa-solid fa-pen-to-square"></i> Güncelle</button>&nbsp;&nbsp;&nbsp;
-                @* <a href="/Firms/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/firmalar" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
-        </div>
-    </div>
-</form>
+<style>
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
 
+    .form-card-header {
+        background-color: #4B49AC;
+        color: #ffffff;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .form-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+    .form-card-body {
+        padding: 24px;
+    }
+
+    .custom-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #334155;
+        margin-bottom: 6px;
+    }
+
+    .custom-input, .custom-select {
+        padding: 9px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+        .custom-input:focus, .custom-select:focus {
+            outline: none;
+            border-color: #4B49AC;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+        }
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-custom-update {
+        background-color: #d97706;
+        color: #ffffff;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-custom-update:hover {
+            background-color: #b45309;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.25);
+        }
+
+    .btn-custom-cancel {
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-custom-cancel:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+</style>
+
+<div class="form-card mb-4">
+    <div class="form-card-header">
+        <i class="fa-solid fa-pen-to-square fs-5"></i>
+        <h5>Firma Güncelle</h5>
+    </div>
+    <div class="form-card-body">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="Created" />
+
+            <div class="row">
+                <!-- Sol Kolon -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="custom-label">Firma Adı</label>
+                        <input asp-for="Name" class="form-control custom-input" placeholder="Firma adını giriniz..." />
+                        <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Authorized" class="custom-label">Yetkili</label>
+                        <input asp-for="Authorized" class="form-control custom-input" placeholder="Yetkili kişi..." />
+                        <span asp-validation-for="Authorized" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="FirmKindId" class="custom-label">Firma Türü</label>
+                        <select asp-for="FirmKindId" class="form-select custom-select" asp-items="ViewBag.FirmKindId"></select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="RecordNo" class="custom-label">Sicil No</label>
+                        <input asp-for="RecordNo" class="form-control custom-input" placeholder="Ticaret sicil no..." />
+                        <span asp-validation-for="RecordNo" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TaxOffice" class="custom-label">Vergi Dairesi</label>
+                        <input asp-for="TaxOffice" class="form-control custom-input" placeholder="Vergi dairesi..." />
+                        <span asp-validation-for="TaxOffice" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TaxNo" class="custom-label">Vergi No</label>
+                        <input asp-for="TaxNo" class="form-control custom-input" placeholder="Vergi kimlik no..." />
+                        <span asp-validation-for="TaxNo" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TcNo" class="custom-label">TC Kimlik No</label>
+                        <input type="number" asp-for="TcNo" class="form-control custom-input" placeholder="T.C. No..." />
+                        <span asp-validation-for="TcNo" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Phone" class="custom-label">Telefon</label>
+                        <input type="tel" asp-for="Phone" class="form-control custom-input" placeholder="Telefon numarası..." />
+                        <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Address" class="custom-label">Adres</label>
+                        <textarea asp-for="Address" class="form-control custom-input" rows="3" placeholder="Firma adresi..."></textarea>
+                        <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Eposta" class="custom-label">E-Posta</label>
+                        <input type="email" asp-for="Eposta" class="form-control custom-input" placeholder="ornek@firma.com" />
+                        <span asp-validation-for="Eposta" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="WebAddress" class="custom-label">Web Adresi</label>
+                        <input asp-for="WebAddress" class="form-control custom-input" placeholder="www.firma.com" />
+                        <span asp-validation-for="WebAddress" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="BankName" class="custom-label">Banka Adı</label>
+                        <input asp-for="BankName" class="form-control custom-input" placeholder="Banka adı..." />
+                        <span asp-validation-for="BankName" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="IbanNo" class="custom-label">IBAN No</label>
+                        <input asp-for="IbanNo" class="form-control custom-input" placeholder="TR..." />
+                        <span asp-validation-for="IbanNo" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-custom-update" title="Güncelle">
+                    <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                </button>
+                <a href="/firmalar" class="btn-custom-cancel" title="İptal">
+                    <i class="fa-solid fa-ban"></i> İptal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
 @section Scripts {
     @{

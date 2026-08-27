@@ -4,86 +4,291 @@
     ViewData["Title"] = "Ürün Güncelle";
 }
 
-<form asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-@*     <input type="hidden" asp-for="CreatedDate" />
-    <input type="hidden" asp-for="Created" /> *@
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Brand" class="control-label"></label>
-                <input asp-for="Brand" class="form-control" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
+<!-- FontAwesome & Google Fonts -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        background-color: #f8fafc !important;
+        color: #334155;
+    }
+
+    /* Modern Form Card */
+    .app-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    .app-card-header {
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.25rem 1.5rem;
+        border-radius: 14px 14px 0 0;
+    }
+
+    /* Input & Label Stilleri */
+    .form-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.875rem;
+        color: #0f172a;
+        background-color: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4B49AC;
+            box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+            outline: none;
+        }
+
+    .input-group-text {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-right: none;
+        color: #4B49AC;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        font-size: 0.875rem;
+    }
+
+    .input-group .form-control, .input-group .form-select {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    /* Modern Buton Tasarımları */
+    .btn-modern-primary {
+        background: #4B49AC;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.65rem 1.4rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(75, 73, 172, 0.25);
+    }
+
+        .btn-modern-primary:hover {
+            background: #3f3da3;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(75, 73, 172, 0.35);
+        }
+
+    .btn-modern-ghost {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.65rem 1.4rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+        .btn-modern-ghost:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+    .section-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #4B49AC;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- Header Kartı -->
+    <div class="card app-card mb-3">
+        <div class="card-body app-card-header d-flex align-items-center justify-content-between py-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="p-2 rounded-3" style="background: #eef2ff; color: #4B49AC;">
+                    <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold" style="color: #0f172a;">Ürün Güncelle</h5>
+                    <p class="text-muted small mb-0">Mevcut envanter kaydının detaylarını düzenleyin.</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SerialNo" class="control-label"></label>
-                <input asp-for="SerialNo" class="form-control" />
-                <span asp-validation-for="SerialNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NetworkAddress" class="control-label"></label>
-                <input asp-for="NetworkAddress" class="form-control" />
-                <span asp-validation-for="NetworkAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NetworkName" class="control-label"></label>
-                <input asp-for="NetworkName" class="form-control" />
-                <span asp-validation-for="NetworkName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HardwareName" class="control-label"></label>
-                <input asp-for="HardwareName" class="form-control" />
-                <span asp-validation-for="HardwareName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Feature" class="control-label"></label>
-                <input asp-for="Feature" class="form-control" />
-                <span asp-validation-for="Feature" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label"></label>
-                <select name="State" class="form-control">
-                    <option value="Faal">Faal</option>
-                    <option value="Arızalı">Arızalı</option>
-                    <option value="Kayıttan Düşürülmüş">Kayıttan Düşürülmüş</option>
-                </select>
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" cols="3" rows="3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Güncelle" class="btn btn-outline-success btn-rounded" title="Güncelle"><i class="fa-solid fa-pen-to-square"></i> Güncelle</button>&nbsp;&nbsp;&nbsp;
-                @* <a href="/Products/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/urunler" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
-            </div>
+            <a href="/urunler" class="btn btn-modern-ghost d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Listeye Dön
+            </a>
         </div>
     </div>
-</form>
 
+    <!-- Form Kartı -->
+    <div class="card app-card">
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Hidden Fields -->
+                <input type="hidden" asp-for="Id" />
+                @* <input type="hidden" asp-for="CreatedDate" /> *@
+                @* <input type="hidden" asp-for="Created" /> *@
+
+                <div class="row g-4">
+                    <!-- Sol Kolon: Temel ve Ağ Bilgileri -->
+                    <div class="col-lg-6">
+                        <div class="section-title d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-microchip"></i> Donanım ve Ağ Bilgileri
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Brand" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-copyright"></i></span>
+                                <input asp-for="Brand" class="form-control" placeholder="Örn: Dell, HP, Lenovo" />
+                            </div>
+                            <span asp-validation-for="Brand" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Model" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-cube"></i></span>
+                                <input asp-for="Model" class="form-control" placeholder="Örn: Latitude 5520" />
+                            </div>
+                            <span asp-validation-for="Model" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SerialNo" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
+                                <input asp-for="SerialNo" class="form-control" placeholder="Seri numarasını giriniz" />
+                            </div>
+                            <span asp-validation-for="SerialNo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NetworkAddress" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-network-wired"></i></span>
+                                <input asp-for="NetworkAddress" class="form-control" placeholder="Örn: 192.168.1.100" />
+                            </div>
+                            <span asp-validation-for="NetworkAddress" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NetworkName" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
+                                <input asp-for="NetworkName" class="form-control" placeholder="Örn: PC-AHMET" />
+                            </div>
+                            <span asp-validation-for="NetworkName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HardwareName" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-desktop"></i></span>
+                                <input asp-for="HardwareName" class="form-control" placeholder="Donanım adını giriniz" />
+                            </div>
+                            <span asp-validation-for="HardwareName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Kolon: Sorumlu, Durum ve Kategori Bilgileri -->
+                    <div class="col-lg-6">
+                        <div class="section-title d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-sliders"></i> Sınıflandırma ve Detaylar
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Username" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input asp-for="Username" class="form-control" placeholder="Kullanıcı adı veya zimmetli kişi" />
+                            </div>
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="State" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-dot"></i></span>
+                                <select asp-for="State" class="form-select">
+                                    <option value="Faal">Faal</option>
+                                    <option value="Arızalı">Arızalı</option>
+                                    <option value="Kayıttan Düşürülmüş">Kayıttan Düşürülmüş</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="State" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CategoryId" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-layer-group"></i></span>
+                                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                                        <option value="">-- Seçiniz --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DepartmentId" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+                                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId">
+                                        <option value="">-- Seçiniz --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Feature" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-list-check"></i></span>
+                                <input asp-for="Feature" class="form-control" placeholder="Örn: 16GB RAM, 512GB SSD" />
+                            </div>
+                            <span asp-validation-for="Feature" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Ek notlar veya açıklamalar..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alt Aksiyon Butonları -->
+                <div class="pt-3 mt-4 border-top d-flex align-items-center justify-content-end gap-2">
+                    <a href="/urunler" class="btn btn-modern-ghost">
+                        <i class="fa-solid fa-ban me-1"></i> İptal
+                    </a>
+                    <button type="submit" class="btn btn-modern-primary d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square"></i> Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{

@@ -1,28 +1,40 @@
 ﻿@model FirmKind
 
 @{
-    ViewData["Title"] = "Firma Türü Güncelle";
+    ViewData["Title"] = "Firma Türü Ekle";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedDate" />
-            <input type="hidden" asp-for="Created" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+<link href="~/css/custom-theme.css" rel="stylesheet" />
 
-            <div class="form-group">
-                <button type="submit" value="Güncelle" class="btn btn-outline-success btn-rounded" title="Güncelle"><i class="fa-solid fa-pen-to-square"></i> Güncelle</button>&nbsp;&nbsp;&nbsp;
-                @* <a href="/FirmKinds/Index" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a> *@
-                <a href="/firmaturleri" class="btn btn-outline-secondary btn-rounded" title="İptal"><i class="fa-solid fa-ban"></i> İptal</a>
+<div class="row justify-content-start mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="form-card">
+            <div class="form-card-header">
+                <h5>
+                    <i class="fa-solid fa-folder-plus"></i> Firma Türü Ekle
+                </h5>
             </div>
-        </form>
+            <div class="form-card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Firma Türü Adı</label>
+                        <input asp-for="Name" class="form-control" placeholder="Firma türü giriniz..." />
+                        <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit" title="Güncelle">
+                            <i class="fa-solid fa-floppy-disk"></i> Güncelle
+                        </button>
+                        <a asp-action="Index" class="btn-cancel" title="İptal">
+                            <i class="fa-solid fa-ban"></i> İptal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -31,3 +43,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="CreatedDate" />
+<input type="hidden" asp-for="Created" />

@@ -1,0 +1,57 @@
+﻿@model MyGuide
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="row g-3">
+    <!-- Ad Soyad -->
+    <div class="col-md-6">
+        <label asp-for="NameSurname" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+            <input asp-for="NameSurname" class="form-control" placeholder="Ad Soyad giriniz" />
+        </div>
+        <span asp-validation-for="NameSurname" class="text-danger small"></span>
+    </div>
+
+    <!-- Unvan -->
+    <div class="col-md-6">
+        <label asp-for="Title" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-briefcase"></i></span>
+            <input asp-for="Title" class="form-control" placeholder="Örn: Yazılım Uzmanı" />
+        </div>
+        <span asp-validation-for="Title" class="text-danger small"></span>
+    </div>
+
+    <!-- Departman -->
+    <div class="col-md-12">
+        <label asp-for="DepartmentId" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+            <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId">
+@*                 <option value="">-- Departman Seçiniz --</option> *@
+            </select>
+        </div>
+        <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+    </div>
+
+    <!-- Dahili No -->
+    <div class="col-md-6">
+        <label asp-for="InternalNo" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            <input asp-for="InternalNo" class="form-control" placeholder="Örn: 1234" />
+        </div>
+        <span asp-validation-for="InternalNo" class="text-danger small"></span>
+    </div>
+
+    <!-- Cep Telefonu -->
+    <div class="col-md-6">
+        <label asp-for="CepNo" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <input asp-for="CepNo" class="form-control" placeholder="Örn: 05XX XXX XX XX" />
+        </div>
+        <span asp-validation-for="CepNo" class="text-danger small"></span>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using BTManagement.Core.Entities.User;
 using BTManagement.Service.IRepository;
+using BTManagement.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
@@ -22,7 +23,7 @@ namespace BTManagement.WebUI.Controllers.User
         [Route("kullanicilar")]
         public IActionResult Index()
         {
-            return View(_repoUser.GetAll(x => x.IsActive == true).OrderByDescending(x => x.CreatedDate));
+            return View(_repoUser.GetAll().OrderByDescending(x=>x.CreatedDate));
         }
 
         [Route("kullaniciekle")]
@@ -68,13 +69,21 @@ namespace BTManagement.WebUI.Controllers.User
             {
                 return NotFound();
             }
-            return View(user);
+            var model = new UserEditViewModel()
+            {
+                NameSurname = user.NameSurname,
+                Username = user.Username,
+                Password = user.Password,
+                IsActive = user.IsActive,
+                IsAdmin = user.IsAdmin,
+            };
+            return View(model);
         }
 
         [Route("kullaniciguncelle/{id?}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(Users userr, int id)
+        public async Task<IActionResult> EditAsync(UserEditViewModel userr, int id)
         {
             if (ModelState.IsValid)
             {
