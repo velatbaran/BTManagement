@@ -4,44 +4,273 @@
     Layout = "_LayoutLogin";
     ViewData["Title"] = "Giriş";
 }
+<link href="~/css/login.css" rel="stylesheet" />
+<div class="login-page">
 
-<div class="row w-100 mx-0">
-    <div class="col-lg-4 mx-auto">
-        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-            <div class="brand-logo text-center">
-                <img src="~/template/images/dsi24.png" width="200" height="200"/>
-            </div>
-            <div class="text-center">
-                <h2>BT Yönetimi</h2>
-                <h3>Giriş Sayfasına Hoşgeldiniz</h3>
-            </div>
-            <form class="pt-3" method="post" asp-action="Login" asp-controller="Account">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Username" class="control-label"></label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
+    <div class="login-wrapper">
+
+        <!-- =================================================
+             SOL KURUMSAL ALAN
+             ================================================= -->
+
+        <div class="login-brand-panel">
+
+            <div class="brand-content">
+
+                <div class="brand-logo">
+
+                    <img src="~/template/images/dsi24.png"
+                         alt="DSİ 24. Bölge Müdürlüğü" />
+
                 </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input type="password" asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <input type="hidden" asp-for="ReturnUrl" value="@Context.Request.Query["ReturnUrl"]" />
-                <div class="mt-3">
-                    <button type="submit" value="Giriş Yap" class="btn btn-outline-success btn-rounded" title="Ekle"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
-                </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
-                    <div class="form-check">
-                        <label class="form-check-label text-muted">
-                            <input type="checkbox" class="form-check-input">
-                            Beni Hatırla
-                        </label>
+
+                <span class="brand-small-title">
+                    DSİ 24. Bölge Müdürlüğü
+                </span>
+
+                <h1>
+                    BT Yönetimi
+                </h1>
+
+                <h2>
+                    Bilgi Teknolojileri<br />
+                    Yönetim Sistemi
+                </h2>
+
+                <p class="brand-description">
+                    Kurumsal bilgi teknolojileri süreçlerinin
+                    merkezi olarak yönetildiği güvenli ve
+                    modern yönetim platformu.
+                </p>
+
+                <div class="brand-features">
+
+                    <div class="brand-feature">
+
+                        <span class="brand-feature-icon">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </span>
+
+                        <span>
+                            Tüm BT süreçlerinizi tek merkezden yönetin.
+                        </span>
+
                     </div>
-                    @* <a href="/Account/ForgetPassword" class="auth-link text-black">Şifremi Unuttum</a> *@
-                    <a href="/sifremiunuttum" class="auth-link text-black">Şifremi Unuttum</a>
+
+
+                    <div class="brand-feature">
+
+                        <span class="brand-feature-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+
+                        <span>
+                            Güvenli ve yetkilendirilmiş erişim sağlayın.
+                        </span>
+
+                    </div>
+
+
+                    <div class="brand-feature">
+
+                        <span class="brand-feature-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </span>
+
+                        <span>
+                            İş süreçlerinizi hızlı ve verimli şekilde takip edin.
+                        </span>
+
+                    </div>
+
                 </div>
-            </form>
+
+            </div>
+
+
+            <div class="brand-footer">
+
+                <strong>
+                    Devlet Su İşleri Genel Müdürlüğü
+                </strong>
+
+                <br />
+
+                24. Bölge Müdürlüğü · Bilgi Teknolojileri Şube Müdürlüğü
+
+            </div>
+
         </div>
+
+
+        <!-- =================================================
+             SAĞ GİRİŞ ALANI
+             ================================================= -->
+
+        <div class="login-form-panel">
+
+            <div class="login-form-container">
+
+
+                <div class="form-logo">
+
+                    <img src="~/template/images/dsi24.png"
+                         alt="DSİ Logo" />
+
+                </div>
+
+
+                <div class="form-header">
+
+                    <h2>
+                        Hoş Geldiniz
+                    </h2>
+
+                    <p>
+                        Sisteme giriş yapmak için
+                        bilgilerinizi giriniz.
+                    </p>
+
+                </div>
+
+
+                <form class="login-form"
+                      method="post"
+                      asp-action="Login"
+                      asp-controller="Account"
+                      id="loginForm">
+
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation-summary-errors">
+                    </div>
+
+
+                    <!-- Kullanıcı Adı -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Username">
+                            Kullanıcı Adı
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user input-icon"></i>
+
+                            <input asp-for="Username"
+                                   class="login-input"
+                                   placeholder="Kullanıcı adınızı giriniz..."
+                                   autocomplete="username" />
+
+                        </div>
+
+                        <span asp-validation-for="Username"
+                              class="login-validation">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Şifre -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Password">
+                            Şifre
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-lock input-icon"></i>
+
+                            <input type="password"
+                                   asp-for="Password"
+                                   class="login-input password-input"
+                                   placeholder="Şifrenizi giriniz..."
+                                   autocomplete="current-password" />
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    title="Şifreyi göster">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="Password"
+                              class="login-validation">
+                        </span>
+
+                    </div>
+
+
+                    <input type="hidden"
+                           asp-for="ReturnUrl"
+                           value="@Context.Request.Query["ReturnUrl"]" />
+
+
+                    <!-- Giriş -->
+
+                    <button type="submit"
+                            class="login-button"
+                            id="loginButton">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        <span>Giriş Yap</span>
+
+                    </button>
+
+
+                    <!-- Seçenekler -->
+
+                    <div class="login-options">
+
+                        <label class="remember-me">
+
+                            <input type="checkbox"
+                                   name="RememberMe"
+                                   value="true" />
+
+                            <span>
+                                Beni Hatırla
+                            </span>
+
+                        </label>
+
+
+                        <a href="/sifremiunuttum"
+                           class="forgot-password">
+
+                            Şifremi Unuttum
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+
+                <div class="form-footer">
+
+                    <strong>
+                        DSİ 24. Bölge Müdürlüğü
+                    </strong>
+
+                    <br />
+
+                    Bilgi Teknolojileri Yönetim Sistemi
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
+<script src="~/js/login.js"></script>

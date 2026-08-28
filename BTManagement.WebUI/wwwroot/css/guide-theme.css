@@ -1,0 +1,220 @@
+﻿body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    background-color: #f8fafc !important;
+    color: #334155;
+}
+
+/* Modern Card Layout */
+.app-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+.app-card-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 1.25rem 1.5rem;
+    border-radius: 14px 14px 0 0;
+}
+
+/* Table Stilleri */
+.table-responsive-wrapper {
+    padding: 1.25rem;
+}
+
+table.dataTable {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    margin-top: 0 !important;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    table.dataTable thead tr:nth-child(1) th {
+        background-color: #4B49AC !important;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 12px 14px;
+        border: none !important;
+    }
+
+    table.dataTable thead tr:nth-child(2) th {
+        background-color: #f8fafc !important;
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    table.dataTable tbody td {
+        padding: 12px 14px !important;
+        font-size: 0.875rem;
+        color: #1e293b;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    table.dataTable tbody tr:hover {
+        background-color: #f1f5f9 !important;
+    }
+
+/* Filter Input Stilleri */
+.table-filter-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    background-color: #ffffff;
+    color: #0f172a;
+    transition: all 0.2s ease;
+}
+
+    .table-filter-input:focus {
+        outline: none;
+        border-color: #4B49AC;
+        box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
+    }
+
+/* Modern Buton Tasarımları */
+.btn-modern-primary {
+    background: #4B49AC;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(75, 73, 172, 0.25);
+    text-decoration: none;
+}
+
+    .btn-modern-primary:hover {
+        background: #3f3da3;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(75, 73, 172, 0.35);
+    }
+
+/* DataTables Export Butonları */
+.dt-buttons {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 6px;
+}
+
+.dt-button {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    transition: all 0.2s ease !important;
+}
+
+    .dt-button:hover {
+        background: #f1f5f9 !important;
+        border-color: #94a3b8 !important;
+        color: #0f172a !important;
+    }
+
+/* Modern Aksiyon Butonları */
+.btn-action-edit {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-action-edit:hover {
+        background-color: #16a34a;
+        color: #ffffff;
+        border-color: #16a34a;
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+        transform: translateY(-1px);
+    }
+
+.btn-action-delete {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-action-delete:hover {
+        background-color: #ef4444;
+        color: #ffffff;
+        border-color: #ef4444;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        transform: translateY(-1px);
+    }
+
+.form-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.form-header-icon {
+    width: 44px;
+    height: 44px;
+    background: #eef2ff;
+    color: #4f46e5;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.35rem;
+}
+
+.input-group-text {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    color: #64748b;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.form-control, .form-select {
+    border-color: #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    padding: 0.55rem 0.75rem;
+    transition: all 0.2s ease;
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }

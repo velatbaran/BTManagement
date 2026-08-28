@@ -43,6 +43,9 @@ namespace BTManagement.WebUI.Controllers
             var productArizaliMasaustu = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "MASAÜSTÜ" && x.State == "Arýzalý").OrderByDescending(x => x.CreatedDate).Count();
             var productKayittanDusurulmusMasaustu = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "MASAÜSTÜ" && x.State == "Kayýttan Düþürülmüþ").OrderByDescending(x => x.CreatedDate).Count();
             var productNetworkYazici = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "NETWORK YAZICI").OrderByDescending(x => x.CreatedDate).Count();
+            var productNetworkYaziciFaal = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "NETWORK YAZICI" && x.State == "Faal").OrderByDescending(x => x.CreatedDate).Count();
+            var productNetworkYaziciArizali = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "NETWORK YAZICI" && x.State == "Arýzalý").OrderByDescending(x => x.CreatedDate).Count();
+            var productNetworkYaziciKayittanDusmus = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "NETWORK YAZICI" && x.State == "Kayýttan Düþürülmüþ").OrderByDescending(x => x.CreatedDate).Count();
             var productTablet = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "TABLET").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalTablet = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "TABLET" && x.State == "Faal").OrderByDescending(x => x.CreatedDate).Count();
             var productArizaliTablet = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "TABLET" && x.State == "Arýzalý").OrderByDescending(x => x.CreatedDate).Count();
@@ -65,7 +68,10 @@ namespace BTManagement.WebUI.Controllers
             ViewData["FAALMASAÜSTÜ"] = productFaalMasaustu;
             ViewData["ARIZALIMASAÜSTÜ"] = productArizaliMasaustu;
             ViewData["KAYITTANDÜSMÜSMASAÜSTÜ"] = productKayittanDusurulmusMasaustu;
-            ViewData["NETWORK YAZICI"] = productNetworkYazici;
+            ViewData["NETWORKYAZICI"] = productNetworkYazici;
+            ViewData["NETWORKYAZICIFAAl"] = productNetworkYaziciFaal;
+            ViewData["NETWORKYAZICIARIZALI"] = productNetworkYaziciArizali;
+            ViewData["NETWORKYAZICIAYITTANDÜSMÜS"] = productNetworkYaziciKayittanDusmus;
             ViewData["TOTALTABLET"] = productTablet;
             ViewData["FAALTABLET"] = productFaalTablet;
             ViewData["ARIZALITABLET"] = productArizaliTablet;

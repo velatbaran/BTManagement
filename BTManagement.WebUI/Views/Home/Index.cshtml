@@ -2,89 +2,178 @@
     ViewData["Title"] = "Anasayfa";
 }
 
-<div class="row text-center">
-    <div class="col-md-12 grid-margin transparent">
-        <div class="row mt-4">
-            <div class="col-md-4 stretch-card transparent">
-                <div class="card card-tale">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="mb-4">Toplam AIO Sayısı</h3>
-                                <h4 class="fs-30 mb-2">@ViewData["TOTALAIO"]</h4>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="mb-4">Faal: @ViewData["FAALAIO"]</span> <br />
-@*                                 <span class="mb-4">Kullanımda : @ViewData["KULLANIMDAAIO"]</span><br />
-                                <span class="mb-4">Ambarda Toplam : @ViewData["AMBARDAAIO"]</span> <br />
-                                <span class="mb-4">Ambarda - Faal : @ViewData["AMBARDAFAALAIO"]</span> <br /> *@
-                                <span class="mb-4">Arızalı : @ViewData["ARIZALIAIO"]</span>  <br />
-                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSAIO"]</span>  
-                            </div>
-                        </div>
-                    </div>
+<link href="~/css/custom-theme.css" rel="stylesheet" />
+
+<div class="container-fluid px-0">
+    <!-- Stat Cards Row 1 -->
+    <div class="row g-3 mb-4">
+        <!-- AIO Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="main-card h-100 shadow-sm border-0">
+                <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fa-solid fa-desktop me-2"></i>Toplam AIO Sayısı
+                    </h6>
+                    <span class="badge bg-white text-primary fw-bold fs-6">@ViewData["TOTALAIO"]</span>
                 </div>
-            </div>
-            <div class="col-md-4 stretch-card transparent">
-                <div class="card card-dark-blue">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="mb-4">Toplam Laptop Sayısı</h3>
-                                <h4 class="fs-30 mb-2">@ViewData["TOTALLAPTOP"]</h4>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="mb-4">Faal : @ViewData["FAALLAPTOP"]</span> <br />
-@*                                 <span class="mb-4">Kullanımda : @ViewData["KULLANIMDALAPTOP"]</span> <br />
-                                <span class="mb-4">Ambarda Toplam : @ViewData["AMBARDALAPTOP"]</span> <br />
-                                <span class="mb-4">Ambarda - Faal : @ViewData["AMBARDAFAALLAPTOP"]</span> <br /> *@
-                                <span class="mb-4">Arızalı : @ViewData["ARIZALILAPTOP"]</span>  <br />
-                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSLAPTOP"]</span> 
-                            </div>
+                <div class="main-card-body p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-check text-success me-2"></i> Faal
+                            </span>
+                            <span class="badge bg-success text-white">@ViewData["FAALAIO"]</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 stretch-card transparent">
-                <div class="card card-light-ol">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="mb-4">Toplam Masaüstü Sayısı</h3>
-                                <h4 class="fs-30 mb-2">@ViewData["TOTALMASAÜSTÜ"]</h4>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="mb-4">Faal : @ViewData["FAALMASAÜSTÜ"]</span> <br />
-                                <span class="mb-4">Arızalı : @ViewData["ARIZALIMASAÜSTÜ"]</span>  <br />
-                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSMASAÜSTÜ"]</span>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
+                            </span>
+                            <span class="badge bg-warning text-dark">@ViewData["ARIZALIAIO"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
+                            </span>
+                            <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSAIO"]</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mb-4 mt-4">
-            <div class="col-md-4 stretch-card transparent">
-                <div class="card card-light-danger">
-                    <div class="card-body">
-                        <h3 class="mb-4">Toplam Network Yazıcı Sayısı</h3>
-                        <h4 class="fs-30 mb-2">@ViewData["NETWORK YAZICI"]</h4>
+
+        <!-- Laptop Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="main-card h-100 shadow-sm border-0">
+                <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fa-solid fa-laptop me-2"></i>Toplam Laptop Sayısı
+                    </h6>
+                    <span class="badge bg-white text-dark fw-bold fs-6">@ViewData["TOTALLAPTOP"]</span>
+                </div>
+                <div class="main-card-body p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
+                            </span>
+                            <span class="badge bg-success text-white">@ViewData["FAALLAPTOP"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
+                            </span>
+                            <span class="badge bg-warning text-dark">@ViewData["ARIZALILAPTOP"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
+                            </span>
+                            <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSLAPTOP"]</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 stretch-card transparent">
-                <div class="card card-tale">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3 class="mb-4">Toplam Tablet Sayısı</h3>
-                                <h4 class="fs-30 mb-2">@ViewData["TOTALTABLET"]</h4>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="mb-4">Faal : @ViewData["FAALTABLET"]</span> <br />
-                                <span class="mb-4">Arızalı : @ViewData["ARIZALITABLET"]</span>  <br />
-                                <span class="mb-4">Kayıttan Düşürülmüş : @ViewData["KAYITTANDÜSMÜSTABLET"]</span>
-                            </div>
+        </div>
+
+        <!-- Desktop Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="main-card h-100 shadow-sm border-0">
+                <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fa-solid fa-desktop me-2"></i>Toplam Masaüstü Sayısı
+                    </h6>
+                    <span class="badge bg-white text-info fw-bold fs-6">@ViewData["TOTALMASAÜSTÜ"]</span>
+                </div>
+                <div class="main-card-body p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
+                            </span>
+                            <span class="badge bg-success text-white">@ViewData["FAALMASAÜSTÜ"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
+                            </span>
+                            <span class="badge bg-warning text-dark">@ViewData["ARIZALIMASAÜSTÜ"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
+                            </span>
+                            <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSMASAÜSTÜ"]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Cards Row 2 -->
+    <div class="row g-3">
+        <!-- Network Printer Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="main-card h-100 shadow-sm border-0">
+                <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fa-solid fa-print me-2"></i>Toplam Network Yazıcı
+                    </h6>
+                    <span class="badge bg-white text-danger fw-bold fs-6">@ViewData["NETWORKYAZICI"]</span>
+                </div>
+                <div class="main-card-body p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
+                            </span>
+                            <span class="badge bg-success text-white">@ViewData["NETWORKYAZICIFAAl"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
+                            </span>
+                            <span class="badge bg-warning text-dark">@ViewData["NETWORKYAZICIARIZALI"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
+                            </span>
+                            <span class="badge bg-danger text-white">@ViewData["NETWORKYAZICIAYITTANDÜSMÜS"]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablet Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="main-card h-100 shadow-sm border-0">
+                <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fa-solid fa-tablet-screen-button me-2"></i>Toplam Tablet Sayısı
+                    </h6>
+                    <span class="badge bg-white text-secondary fw-bold fs-6">@ViewData["TOTALTABLET"]</span>
+                </div>
+                <div class="main-card-body p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
+                            </span>
+                            <span class="badge bg-success text-white">@ViewData["FAALTABLET"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
+                            </span>
+                            <span class="badge bg-warning text-dark">@ViewData["ARIZALITABLET"]</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
+                            <span class="text-dark fw-semibold">
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
+                            </span>
+                            <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSTABLET"]</span>
                         </div>
                     </div>
                 </div>
