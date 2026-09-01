@@ -1,37 +1,48 @@
-﻿/* Tipografi ve Temel Gövde */
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    background-color: #f8fafc !important; /* Soft Aydınlık Arka Plan */
-    color: #334155;
-}
+﻿    /* ==========================================================
+       TEMEL GÖVDE
+       ========================================================== */
 
-/* Modern Light Card Yapısı */
-.app-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-}
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        background-color: #f8fafc !important;
+        color: #334155;
+    }
 
-.app-card-header {
-    background: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
-    padding: 1.25rem 1.5rem;
-    border-radius: 14px 14px 0 0;
-}
 
-/* Modern Buton Tasarımları */
-.btn-modern-primary {
-    background: #2563eb;
-    color: #ffffff;
-    border: none;
-    border-radius: 10px;
-    padding: 0.55rem 1.2rem;
-    font-weight: 500;
-    font-size: 0.825rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-}
+    /* ==========================================================
+       MODERN LIGHT CARD
+       ========================================================== */
+
+    .app-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    .app-card-header {
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.25rem 1.5rem;
+        border-radius: 14px 14px 0 0;
+    }
+
+
+    /* ==========================================================
+       MODERN BUTONLAR
+       ========================================================== */
+
+    .btn-modern-primary {
+        background: #2563eb;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.55rem 1.2rem;
+        font-weight: 500;
+        font-size: 0.825rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
 
     .btn-modern-primary:hover {
         background: #1d4ed8;
@@ -40,38 +51,42 @@ body {
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
     }
 
-.btn-modern-ghost {
-    background: #f1f5f9;
-    color: #475569;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 0.55rem 1.2rem;
-    font-weight: 500;
-    font-size: 0.825rem;
-    transition: all 0.2s ease;
-}
+    .btn-modern-ghost {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.55rem 1.2rem;
+        font-weight: 500;
+        font-size: 0.825rem;
+        transition: all 0.2s ease;
+    }
 
     .btn-modern-ghost:hover {
         background: #e2e8f0;
         color: #0f172a;
     }
 
-/* Excel Butonu */
-div.dt-buttons {
-    float: right;
-    margin-bottom: 1rem;
-}
 
-.dt-btn-custom-excel {
-    padding: 0.55rem 1.2rem;
-    border-radius: 10px;
-    border: 1px solid #a7f3d0;
-    background: #ecfdf5 !important;
-    color: #047857 !important;
-    font-size: 0.825rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
+    /* ==========================================================
+       EXCEL BUTONU
+       ========================================================== */
+
+    div.dt-buttons {
+        float: right;
+        margin-bottom: 1rem;
+    }
+
+    .dt-btn-custom-excel {
+        padding: 0.55rem 1.2rem;
+        border-radius: 10px;
+        border: 1px solid #a7f3d0;
+        background: #ecfdf5 !important;
+        color: #047857 !important;
+        font-size: 0.825rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
 
     .dt-btn-custom-excel:hover {
         background: #10b981 !important;
@@ -81,15 +96,19 @@ div.dt-buttons {
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
     }
 
-/* Tablo Tasarımı */
-#myTable {
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-    width: 100% !important;
-}
+
+    /* ==========================================================
+       TABLO
+       ========================================================== */
+
+    #myTable {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        width: 100% !important;
+    }
 
     #myTable thead th {
-        background-color: #4B49AC; /* Kurumsal Koyu Lacivert Header */
+        background-color: #4B49AC;
         color: #f8fafc;
         font-weight: 600;
         font-size: 0.725rem;
@@ -99,26 +118,28 @@ div.dt-buttons {
         border: none;
     }
 
-        #myTable thead th:first-child {
-            border-top-left-radius: 8px;
-        }
+    #myTable thead th:first-child {
+        border-top-left-radius: 8px;
+    }
 
-        #myTable thead th:last-child {
-            border-top-right-radius: 8px;
-        }
+    #myTable thead th:last-child {
+        border-top-right-radius: 8px;
+    }
 
     #myTable tbody tr {
         background-color: #ffffff;
-        transition: background-color 0.15s ease;
+        transition: all 0.15s ease;
+        cursor: pointer;
     }
 
-        #myTable tbody tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
+    #myTable tbody tr:nth-child(even) {
+        background-color: #f8fafc;
+    }
 
-        #myTable tbody tr:hover {
-            background-color: #f1f5f9 !important;
-        }
+    #myTable tbody tr:hover {
+        background-color: #f1f5f9 !important;
+        box-shadow: inset 3px 0 0 #4B49AC;
+    }
 
     #myTable tbody td {
         font-size: 0.825rem;
@@ -128,41 +149,50 @@ div.dt-buttons {
         border-bottom: 1px solid #f1f5f9;
     }
 
-/* Veri Hücre İkonları */
-.cell-data {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
 
-.cell-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    background: #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    color: #0284c7;
-    flex-shrink: 0;
-}
+    /* ==========================================================
+       VERİ HÜCRE İKONLARI
+       ========================================================== */
 
-/* Filtre Satırı ve Input Stilleri */
-.filters-row th {
-    padding: 8px 6px !important;
-    background-color: #f8fafc !important;
-}
+    .cell-data {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-.column-filter {
-    width: 100%;
-    padding: 6px 10px;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    font-size: 0.775rem;
-    background-color: #4B49AC color: #f8fafc;
-    transition: all 0.2s ease;
-}
+    .cell-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: #0284c7;
+        flex-shrink: 0;
+    }
+
+
+    /* ==========================================================
+       FİLTRE SATIRI
+       ========================================================== */
+
+    .filters-row th {
+        padding: 8px 6px !important;
+        background-color: #f8fafc !important;
+    }
+
+    .column-filter {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        font-size: 0.775rem;
+        background-color: #ffffff;
+        color: #334155;
+        transition: all 0.2s ease;
+    }
 
     .column-filter::placeholder {
         color: #94a3b8;
@@ -170,96 +200,113 @@ div.dt-buttons {
 
     .column-filter:focus {
         outline: none;
-        border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        border-color: #4B49AC;
+        box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.15);
     }
 
-/* Detay Aç/Kapat Butonu */
-td.details-control span.detail-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    background-color: #e2e8f0;
-    color: #475569;
-    cursor: pointer;
-}
+
+    /* ==========================================================
+       DETAY AÇ / KAPAT BUTONU
+       ========================================================== */
+
+    td.details-control span.detail-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        background-color: #e2e8f0;
+        color: #475569;
+        cursor: pointer;
+    }
 
     td.details-control span.detail-toggle:hover {
-        background-color: #2563eb;
+        background-color: #4B49AC;
         color: #ffffff;
     }
 
-tr.shown td.details-control span.detail-toggle {
-    background-color: #ef4444;
-    color: #ffffff;
-    transform: rotate(45deg);
-}
+    tr.shown td.details-control span.detail-toggle {
+        background-color: #ef4444;
+        color: #ffffff;
+        transform: rotate(45deg);
+    }
 
-/* Detay Kartı (Child Row) */
-.detail-card {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 16px;
-    margin: 8px 0;
-}
 
-/* Esnek ve Taşmayı Önleyen Detay Grid Yapısı */
-.detail-grid {
-    display: grid;
-    /* Minimum genişliği 220px yerine 180px'e çekerek dar ekranlarda daha rahat sığmasını sağlıyoruz */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-}
+    /* ==========================================================
+       CHILD ROW DETAY KARTI
+       ========================================================== */
 
-.detail-item {
-    background: #ffffff;
-    padding: 9px 12px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    /* İçeriklerin kutu dışına taşmasını engeller */
-    min-width: 0;
-}
+    .detail-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 16px;
+        margin: 8px 0;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+    }
+
+    .detail-item {
+        background: #ffffff;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
 
     .detail-item > div {
-        /* Metin kapsayıcısının daralmasına izin verir */
         min-width: 0;
         flex: 1;
     }
 
-.detail-value {
-    font-size: 0.825rem;
-    color: #0f172a;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-/* Aksiyon Butonları */
-.btn-action {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    transition: all 0.2s ease;
-    text-decoration: none;
-}
+    .detail-label {
+        font-size: 0.68rem;
+        color: #94a3b8;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
 
-.btn-action-edit {
-    background: #fef3c7;
-    color: #d97706;
-}
+    .detail-value {
+        font-size: 0.825rem;
+        color: #0f172a;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    /* ==========================================================
+       AKSİYON BUTONLARI
+       ========================================================== */
+
+    .btn-action {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-action-edit {
+        background: #fef3c7;
+        color: #d97706;
+    }
 
     .btn-action-edit:hover {
         background: #f59e0b;
@@ -267,10 +314,10 @@ tr.shown td.details-control span.detail-toggle {
         transform: translateY(-1px);
     }
 
-.btn-action-delete {
-    background: #fee2e2;
-    color: #dc2626;
-}
+    .btn-action-delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
 
     .btn-action-delete:hover {
         background: #ef4444;
@@ -278,19 +325,328 @@ tr.shown td.details-control span.detail-toggle {
         transform: translateY(-1px);
     }
 
-/* Modern Durum Etiketleri (Badges) */
-.badge-status {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: inline-flex;
+
+    /* ==========================================================
+       DURUM ETİKETLERİ
+       ========================================================== */
+
+    .badge-status {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.3px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .status-icon {
+        font-size: 0.7rem;
+    }
+
+
+    /* ==========================================================
+       ==========================================================
+       SATIR ÇİFT TIKLAMA DETAY MODALI
+       ==========================================================
+       ========================================================== */
+
+    .product-detail-modal .modal-dialog {
+        max-width: 1050px;
+    }
+
+    .product-detail-modal .modal-content {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.20);
+    }
+
+
+    /* ==========================================================
+       MODAL HEADER
+       ========================================================== */
+
+    .product-detail-modal .modal-header {
+        background: linear-gradient(135deg, #4B49AC 0%, #625fd0 100%);
+        color: #ffffff;
+        padding: 20px 24px;
+        border: 0;
+    }
+
+    .product-detail-modal .modal-title {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .product-detail-modal .modal-subtitle {
+        font-size: 0.75rem;
+        opacity: 0.85;
+        margin-top: 3px;
+    }
+
+    .product-detail-modal .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.85;
+    }
+
+    .product-detail-modal .btn-close:hover {
+        opacity: 1;
+    }
+
+
+    /* ==========================================================
+       MODAL BODY
+       ========================================================== */
+
+    .product-detail-modal .modal-body {
+        background: #f8fafc;
+        padding: 22px;
+    }
+
+
+    /* ==========================================================
+       ÜRÜN ÖZET KARTI
+       ========================================================== */
+
+    .product-detail-summary {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 15px 17px;
+        margin-bottom: 18px;
+    }
+
+    .product-detail-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 12px;
+        background: #ede9fe;
+        color: #4B49AC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .product-detail-summary-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 3px;
+    }
+
+    .product-detail-summary-text {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+
+    /* ==========================================================
+       MODAL BÖLÜM BAŞLIKLARI
+       ========================================================== */
+
+    .product-detail-section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 18px 0 10px;
+    }
+
+    .product-detail-section-title i {
+        color: #4B49AC;
+        font-size: 0.8rem;
+    }
+
+
+    /* ==========================================================
+       MODAL DETAY GRID
+       ========================================================== */
+
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+
+    /* ==========================================================
+       MODAL DETAY KARTLARI
+       ========================================================== */
+
+    .product-detail-box {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+        padding: 12px 13px;
+        min-width: 0;
+        transition: all 0.18s ease;
+    }
+
+    .product-detail-box:hover {
+        border-color: #c7d2fe;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        transform: translateY(-1px);
+    }
+
+    .product-detail-box-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .product-detail-box-icon {
+        width: 27px;
+        height: 27px;
+        min-width: 27px;
+        border-radius: 7px;
+        background: #f1f5f9;
+        color: #4B49AC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+    }
+
+    .product-detail-box-label {
+        font-size: 0.68rem;
+        color: #94a3b8;
+        font-weight: 600;
+    }
+
+    .product-detail-box-value {
+        color: #0f172a;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding-left: 35px;
+        word-break: break-word;
+    }
+
+
+    /* ==========================================================
+       AÇIKLAMA ALANI
+       ========================================================== */
+
+    .product-detail-description {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+        padding: 13px 15px;
+        color: #334155;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        min-height: 45px;
+        word-break: break-word;
+    }
+
+
+    /* ==========================================================
+       MODAL FOOTER
+       ========================================================== */
+
+    .product-detail-modal .modal-footer {
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        padding: 13px 20px;
+    }
+
+    .product-detail-modal .btn-detail-edit {
+        background: #fef3c7;
+        color: #b45309;
+        border: 1px solid #fde68a;
+        border-radius: 9px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 7px 14px;
+    }
+
+    .product-detail-modal .btn-detail-edit:hover {
+        background: #f59e0b;
+        color: #ffffff;
+    }
+
+    .product-detail-modal .btn-detail-delete {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 7px 14px;
+    }
+
+    .product-detail-modal .btn-detail-delete:hover {
+        background: #ef4444;
+        color: #ffffff;
+    }
+
+
+    /* ==========================================================
+       RESPONSIVE
+       ========================================================== */
+
+    @media (max-width: 992px) {
+
+        .product-detail-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .product-detail-modal .modal-dialog {
+            margin: 10px;
+        }
+    }
+
+    @media (max-width: 576px) {
+
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .product-detail-modal .modal-body {
+            padding: 14px;
+        }
+
+        .product-detail-summary {
+            padding: 12px;
+        }
+    }
+
+/* ==========================================================
+   TABLO ÇİFT TIKLAMA BİLGİ NOTU
+   ========================================================== */
+
+.table-info-note {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    letter-spacing: 0.3px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 7px 11px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 0.80rem;
+    width: fit-content;
 }
 
-.status-icon {
-    font-size: 0.7rem;
-}
+    .table-info-note i {
+        color: #4B49AC;
+        font-size: 0.8rem;
+    }
+
+    .table-info-note strong {
+        color: #475569;
+        font-weight: 600;
+    }

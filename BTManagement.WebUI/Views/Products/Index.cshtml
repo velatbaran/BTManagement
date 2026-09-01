@@ -1,45 +1,62 @@
-﻿@model IEnumerable<Products>
+﻿
+@model IEnumerable<Products>
 
 @{
     ViewData["Title"] = "Envanter Listesi";
 }
 
-<!-- DataTables, Fonts & FontAwesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-
 <link href="~/css/product-theme.css" rel="stylesheet" />
 
 <div class="container-fluid px-0">
-    <!-- Header Aksiyon Alanı -->
+
     <div class="card app-card mb-3">
         <div class="card-body app-card-header d-flex flex-wrap justify-content-between align-items-center gap-3 py-3">
             <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-3" style="background: #e0f2fe; color: #0284c7;">
                     <i class="fa-solid fa-boxes-stacked fa-lg"></i>
                 </div>
+
                 <div>
-                    <h5 class="mb-0 fw-bold text-slate-800" style="color: #0f172a;">Envanter Yönetimi</h5>
-                    <p class="text-muted small mb-0">Tüm donanım ve varlık kayıtlarını görüntüleyin ve yönetin.</p>
+                    <h5 class="mb-0 fw-bold text-slate-800" style="color: #0f172a;">
+                        Envanter Yönetimi
+                    </h5>
+                    <p class="text-muted small mb-0">
+                        Tüm donanım ve varlık kayıtlarını görüntüleyin ve yönetin.
+                    </p>
                 </div>
             </div>
+
             <div class="d-flex align-items-center gap-2">
-                <a asp-action="Create" class="btn btn-modern-primary d-inline-flex align-items-center gap-2" id="btnCreate" title="Yeni Ekle">
-                    <i class="fa-solid fa-plus"></i> Yeni Ekle
+                <a asp-action="Create"
+                   class="btn btn-modern-primary d-inline-flex align-items-center gap-2"
+                   id="btnCreate"
+                   title="Yeni Ekle">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Ekle
                 </a>
-                <button type="button" id="clearAllFilters" class="btn btn-modern-ghost d-inline-flex align-items-center gap-2" title="Filtreleri Temizle">
-                    <i class="fa-solid fa-rotate-left"></i> Filtreleri Temizle
+
+                <button type="button"
+                        id="clearAllFilters"
+                        class="btn btn-modern-ghost d-inline-flex align-items-center gap-2"
+                        title="Filtreleri Temizle">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Filtreleri Temizle
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Tablo Kartı -->
     <div class="card app-card">
         <div class="card-body p-3">
+            <div class="table-info-note">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Detayları görüntülemek için satıra <strong>çift tıklayın</strong>.</span>
+            </div>
             <div class="table-responsive">
                 <table class="table align-middle" id="myTable">
                     <thead>
@@ -61,6 +78,7 @@
                             <th>Oluşturma Tarihi</th>
                             <th class="text-end">İşlemler</th>
                         </tr>
+
                         <tr class="filters-row">
                             <th></th>
                             <th><input type="text" class="column-filter" placeholder="Marka..." data-column="1"></th>
@@ -87,33 +105,291 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade product-detail-modal"
+     id="productDetailModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="product-detail-icon" style="background: rgba(255,255,255,0.16); color:#fff;">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+
+                    <div>
+                        <div class="modal-title" id="detailModalTitle">
+                            Envanter Detayı
+                        </div>
+                        <div class="modal-subtitle" id="detailModalSubtitle">
+                            Kayıt detayları
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Kapat">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="product-detail-summary">
+                    <div class="product-detail-icon">
+                        <i class="fa-solid fa-desktop"></i>
+                    </div>
+
+                    <div class="flex-grow-1 min-width-0">
+                        <div class="product-detail-summary-title" id="detailProductName">-</div>
+                        <div class="product-detail-summary-text" id="detailProductSerial">
+                            Seri No: -
+                        </div>
+                    </div>
+
+                    <div id="detailProductStatus">-</div>
+                </div>
+
+                <div class="product-detail-section-title">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Temel Bilgiler
+                </div>
+
+                <div class="product-detail-grid">
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-copyright"></i>
+                            </div>
+                            <span class="product-detail-box-label">Marka</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailBrand">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-cube"></i>
+                            </div>
+                            <span class="product-detail-box-label">Model</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailModel">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-hashtag"></i>
+                            </div>
+                            <span class="product-detail-box-label">Seri No</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailSerialNo">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <span class="product-detail-box-label">Kullanıcı</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailUsername">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <span class="product-detail-box-label">Kategori</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailCategory">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <span class="product-detail-box-label">Şube</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailDepartment">-</div>
+                    </div>
+
+                </div>
+
+                <div class="product-detail-section-title">
+                    <i class="fa-solid fa-network-wired"></i>
+                    Ağ ve Donanım Bilgileri
+                </div>
+
+                <div class="product-detail-grid">
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <span class="product-detail-box-label">Ağ Adresi</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailNetworkAddress">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <span class="product-detail-box-label">Ağ Adı</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailNetworkName">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <span class="product-detail-box-label">Donanım Adı</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailHardwareName">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-sliders"></i>
+                            </div>
+                            <span class="product-detail-box-label">Özellik</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailFeature">-</div>
+                    </div>
+
+                </div>
+
+                <div class="product-detail-section-title">
+                    <i class="fa-solid fa-align-left"></i>
+                    Açıklama
+                </div>
+
+                <div class="product-detail-description" id="detailDescription">-</div>
+
+                <div class="product-detail-section-title">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Kayıt Bilgileri
+                </div>
+
+                <div class="product-detail-grid">
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <span class="product-detail-box-label">Oluşturan</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailCreated">-</div>
+                    </div>
+
+                    <div class="product-detail-box">
+                        <div class="product-detail-box-header">
+                            <div class="product-detail-box-icon">
+                                <i class="fa-regular fa-calendar"></i>
+                            </div>
+                            <span class="product-detail-box-label">Oluşturma Tarihi</span>
+                        </div>
+                        <div class="product-detail-box-value" id="detailCreatedDate">-</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-light btn-sm px-3 rounded-2 fw-semibold"
+                        data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark me-1"></i>
+                    Kapat
+                </button>
+
+                <div class="ms-auto d-flex gap-2">
+                    <a href="#"
+                       id="detailEditButton"
+                       class="btn btn-detail-edit">
+                        <i class="fa-solid fa-pen me-1"></i>
+                        Güncelle
+                    </a>
+
+                    <button type="button"
+                            id="detailDeleteButton"
+                            class="btn btn-detail-delete">
+                        <i class="fa-solid fa-trash me-1"></i>
+                        Sil
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
+
             <form method="post" asp-action="Delete">
+
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title fw-bold text-danger d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i>Silme Onayı
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Silme Onayı
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
                 </div>
+
                 <div class="modal-body py-4">
                     <p class="mb-0 text-secondary">
-                        <strong id="fileName" class="text-dark"></strong> kaydını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+                        <strong id="fileName" class="text-dark"></strong>
+                        kaydını silmek istediğinize emin misiniz?
+                        Bu işlem geri alınamaz.
                     </p>
+
                     <input type="hidden" name="id" id="fileId" />
                 </div>
+
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light btn-sm px-3 rounded-2 fw-semibold" data-bs-dismiss="modal" title="İptal">İptal</button>
-                    <button type="submit" class="btn btn-danger btn-sm px-3 rounded-2 fw-semibold" title="Kaydı Sil">Kaydı Sil</button>
+                    <button type="button"
+                            class="btn btn-light btn-sm px-3 rounded-2 fw-semibold"
+                            data-bs-dismiss="modal">
+                        İptal
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-danger btn-sm px-3 rounded-2 fw-semibold">
+                        Kaydı Sil
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
+
     <script src="~/datatable/datatables.min.js"></script>
     <script src="~/datatable/datatables.responsive.min.js"></script>
     <script src="~/datatable/datatables.buttons.min.js"></script>
@@ -125,46 +401,73 @@
 
     <script>
         $(document).ready(function () {
+
             if ($.fn.dataTable.isDataTable('#myTable')) {
                 $('#myTable').DataTable().destroy();
                 $('#myTable tbody').empty();
             }
 
             function createCell(iconClass, text) {
-                if (!text || text === '-') return '<span class="text-muted">-</span>';
-                return `<div class="cell-data"><div class="cell-icon"><i class="${iconClass}"></i></div><span>${text}</span></div>`;
+                if (!text || text === '-') {
+                    return '<span class="text-muted">-</span>';
+                }
+
+                return `
+                    <div class="cell-data">
+                        <div class="cell-icon">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <span>${text}</span>
+                    </div>
+                `;
             }
 
-        function formatStatus(status) {
-            if (!status) return '<span class="text-muted">-</span>';
+            function formatStatus(status) {
+                if (!status) {
+                    return '<span class="text-muted">-</span>';
+                }
 
-            var bg = "#f1f5f9";
-            var color = "#64748b";
-            var icon = "fa-circle-dot";
-            var lower = status.toLowerCase();
+                var bg = "#f1f5f9";
+                var color = "#64748b";
+                var icon = "fa-circle-dot";
+                var lower = status.toLowerCase();
 
-            if (lower.includes("faal") || lower.includes("aktif") || lower.includes("kullanımda")) {
-                // Soft Yeşil (Faal / Çalışıyor)
-                bg = "#dcfce7";
-                color = "#15803d";
-                icon = "fa-circle-check";
-            } else if (lower.includes("arıza") || lower.includes("arızalı")) {
-                // Soft Kırmızı/Amber (Arızalı)
-                bg = "#fee2e2";
-                color = "#b91c1c";
-                icon = "fa-circle-exclamation";
-            } else if (lower.includes("kayıttan") || lower.includes("düşürülmüş") || lower.includes("hurda") || lower.includes("pasif")) {
-                // Soft Nötr Gri (Kayıttan Düşürülmüş)
-                bg = "#f1f5f9";
-                color = "#475569";
-                icon = "fa-circle-xmark";
-            }
+                if (
+                    lower.includes("faal") ||
+                    lower.includes("aktif") ||
+                    lower.includes("kullanımda")
+                ) {
+                    bg = "#dcfce7";
+                    color = "#15803d";
+                    icon = "fa-circle-check";
+                }
+                else if (
+                    lower.includes("arıza") ||
+                    lower.includes("arızalı")
+                ) {
+                    bg = "#fee2e2";
+                    color = "#b91c1c";
+                    icon = "fa-circle-exclamation";
+                }
+                else if (
+                    lower.includes("kayıttan") ||
+                    lower.includes("düşürülmüş") ||
+                    lower.includes("hurda") ||
+                    lower.includes("pasif")
+                ) {
+                    bg = "#f1f5f9";
+                    color = "#475569";
+                    icon = "fa-circle-xmark";
+                }
 
-            return `<span class="badge-status" style="background:${bg}; color:${color};">
+                return `
+                    <span class="badge-status"
+                          style="background:${bg}; color:${color};">
                         <i class="fa-solid ${icon} status-icon"></i>
                         <span>${status}</span>
-                    </span>`;
-        }
+                    </span>
+                `;
+            }
 
             function saveFiltersToSession(filters) {
                 sessionStorage.setItem('returnFilters', JSON.stringify(filters));
@@ -174,79 +477,205 @@
             function getFiltersFromSession() {
                 var filters = sessionStorage.getItem('returnFilters');
                 var returnFrom = sessionStorage.getItem('returnFromPage');
+
                 if (filters && returnFrom === window.location.pathname) {
                     sessionStorage.removeItem('returnFilters');
                     sessionStorage.removeItem('returnFromPage');
                     return JSON.parse(filters);
                 }
+
                 return null;
             }
 
             var previousPage = document.referrer;
-            var isComingFromActionPage = previousPage.includes('/Edit') || previousPage.includes('/Delete') || previousPage.includes('/Create');
-            var savedFilters = isComingFromActionPage ? getFiltersFromSession() : null;
+
+            var isComingFromActionPage =
+                previousPage.includes('/Edit') ||
+                previousPage.includes('/Delete') ||
+                previousPage.includes('/Create');
+
+            var savedFilters =
+                isComingFromActionPage
+                    ? getFiltersFromSession()
+                    : null;
 
             var table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                responsive: { details: { type: 'column', target: 0 } },
+
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 0
+                    }
+                },
+
                 stateSave: true,
                 stateDuration: -1,
                 pageLength: 25,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tümü"]],
+
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "Tümü"]
+                ],
+
                 order: [],
                 searching: true,
+
                 ajax: {
                     url: '/urunler/LoadData',
                     type: 'POST',
                     contentType: 'application/x-www-form-urlencoded; charset=utf-8',
                     dataType: 'json',
-                    data: function(d) {
-                        $('.column-filter').each(function() {
+
+                    data: function (d) {
+                        $('.column-filter').each(function () {
                             var columnIndex = $(this).data('column');
-                            d['columns[' + columnIndex + '][search][value]'] = $(this).val();
+
+                            d['columns[' + columnIndex + '][search][value]'] =
+                                $(this).val();
                         });
+
                         return d;
                     }
                 },
+
                 columns: [
                     {
                         data: null,
                         className: 'details-control',
                         orderable: false,
                         searchable: false,
-                        defaultContent: '<span class="detail-toggle"><i class="fa-solid fa-plus"></i></span>',
+                        defaultContent:
+                            '<span class="detail-toggle">' +
+                            '<i class="fa-solid fa-plus"></i>' +
+                            '</span>',
                         width: '30px'
                     },
-                    { data: "brand", name: "Brand", render: function(d) { return createCell("fa-solid fa-copyright", d); } },
-                    { data: "model", name: "Model", render: function(d) { return createCell("fa-solid fa-cube", d); } },
-                    { data: "serialNo", name: "SerialNo", render: function(d) { return createCell("fa-solid fa-hashtag", d); } },
-                    { data: "username", name: "Username", render: function(d) { return createCell("fa-solid fa-user", d); } },
-                    { data: "categoryName", name: "CategoryName", render: function(d) { return createCell("fa-solid fa-layer-group", d); } },
-                    { data: "departmentName", name: "DepartmentName", render: function(d) { return createCell("fa-solid fa-building", d); } },
-                    { data: "state", name: "State", render: function(d) { return formatStatus(d); } },
-                    { data: "description", name: "Description", render: function(d) { return createCell("fa-solid fa-align-left", d); } },
-                    { data: "networkAddress", name: "NetworkAddress", render: function(d) { return createCell("fa-solid fa-network-wired", d); } },
-                    { data: "networkName", name: "NetworkName", render: function(d) { return createCell("fa-solid fa-globe", d); } },
-                    { data: "hardwareName", name: "HardwareName", render: function(d) { return createCell("fa-solid fa-microchip", d); } },
-                    { data: "feature", name: "Feature", render: function(d) { return createCell("fa-solid fa-sliders", d); } },
-                    { data: "created", name: "Created", render: function(d) { return createCell("fa-solid fa-user-shield", d); } },
-                    { data: "createdDate", name: "CreatedDate", render: function(d) { return createCell("fa-regular fa-calendar", d); } },
+                    {
+                        data: "brand",
+                        name: "Brand",
+                        render: function (d) {
+                            return createCell("fa-solid fa-copyright", d);
+                        }
+                    },
+                    {
+                        data: "model",
+                        name: "Model",
+                        render: function (d) {
+                            return createCell("fa-solid fa-cube", d);
+                        }
+                    },
+                    {
+                        data: "serialNo",
+                        name: "SerialNo",
+                        render: function (d) {
+                            return createCell("fa-solid fa-hashtag", d);
+                        }
+                    },
+                    {
+                        data: "username",
+                        name: "Username",
+                        render: function (d) {
+                            return createCell("fa-solid fa-user", d);
+                        }
+                    },
+                    {
+                        data: "categoryName",
+                        name: "CategoryName",
+                        render: function (d) {
+                            return createCell("fa-solid fa-layer-group", d);
+                        }
+                    },
+                    {
+                        data: "departmentName",
+                        name: "DepartmentName",
+                        render: function (d) {
+                            return createCell("fa-solid fa-building", d);
+                        }
+                    },
+                    {
+                        data: "state",
+                        name: "State",
+                        render: function (d) {
+                            return formatStatus(d);
+                        }
+                    },
+                    {
+                        data: "description",
+                        name: "Description",
+                        render: function (d) {
+                            return createCell("fa-solid fa-align-left", d);
+                        }
+                    },
+                    {
+                        data: "networkAddress",
+                        name: "NetworkAddress",
+                        render: function (d) {
+                            return createCell("fa-solid fa-network-wired", d);
+                        }
+                    },
+                    {
+                        data: "networkName",
+                        name: "NetworkName",
+                        render: function (d) {
+                            return createCell("fa-solid fa-globe", d);
+                        }
+                    },
+                    {
+                        data: "hardwareName",
+                        name: "HardwareName",
+                        render: function (d) {
+                            return createCell("fa-solid fa-microchip", d);
+                        }
+                    },
+                    {
+                        data: "feature",
+                        name: "Feature",
+                        render: function (d) {
+                            return createCell("fa-solid fa-sliders", d);
+                        }
+                    },
+                    {
+                        data: "created",
+                        name: "Created",
+                        render: function (d) {
+                            return createCell("fa-solid fa-user-shield", d);
+                        }
+                    },
+                    {
+                        data: "createdDate",
+                        name: "CreatedDate",
+                        render: function (d) {
+                            return createCell("fa-regular fa-calendar", d);
+                        }
+                    },
                     {
                         data: null,
                         orderable: false,
                         searchable: false,
                         className: 'text-end',
-                        render: function(data) {
-                            if (!data) return '';
+
+                        render: function (data) {
+                            if (!data) {
+                                return '';
+                            }
+
                             return `
                                 <div class="d-inline-flex gap-1">
-                                    <a class="btn-action btn-action-edit btn-edit" href="/urunguncelle/${data.id}" title="Düzenle">
+                                    <a class="btn-action btn-action-edit btn-edit"
+                                       href="/urunguncelle/${data.id}"
+                                       title="Düzenle">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
-                                    <button type="button" class="btn-action btn-action-delete btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                            data-file-id="${data.id}" data-file-name="${data.brand}" title="Sil">
+
+                                    <button type="button"
+                                            class="btn-action btn-action-delete btn-delete"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-file-id="${data.id}"
+                                            data-file-name="${data.brand}"
+                                            title="Sil">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -254,26 +683,41 @@
                         }
                     }
                 ],
+
                 dom: 'Blrtip',
+
                 buttons: [
                     {
                         extend: 'excel',
-                        text: '<i class="fa-regular fa-file-excel me-2"></i> Excel Dışa Aktar',
-                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
+                        text:
+                            '<i class="fa-regular fa-file-excel me-2"></i>' +
+                            ' Excel Dışa Aktar',
+
+                        exportOptions: {
+                            columns: [
+                                1, 2, 3, 4, 5, 6, 7,
+                                8, 9, 10, 11, 12, 13, 14
+                            ]
+                        },
+
                         className: 'dt-btn-custom-excel'
                     }
                 ],
+
                 language: {
                     url: '/datatable/tr.json',
-                    processing: '<div class="spinner-border text-primary spinner-border-sm" role="status"></div>'
+                    processing:
+                        '<div class="spinner-border text-primary spinner-border-sm" role="status"></div>'
                 }
             });
 
-            table.on('stateLoaded', function() {
+            table.on('stateLoaded', function () {
                 var state = table.state.loaded();
+
                 if (state && state.columns) {
                     for (var i = 0; i < state.columns.length; i++) {
                         var searchValue = state.columns[i].search.search;
+
                         if (searchValue && i > 0 && i <= 14) {
                             $('.column-filter[data-column="' + i + '"]').val(searchValue);
                         }
@@ -284,55 +728,158 @@
             if (savedFilters && Object.keys(savedFilters).length > 0) {
                 for (var col in savedFilters) {
                     $('.column-filter[data-column="' + col + '"]').val(savedFilters[col]);
-                    table.column(parseInt(col)).search(savedFilters[col]);
+
+                    table
+                        .column(parseInt(col))
+                        .search(savedFilters[col]);
                 }
+
                 table.draw();
             }
 
-            $('.column-filter').on('keyup change', function() {
+            $('.column-filter').on('keyup change', function () {
                 var columnIndex = $(this).data('column');
-                table.column(columnIndex).search($(this).val()).draw();
+
+                table
+                    .column(columnIndex)
+                    .search($(this).val())
+                    .draw();
             });
 
-            $('#clearAllFilters').on('click', function() {
+            $('#clearAllFilters').on('click', function () {
                 $('.column-filter').val('');
-                table.columns().search('').draw();
+
+                table
+                    .columns()
+                    .search('')
+                    .draw();
+
                 sessionStorage.removeItem('returnFilters');
                 sessionStorage.removeItem('returnFromPage');
+
                 table.state.clear();
             });
 
-            $('#btnCreate, #myTable tbody').on('click', '.btn-edit, .btn-delete, #btnCreate', function(e) {
-                var filters = {};
-                $('.column-filter').each(function() {
-                    var val = $(this).val();
-                    if (val) filters[$(this).data('column')] = val;
-                });
-                saveFiltersToSession(filters);
-            });
+            $('#btnCreate, #myTable tbody').on(
+                'click',
+                '.btn-edit, .btn-delete, #btnCreate',
+                function () {
+
+                    var filters = {};
+
+                    $('.column-filter').each(function () {
+                        var val = $(this).val();
+
+                        if (val) {
+                            filters[$(this).data('column')] = val;
+                        }
+                    });
+
+                    saveFiltersToSession(filters);
+                }
+            );
 
             function format(rowData) {
                 return `
                     <div class="detail-card">
                         <div class="detail-grid">
-                            <div class="detail-item"><i class="fa-solid fa-copyright text-primary"></i><div><div class="detail-label">Marka</div><div class="detail-value">${rowData.brand || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-cube text-primary"></i><div><div class="detail-label">Model</div><div class="detail-value">${rowData.model || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-hashtag text-primary"></i><div><div class="detail-label">Seri No</div><div class="detail-value">${rowData.serialNo || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-user text-primary"></i><div><div class="detail-label">Kullanıcı</div><div class="detail-value">${rowData.username || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-layer-group text-primary"></i><div><div class="detail-label">Kategori</div><div class="detail-value">${rowData.categoryName || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-building text-primary"></i><div><div class="detail-label">Şube</div><div class="detail-value">${rowData.departmentName || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-network-wired text-primary"></i><div><div class="detail-label">Ağ Adresi (IP)</div><div class="detail-value">${rowData.networkAddress || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-globe text-primary"></i><div><div class="detail-label">Ağ Adı</div><div class="detail-value">${rowData.networkName || '-'}</div></div></div>
-                            <div class="detail-item"><i class="fa-solid fa-microchip text-primary"></i><div><div class="detail-label">Donanım</div><div class="detail-value">${rowData.hardwareName || '-'}</div></div></div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-copyright text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Marka</div>
+                                    <div class="detail-value">${rowData.brand || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-cube text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Model</div>
+                                    <div class="detail-value">${rowData.model || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-hashtag text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Seri No</div>
+                                    <div class="detail-value">${rowData.serialNo || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-user text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Kullanıcı</div>
+                                    <div class="detail-value">${rowData.username || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-layer-group text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Kategori</div>
+                                    <div class="detail-value">${rowData.categoryName || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-building text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Şube</div>
+                                    <div class="detail-value">${rowData.departmentName || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-network-wired text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Ağ Adresi (IP)</div>
+                                    <div class="detail-value">${rowData.networkAddress || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-globe text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Ağ Adı</div>
+                                    <div class="detail-value">${rowData.networkName || '-'}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fa-solid fa-microchip text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Donanım</div>
+                                    <div class="detail-value">${rowData.hardwareName || '-'}</div>
+                                </div>
+                            </div>
+
                         </div>
+
                         <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
-                            <span class="small text-muted"><i class="fa-solid fa-circle-info me-1"></i> Oluşturan: ${rowData.created || '-'} (${rowData.createdDate || '-'})</span>
+                            <span class="small text-muted">
+                                <i class="fa-solid fa-circle-info me-1"></i>
+                                Oluşturan:
+                                ${rowData.created || '-'}
+                                (${rowData.createdDate || '-'})
+                            </span>
+
                             <div class="d-flex gap-2">
-                                <a class="btn btn-warning btn-sm px-3 rounded-2 fw-semibold" href="/urunguncelle/${rowData.id}" title="Güncelle">
-                                    <i class="fa-solid fa-pen me-1"></i> Güncelle
+                                <a class="btn btn-warning btn-sm px-3 rounded-2 fw-semibold"
+                                   href="/urunguncelle/${rowData.id}"
+                                   title="Güncelle">
+                                    <i class="fa-solid fa-pen me-1"></i>
+                                    Güncelle
                                 </a>
-                                <button class="btn btn-danger btn-sm px-3 rounded-2 btn-delete-detail" data-file-id="${rowData.id}" data-file-name="${rowData.username}" title="Sil">
-                                    <i class="fa-solid fa-trash me-1"></i> Sil
+
+                                <button class="btn btn-danger btn-sm px-3 rounded-2 btn-delete-detail"
+                                        data-file-id="${rowData.id}"
+                                        data-file-name="${rowData.username}"
+                                        title="Sil">
+                                    <i class="fa-solid fa-trash me-1"></i>
+                                    Sil
                                 </button>
                             </div>
                         </div>
@@ -340,29 +887,153 @@
                 `;
             }
 
-            $('#myTable tbody').on('click', 'td.details-control .detail-toggle', function(e) {
-                e.stopPropagation();
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
+            $('#myTable tbody').on(
+                'click',
+                'td.details-control .detail-toggle',
+                function (e) {
 
-                if (row.child.isShown()) {
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    table.rows('.shown').every(function() {
-                        this.child.hide();
-                        $(this.node()).removeClass('shown');
-                    });
-                    row.child(format(row.data())).show();
-                    tr.addClass('shown');
+                    e.stopPropagation();
+
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+
+                    if (row.child.isShown()) {
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        table.rows('.shown').every(function () {
+                            this.child.hide();
+                            $(this.node()).removeClass('shown');
+                        });
+
+                        row.child(format(row.data())).show();
+                        tr.addClass('shown');
+                    }
                 }
+            );
+
+            $('#myTable tbody').on(
+                'dblclick',
+                'tr',
+                function (e) {
+
+                    if (
+                        $(e.target).closest(
+                            '.btn-action, .btn-edit, .btn-delete, .detail-toggle, input, button, a'
+                        ).length
+                    ) {
+                        return;
+                    }
+
+                    if ($(this).hasClass('child')) {
+                        return;
+                    }
+
+                    var tr = $(this);
+                    var row = table.row(tr);
+
+                    if (!row || !row.data()) {
+                        return;
+                    }
+
+                    var data = row.data();
+
+                    $('#detailModalTitle').text(
+                        (data.brand || '-') + ' ' + (data.model || '')
+                    );
+
+                    $('#detailModalSubtitle').text('Envanter kayıt detayları');
+
+                    $('#detailProductName').text(
+                        (data.brand || '-') + ' ' + (data.model || '-')
+                    );
+
+                    $('#detailProductSerial').text(
+                        'Seri No: ' + (data.serialNo || '-')
+                    );
+
+                    $('#detailProductStatus').html(
+                        formatStatus(data.state)
+                    );
+
+                    setDetailValue('#detailBrand', data.brand);
+                    setDetailValue('#detailModel', data.model);
+                    setDetailValue('#detailSerialNo', data.serialNo);
+                    setDetailValue('#detailUsername', data.username);
+                    setDetailValue('#detailCategory', data.categoryName);
+                    setDetailValue('#detailDepartment', data.departmentName);
+
+                    setDetailValue('#detailNetworkAddress', data.networkAddress);
+                    setDetailValue('#detailNetworkName', data.networkName);
+                    setDetailValue('#detailHardwareName', data.hardwareName);
+                    setDetailValue('#detailFeature', data.feature);
+
+                    setDetailValue('#detailDescription', data.description);
+
+                    setDetailValue('#detailCreated', data.created);
+                    setDetailValue('#detailCreatedDate', data.createdDate);
+
+                    $('#detailEditButton').attr(
+                        'href',
+                        '/urunguncelle/' + data.id
+                    );
+
+                    $('#detailDeleteButton')
+                        .attr('data-file-id', data.id)
+                        .attr('data-file-name', data.brand || 'Kayıt');
+
+                    $('#productDetailModal').modal('show');
+                }
+            );
+
+            function setDetailValue(selector, value) {
+                var text = value;
+
+                if (
+                    text === null ||
+                    text === undefined ||
+                    text === ''
+                ) {
+                    text = '-';
+                }
+
+                $(selector).text(text);
+            }
+
+            $('#detailDeleteButton').on('click', function () {
+
+                var id = $(this).attr('data-file-id');
+                var name = $(this).attr('data-file-name');
+
+                $('#productDetailModal').modal('hide');
+
+                $('#fileId').val(id);
+                $('#fileName').text(name);
+
+                setTimeout(function () {
+                    $('#deleteModal').modal('show');
+                }, 250);
             });
 
-            $('#myTable tbody').on('click', '.btn-delete, .btn-delete-detail', function () {
-                $('#fileId').val($(this).data('file-id'));
-                $('#fileName').text($(this).data('file-name'));
-                $('#deleteModal').modal('show');
-            });
+            $('#myTable tbody').on(
+                'click',
+                '.btn-delete, .btn-delete-detail',
+                function () {
+
+                    $('#fileId').val(
+                        $(this).data('file-id')
+                    );
+
+                    $('#fileName').text(
+                        $(this).data('file-name')
+                    );
+
+                    $('#deleteModal').modal('show');
+                }
+            );
+
         });
     </script>
 }
+
