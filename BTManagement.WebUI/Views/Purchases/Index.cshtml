@@ -4,197 +4,47 @@
     ViewData["Title"] = "Satın Alınanların Listesi";
 }
 
-<!-- DataTables Stil Bağlantıları -->
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
-
-<style>
-    /* Kart ve Genel Sayfa Düzeni */
-    .table-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        overflow: hidden;
-    }
-
-    .page-header-icon {
-        width: 44px;
-        height: 44px;
-        background: #eef2ff;
-        color: #4f46e5;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-
-    /* Tablo Mimarisi */
-    .custom-table {
-        font-family: inherit;
-        font-size: 0.85rem;
-        margin-bottom: 0 !important;
-        border-collapse: separate !important;
-        border-spacing: 0;
-    }
-
-        .custom-table thead tr:first-child th {
-            background-color: #4B49AC;
-            color: #ffffff;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid #e2e8f0;
-            padding: 12px;
-            white-space: nowrap;
-        }
-
-        .custom-table thead tr:nth-child(2) th {
-            background-color: #ffffff;
-            border-bottom: 2px solid #cbd5e1;
-            padding: 6px 8px;
-        }
-
-        .custom-table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-
-            .custom-table tbody tr:hover {
-                background-color: #f1f5f9 !important;
-            }
-
-        .custom-table td {
-            padding: 10px 12px;
-            vertical-align: middle;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-    /* Filtreleme Inputları */
-    .filter-input {
-        width: 100%;
-        padding: 5px 8px;
-        border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        font-size: 0.78rem;
-        background-color: #f8fafc;
-        transition: all 0.2s ease;
-    }
-
-        .filter-input:focus {
-            outline: none;
-            border-color: #4f46e5;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-    /* DataTables Ekstra Özelleştirmeleri */
-    .dt-buttons .btn {
-        font-size: 0.8rem !important;
-        border-radius: 6px !important;
-        margin-right: 4px;
-        padding: 4px 10px !important;
-    }
-
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_paginate {
-        padding: 12px 16px;
-        font-size: 0.825rem;
-    }
-
-    /* Modern İşlem Buton Grubu */
-    .action-btn-group {
-        display: inline-flex;
-        gap: 6px;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .action-btn-group .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            border-radius: 6px !important;
-            border: 1px solid transparent;
-            transition: all 0.2s ease-in-out;
-            white-space: nowrap;
-        }
-
-        /* Güncelle Butonu (Amber / Sarı Soft Stil) */
-        .action-btn-group .btn-edit {
-            background-color: #fffbe8;
-            color: #b45309;
-            border-color: #fde68a;
-        }
-
-            .action-btn-group .btn-edit:hover {
-                background-color: #d97706;
-                color: #ffffff;
-                border-color: #d97706;
-                box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
-            }
-
-        /* Sil Butonu (Kırmızı Soft Stil) */
-        .action-btn-group .btn-delete {
-            background-color: #fef2f2;
-            color: #dc2626;
-            border-color: #fecaca;
-        }
-
-            .action-btn-group .btn-delete:hover {
-                background-color: #dc2626;
-                color: #ffffff;
-                border-color: #dc2626;
-                box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
-            }
-
-        /* Kopyala Butonu (Mavi Soft Stil) */
-        .action-btn-group .btn-copy {
-            background-color: #eff6ff;
-            color: #2563eb;
-            border-color: #bfdbfe;
-        }
-
-            .action-btn-group .btn-copy:hover {
-                background-color: #2563eb;
-                color: #ffffff;
-                border-color: #2563eb;
-                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-            }
-       
-</style>
+<link href="~/css/purchase-theme.css" rel="stylesheet" />
 
 <div class="container-fluid px-0">
-    <!-- Sayfa Üst Alanı (Başlık, Buton ve Toplam Göstergesi) -->
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <div class="d-flex align-items-center gap-3">
             <div class="page-header-icon">
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
+
             <div>
                 <h4 class="mb-0 fw-bold text-dark">Satın Alınanların Listesi</h4>
-                <p class="text-muted small mb-0">Kurum bünyesinde gerçekleştirilen alımları inceleyin ve yönetin.</p>
+                <p class="text-muted small mb-0">
+                    Kurum bünyesinde gerçekleştirilen alımları inceleyin ve yönetin.
+                </p>
             </div>
         </div>
 
         <div class="d-flex align-items-center gap-3 ms-auto">
-            <a asp-action="Create" class="btn btn-primary btn-sm fw-medium px-3 rounded-2">
-                <i class="fa-solid fa-plus me-1"></i> Yeni Ekle
+
+            <button type="button" id="clearFiltersBtn" class="btn btn-warning btn-sm fw-medium px-3 rounded-2" title="Filtreleri Sıfırla">
+                <i class="fa-solid fa-rotate-right me-1"></i>
+                Filtreleri Sıfırla
+            </button>
+
+            <a asp-action="Create" class="btn btn-primary btn-sm fw-medium px-3 rounded-2" title="Yeni Ekle">
+                <i class="fa-solid fa-plus me-1"></i>
+                Yeni Ekle
             </a>
+
             <div class="bg-white border rounded-3 px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
                 <span class="text-muted small fw-semibold">Alımların Toplamı:</span>
-                <span id="allTotalBtn" class="badge bg-success fs-6 fw-bold px-3 py-2 rounded-2">₺0,00</span>
+                <span id="allTotalBtn" class="badge bg-success fs-6 fw-bold px-3 py-2 rounded-2">
+                    ₺0,00
+                </span>
             </div>
         </div>
     </div>
 
-    <!-- Tablo Kart Yapısı -->
     <div class="card table-card">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -211,8 +61,9 @@
                             <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
                             <th>@Html.DisplayNameFor(m => m.Description)</th>
                             <th>@Html.DisplayNameFor(m => m.FilePath)</th>
-                            <th class="text-center" style="min-width: 130px;">İşlemler</th>
+                            <th class="text-center" style="min-width:130px;">İşlemler</th>
                         </tr>
+
                         <tr>
                             <th><input type="text" class="filter-input" placeholder="Dosya No..." /></th>
                             <th><input type="text" class="filter-input" placeholder="İşin Adı..." /></th>
@@ -227,35 +78,99 @@
                             <th></th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td class="fw-medium text-dark">@Html.DisplayFor(m => item.FileNo)</td>
-                                <td>@Html.DisplayFor(m => item.WorkingName)</td>
-                                <td>@Html.DisplayFor(m => item.Firms.Name)</td>
-                                <td data-value="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="text-end fw-bold text-dark">
+                            <tr data-id="@item.Id"
+                                data-fileno="@item.FileNo"
+                                data-workingname="@item.WorkingName"
+                                data-firm="@item.Firms?.Name"
+                                data-price="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                data-purchasedate="@item.PurchaseDate.ToString("dd.MM.yyyy")"
+                                data-purchaseform="@item.PurchaseForms?.Name"
+                                data-purchasekind="@item.PurchaseKinds?.Name"
+                                data-purchasetype="@item.PurchaseTypes?.Name"
+                                data-description="@item.Description"
+                                data-filepath="@item.FilePath">
+                                <td class="fw-medium text-dark">
+                                    @Html.DisplayFor(m => item.FileNo)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(m => item.WorkingName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(m => item.Firms.Name)
+                                </td>
+
+                                <td data-value="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                    class="text-end fw-bold text-dark">
                                     @item.Price.ToString("N2", new System.Globalization.CultureInfo("tr-TR")) ₺
                                 </td>
-                                <td>@Html.DisplayFor(m => item.PurchaseDate)</td>
-                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseForms.Name)</span></td>
-                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseKinds.Name)</span></td>
-                                <td><span class="badge bg-light text-secondary border">@Html.DisplayFor(m => item.PurchaseTypes.Name)</span></td>
-                                <td class="text-truncate" style="max-width: 150px;" title="@item.Description">@Html.DisplayFor(m => item.Description)</td>
-                                <td class="text-truncate" style="max-width: 120px;" title="@item.FilePath">@Html.DisplayFor(m => item.FilePath)</td>
+
+                                <td>
+                                    @Html.DisplayFor(m => item.PurchaseDate)
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-secondary border">
+                                        @Html.DisplayFor(m => item.PurchaseForms.Name)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-secondary border">
+                                        @Html.DisplayFor(m => item.PurchaseKinds.Name)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-secondary border">
+                                        @Html.DisplayFor(m => item.PurchaseTypes.Name)
+                                    </span>
+                                </td>
+
+                                <td class="text-truncate"
+                                    style="max-width:150px;"
+                                    title="@item.Description">
+                                    @Html.DisplayFor(m => item.Description)
+                                </td>
+
+                                <td class="text-truncate"
+                                    style="max-width:120px;"
+                                    title="@item.FilePath">
+                                    @Html.DisplayFor(m => item.FilePath)
+                                </td>
+
                                 <td class="text-center">
                                     <div class="action-btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit" title="Güncelle" data-bs-toggle="tooltip">
-                                            <i class="fa-solid fa-pen-to-square mr-2"></i> Güncelle
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-edit"
+                                           title="Güncelle">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            Güncelle
                                         </a>
-                                        <button type="button" class="btn btn-delete mr-2"
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                data-file-id="@item.Id" data-file-name="@item.WorkingName"
+
+                                        <button type="button"
+                                                class="btn btn-delete"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                data-file-id="@item.Id"
+                                                data-file-name="@item.WorkingName"
                                                 title="Sil">
-                                            <i class="fa-solid fa-trash-can"></i> Sil
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            Sil
                                         </button>
-                                        <button type="button" class="btn btn-copy copy-path-btn" data-path="@item.FilePath" title="Dosya Yolunu Kopyala">
-                                            <i class="fa-regular fa-copy"></i> Dosya Yolunu Kopyala
+
+                                        <button type="button"
+                                                class="btn btn-copy copy-path-btn"
+                                                data-path="@item.FilePath"
+                                                title="Dosya Yolunu Kopyala">
+                                            <i class="fa-regular fa-copy"></i>
+                                            Kopyala
                                         </button>
                                     </div>
                                 </td>
@@ -268,15 +183,151 @@
     </div>
 </div>
 
+<!-- Detay Modalı (Küçültülmüş) -->
+<div class="modal fade" id="purchaseDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-3">
+            <div class="modal-header bg-primary text-white border-0 py-2">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-white bg-opacity-25 rounded-circle p-1">
+                        <i class="fa-solid fa-receipt fa-sm"></i>
+                    </div>
+                    <div>
+                        <h6 class="modal-title fw-bold mb-0" id="detailModalTitle">Satın Alma Detayı</h6>
+                        <small class="opacity-75" id="detailModalSubtitle">Kayıt detayları</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+
+            <div class="modal-body p-3">
+                <!-- Özet Kart (Küçültülmüş) -->
+                <div class="bg-light rounded-2 p-2 mb-3 d-flex align-items-center gap-2">
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                        <i class="fa-solid fa-file-invoice text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6" id="detailFileNo">-</div>
+                        <div class="text-muted small" id="detailWorkingName">-</div>
+                    </div>
+                    <div class="ms-auto">
+                        <span class="badge bg-success fs-6 p-1 px-2" id="detailPrice">₺0,00</span>
+                    </div>
+                </div>
+
+                <!-- Bilgi Grid (Küçültülmüş) -->
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-solid fa-building text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Firma</span>
+                            </div>
+                            <div class="fw-semibold small" id="detailFirm">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-regular fa-calendar text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Tarih</span>
+                            </div>
+                            <div class="fw-semibold small" id="detailPurchaseDate">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-solid fa-shapes text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Şekil</span>
+                            </div>
+                            <div class="small" id="detailPurchaseForm">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-solid fa-tag text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Tür</span>
+                            </div>
+                            <div class="small" id="detailPurchaseKind">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-solid fa-list text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Tip</span>
+                            </div>
+                            <div class="small" id="detailPurchaseType">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-solid fa-align-left text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Açıklama</span>
+                            </div>
+                            <div id="detailDescription" class="text-secondary small">-</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="border rounded-2 p-2">
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <i class="fa-regular fa-folder text-primary fa-xs"></i>
+                                <span class="text-muted small fw-semibold">Dosya Yolu</span>
+                            </div>
+                            <div id="detailFilePath" class="text-secondary small">
+                                <span id="detailFilePathText">-</span>
+                                <button type="button" class="btn btn-sm btn-outline-primary ms-1 py-0 px-2" id="detailCopyPathBtn">
+                                    <i class="fa-regular fa-copy fa-xs"></i> Kopyala
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 pt-0 pb-2">
+                <button type="button" class="btn btn-light btn-sm fw-medium border" data-bs-dismiss="modal" title="Kapat">
+                    Kapat
+                </button>
+                <a href="#" id="detailEditButton" class="btn btn-info btn-sm fw-medium" title="Güncelle">
+                    <i class="fa-solid fa-pen me-1"></i> Güncelle
+                </a>
+                <button type="button" id="detailDeleteButton" class="btn btn-danger btn-sm fw-medium" title="Sil">
+                    <i class="fa-solid fa-trash me-1"></i> Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Bildirimi -->
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
-    <div id="copyToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1100;">
+    <div id="copyToast"
+         class="toast align-items-center text-white bg-success border-0 shadow-lg"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+
         <div class="d-flex">
             <div class="toast-body d-flex align-items-center gap-2">
                 <i id="toastIcon" class="fa-solid fa-check"></i>
                 <span id="toastMessage">Kopyalandı!</span>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+
+            <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close">
+            </button>
         </div>
     </div>
 </div>
@@ -285,26 +336,46 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-3">
+
             <form method="post" asp-action="Delete">
                 <div class="modal-header border-bottom-0">
                     <h5 class="modal-title fw-bold text-danger">
-                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Silme Onayı
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                        Silme Onayı
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
                 </div>
+
                 <div class="modal-body py-2">
                     <p class="mb-0 text-secondary">
-                        <strong id="fileName" class="text-dark"></strong> kaydını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                        <strong id="fileName" class="text-dark"></strong>
+                        kaydını silmek istediğinizden emin misiniz?
+                        Bu işlem geri alınamaz.
                     </p>
+
                     <input type="hidden" name="id" id="fileId" />
                 </div>
+
                 <div class="modal-footer border-top-0 pt-3">
-                    <button type="button" class="btn btn-light btn-sm fw-medium border" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-danger btn-sm fw-medium">
-                        <i class="fa-solid fa-trash me-1"></i> Sil
+                    <button type="button"
+                            class="btn btn-light btn-sm fw-medium border"
+                            data-bs-dismiss="modal" title="İptal">
+                        İptal
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-danger btn-sm fw-medium" title="Sil">
+                        <i class="fa-solid fa-trash me-1"></i>
+                        Sil
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -321,80 +392,299 @@
 
     <script>
         $(document).ready(function () {
-            // Silme modalı veri aktarımı
+
+            // Silme Modalı
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
+
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
 
             var totalAll = @Html.Raw(Json.Serialize(ViewBag.TotalAll ?? 0));
 
-            // Başlangıç genel toplamı
             $("#allTotalBtn").text(
-                totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
+                totalAll.toLocaleString("tr-TR", {
+                    style: "currency",
+                    currency: "TRY"
+                })
             );
 
-            // DataTables İlklendirme
             var table = $('#myTable').DataTable({
-                dom: '<"d-flex flex-wrap justify-content-between align-items-center p-3 border-bottom"B>rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>',
+                dom: '<"d-flex flex-wrap justify-content-between align-items-center p-3 border-bottom"B><"d-flex flex-wrap justify-content-between align-items-center p-3"l>rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>',
+
                 buttons: [
-                    { extend: 'copy', className: 'btn btn-outline-secondary' },
-                    { extend: 'excel', className: 'btn btn-outline-success' },
-                    { extend: 'pdf', className: 'btn btn-outline-danger' },
-                    { extend: 'print', className: 'btn btn-outline-dark' }
-                ],
-                responsive: true,
-                columnDefs: [
-                    { orderable: false, targets: -1 } // İşlemler sütunu sıralanamaz
-                ],
-                order: [[0, 'desc']],
-                language: { url: '/datatable/tr.json' }
-            });
-
-            // Sütun Filtreleme ve Dinamik Toplam Hesaplama
-            $('#myTable thead tr:eq(1) th input').on('keyup change clear', function () {
-                var colIndex = $(this).parent().index();
-                var value = this.value;
-
-                if (table.column(colIndex).search() !== value) {
-                    table.column(colIndex).search(value).draw();
-
-                    var anyFilter = table.columns().search().reduce(function (acc, curr) {
-                        return acc || curr.length > 0;
-                    }, false);
-
-                    if (anyFilter) {
-                        var priceColIndex = 3; // Price sütununun indeksi
-                        var filteredTotal = table
-                            .column(priceColIndex, { search: 'applied' })
-                            .nodes()
-                            .toArray()
-                            .reduce(function (a, node) {
-                                return a + (parseFloat($(node).data('value')) || 0);
-                            }, 0);
-
-                        $("#allTotalBtn").text(
-                            filteredTotal.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
-                        );
-                    } else {
-                        $("#allTotalBtn").text(
-                            totalAll.toLocaleString("tr-TR", { style: "currency", currency: "TRY" })
-                        );
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-outline-secondary btn-sm'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-outline-success btn-sm'
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-outline-danger btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-outline-dark btn-sm'
                     }
+                ],
+
+                responsive: true,
+
+                columnDefs: [
+                    {
+                        orderable: false,
+                        targets: -1
+                    }
+                ],
+
+                order: [[0, 'desc']],
+
+                pageLength: 25,
+
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "Tümü"]
+                ],
+
+                language: {
+                    url: '/datatable/tr.json'
                 }
             });
 
-            // Pano / Clipboard Etkileşimi ve Toast Bildirimi
+            // ===== FİLTRE INPUTLARINA TIKLANDIĞINDA SIRALAMANIN DEĞİŞMESİNİ ENGELLE =====
+            // Input alanlarına tıklama olaylarını durdur
+            $('#myTable thead tr:eq(1) th input').on('mousedown click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Filtreleme işlemi
+            $('#myTable thead tr:eq(1) th input').on('keyup change clear', function () {
+                var colIndex = $(this).closest('th').index();
+                var value = this.value;
+
+                // Mevcut sıralamayı kaydet
+                var currentOrder = table.order();
+
+                if (table.column(colIndex).search() !== value) {
+                    // Filtrele
+                    table
+                        .column(colIndex)
+                        .search(value)
+                        .draw();
+
+                    // Sıralamayı geri yükle
+                    if (currentOrder && currentOrder.length > 0) {
+                        table.order(currentOrder).draw(false);
+                    }
+
+                    updateTotal();
+                }
+            });
+
+            // Toplam Güncelleme
+            function updateTotal() {
+
+                var hasFilter = false;
+
+                table.columns().every(function () {
+                    if (this.search().length > 0) {
+                        hasFilter = true;
+                    }
+                });
+
+                if (!hasFilter) {
+                    $("#allTotalBtn").text(
+                        totalAll.toLocaleString("tr-TR", {
+                            style: "currency",
+                            currency: "TRY"
+                        })
+                    );
+
+                    return;
+                }
+
+                var filteredTotal = table
+                    .column(3, { search: 'applied' })
+                    .nodes()
+                    .toArray()
+                    .reduce(function (total, node) {
+
+                        return total +
+                            (parseFloat($(node).data('value')) || 0);
+
+                    }, 0);
+
+                $("#allTotalBtn").text(
+                    filteredTotal.toLocaleString("tr-TR", {
+                        style: "currency",
+                        currency: "TRY"
+                    })
+                );
+            }
+
+            // Toast
             var toastEl = document.getElementById('copyToast');
             var toastMessage = document.getElementById('toastMessage');
             var toastIcon = document.getElementById('toastIcon');
-            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
 
+            var toast = new bootstrap.Toast(toastEl, {
+                delay: 3000
+            });
+
+            // Kopyalama
             $('#myTable').on('click', '.copy-path-btn', function (e) {
+
                 e.preventDefault();
+
                 var path = $(this).data('path');
-                if (!path) return;
+
+                if (!path) {
+                    return;
+                }
+
+                function notify(success) {
+
+                    if (success) {
+                        toastMessage.textContent =
+                            'Dosya yolu panoya kopyalandı!';
+
+                        toastEl.className =
+                            'toast align-items-center text-white bg-success border-0 shadow-lg';
+
+                        toastIcon.className =
+                            'fa-solid fa-check me-1';
+                    }
+                    else {
+                        toastMessage.textContent =
+                            'Kopyalama başarısız oldu!';
+
+                        toastEl.className =
+                            'toast align-items-center text-white bg-danger border-0 shadow-lg';
+
+                        toastIcon.className =
+                            'fa-solid fa-xmark me-1';
+                    }
+
+                    toast.show();
+                }
+
+                if (navigator.clipboard) {
+
+                    navigator.clipboard
+                        .writeText(path)
+                        .then(function () {
+                            notify(true);
+                        })
+                        .catch(function () {
+                            notify(false);
+                        });
+                }
+                else {
+
+                    var $temp = $("<input>");
+
+                    $("body").append($temp);
+
+                    $temp.val(path).select();
+
+                    var success = false;
+
+                    try {
+                        success = document.execCommand("copy");
+                    }
+                    catch (err) {
+                        success = false;
+                    }
+
+                    $temp.remove();
+
+                    notify(success);
+                }
+            });
+
+            // =============================================
+            // SATIRA ÇİFT TIKLAYINCA DETAY MODALI AÇMA
+            // =============================================
+
+            // Detay Modalı Gösterme
+            function showPurchaseDetail(rowData) {
+                // Özet Bilgiler
+                $('#detailFileNo').text(rowData.fileno || '-');
+                $('#detailWorkingName').text(rowData.workingname || '-');
+                $('#detailPrice').text(
+                    (parseFloat(rowData.price) || 0).toLocaleString("tr-TR", {
+                        style: "currency",
+                        currency: "TRY"
+                    })
+                );
+
+                // Temel Bilgiler
+                $('#detailFirm').text(rowData.firm || '-');
+                $('#detailPurchaseDate').text(rowData.purchasedate || '-');
+                $('#detailPurchaseForm').text(rowData.purchaseform || '-');
+                $('#detailPurchaseKind').text(rowData.purchasekind || '-');
+                $('#detailPurchaseType').text(rowData.purchasetype || '-');
+                $('#detailDescription').text(rowData.description || '-');
+
+                // Dosya Yolu
+                var filePath = rowData.filepath || '-';
+                $('#detailFilePathText').text(filePath);
+
+                // Modal Başlığı
+                $('#detailModalTitle').text(rowData.fileno || 'Satın Alma Detayı');
+                $('#detailModalSubtitle').text(rowData.workingname || 'Kayıt detayları');
+
+                // Güncelle Butonu
+                var editUrl = '/satinalimiguncelle/' + rowData.id;
+                $('#detailEditButton').attr('href', editUrl);
+
+                // Sil Butonu
+                $('#detailDeleteButton')
+                    .attr('data-file-id', rowData.id)
+                    .attr('data-file-name', rowData.workingname);
+
+                // Modalı Göster
+                $('#purchaseDetailModal').modal('show');
+            }
+
+            // Tablo satırına çift tıklama olayı
+            $('#myTable tbody').on('dblclick', 'tr', function (e) {
+                // Butonlara veya tıklanabilir elemanlara tıklandıysa çalışmasın
+                if ($(e.target).closest('.btn, .action-btn-group, a, button, input').length) {
+                    return;
+                }
+
+                var tr = $(this);
+
+                // DataTable satır verilerini al
+                var rowData = {
+                    id: tr.data('id'),
+                    fileno: tr.data('fileno'),
+                    workingname: tr.data('workingname'),
+                    firm: tr.data('firm'),
+                    price: tr.data('price'),
+                    purchasedate: tr.data('purchasedate'),
+                    purchaseform: tr.data('purchaseform'),
+                    purchasekind: tr.data('purchasekind'),
+                    purchasetype: tr.data('purchasetype'),
+                    description: tr.data('description'),
+                    filepath: tr.data('filepath')
+                };
+
+                showPurchaseDetail(rowData);
+            });
+
+            // Detay modalındaki kopyala butonu
+            $('#detailCopyPathBtn').on('click', function () {
+                var path = $('#detailFilePathText').text();
+
+                if (!path || path === '-') {
+                    return;
+                }
 
                 function notify(success) {
                     if (success) {
@@ -410,21 +700,64 @@
                 }
 
                 if (navigator.clipboard) {
-                    navigator.clipboard.writeText(path).then(function () {
-                        notify(true);
-                    }).catch(function () {
-                        notify(false);
-                    });
+                    navigator.clipboard.writeText(path).then(() => notify(true)).catch(() => notify(false));
                 } else {
                     var $temp = $("<input>");
                     $("body").append($temp);
                     $temp.val(path).select();
                     var success = false;
-                    try { success = document.execCommand("copy"); } catch (err) { success = false; }
+                    try {
+                        success = document.execCommand("copy");
+                    } catch (err) {
+                        success = false;
+                    }
                     $temp.remove();
                     notify(success);
                 }
             });
+
+            // Detay modalındaki sil butonu
+            $('#detailDeleteButton').on('click', function () {
+                var id = $(this).data('file-id');
+                var name = $(this).data('file-name');
+
+                $('#purchaseDetailModal').modal('hide');
+
+                setTimeout(function () {
+                    $('#fileId').val(id);
+                    $('#fileName').text(name);
+                    $('#deleteModal').modal('show');
+                }, 300);
+            });
+
+                   // ===== FİLTRELERİ TEMİZLE BUTONU =====
+        $('#clearFiltersBtn').on('click', function () {
+            // Tüm input alanlarını temizle
+            $('#myTable thead tr:eq(1) th input').each(function () {
+                $(this).val('');
+            });
+
+            // DataTable'daki tüm filtreleri temizle
+            table.columns().every(function () {
+                this.search('');
+            });
+
+            // Mevcut sıralamayı koru
+            var currentOrder = table.order();
+
+            // Tabloyu yeniden çiz
+            table.draw();
+
+            // Sıralamayı geri yükle
+            if (currentOrder && currentOrder.length > 0) {
+                table.order(currentOrder).draw(false);
+            }
+
+            // Toplamı güncelle
+            updateTotal();
+
+        });
+
         });
     </script>
 }
