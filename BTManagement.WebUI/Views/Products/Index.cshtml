@@ -4,8 +4,7 @@
     ViewData["Title"] = "Envanter Listesi";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link href="~/datatable/buttons.datatables.css" rel="stylesheet" />
 <link href="~/datatable/responsive.datatables.min.css" rel="stylesheet" />
 <link href="~/datatable/datatables.min.css" rel="stylesheet" />
@@ -51,12 +50,16 @@
         </div>
     </div>
 
+    <!-- BİLGİ NOTU - Toolbar ile tablo arasında -->
+    <div class="table-info-note mb-3">
+        <div class="d-flex align-items-center gap-2 text-muted small bg-light rounded-2 px-3 py-2 border-start border-3 border-primary shadow-sm">
+            <i class="fa-solid fa-circle-info text-primary"></i>
+            <span>💡 Detayları görüntülemek için satıra <strong class="text-dark">çift tıklayın</strong>.</span>
+        </div>
+    </div>
+
     <div class="card app-card">
-        <div class="card-body p-3">
-            <div class="table-info-note">
-                <i class="fa-solid fa-circle-info"></i>
-                <span>Detayları görüntülemek için satıra <strong>çift tıklayın</strong>.</span>
-            </div>
+        <div class="card-body p-2">
             <div class="table-responsive">
                 <table class="table align-middle" id="myTable">
                     <thead>
@@ -74,8 +77,8 @@
                             <th>Ağ Adı</th>
                             <th>Donanım Adı</th>
                             <th>Özellik</th>
-                            <th>Oluşturan</th>
-                            <th>Oluşturma Tarihi</th>
+                            <th>Kaydeden</th>
+                            <th>Kayıt Tarihi</th>
                             <th class="text-end">İşlemler</th>
                         </tr>
 
@@ -93,8 +96,8 @@
                             <th><input type="text" class="column-filter" placeholder="Ağ Adı..." data-column="10"></th>
                             <th><input type="text" class="column-filter" placeholder="Donanım Adı..." data-column="11"></th>
                             <th><input type="text" class="column-filter" placeholder="Özellik..." data-column="12"></th>
-                            <th><input type="text" class="column-filter" placeholder="Oluşturan..." data-column="13"></th>
-                            <th><input type="text" class="column-filter" placeholder="Tarih..." data-column="14"></th>
+                            <th><input type="text" class="column-filter" placeholder="Kaydeden..." data-column="13"></th>
+                            <th><input type="text" class="column-filter" placeholder="Kayıt Tarih..." data-column="14"></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -290,7 +293,7 @@
                             <div class="product-detail-box-icon">
                                 <i class="fa-solid fa-user-shield"></i>
                             </div>
-                            <span class="product-detail-box-label">Oluşturan</span>
+                            <span class="product-detail-box-label">Kaydeden</span>
                         </div>
                         <div class="product-detail-box-value" id="detailCreated">-</div>
                     </div>
@@ -300,7 +303,7 @@
                             <div class="product-detail-box-icon">
                                 <i class="fa-regular fa-calendar"></i>
                             </div>
-                            <span class="product-detail-box-label">Oluşturma Tarihi</span>
+                            <span class="product-detail-box-label">Kayıt Tarihi</span>
                         </div>
                         <div class="product-detail-box-value" id="detailCreatedDate">-</div>
                     </div>
@@ -402,6 +405,10 @@
     <script>
         $(document).ready(function () {
 
+            console.log('=== SAYFA YÜKLENDİ ===');
+            console.log('Session Storage:', sessionStorage);
+            console.log('Current Path:', window.location.pathname);
+
             if ($.fn.dataTable.isDataTable('#myTable')) {
                 $('#myTable').DataTable().destroy();
                 $('#myTable tbody').empty();
@@ -469,35 +476,53 @@
                 `;
             }
 
-            function saveFiltersToSession(filters) {
-                sessionStorage.setItem('returnFilters', JSON.stringify(filters));
-                sessionStorage.setItem('returnFromPage', window.location.pathname);
-            }
-
-            function getFiltersFromSession() {
-                var filters = sessionStorage.getItem('returnFilters');
-                var returnFrom = sessionStorage.getItem('returnFromPage');
-
-                if (filters && returnFrom === window.location.pathname) {
-                    sessionStorage.removeItem('returnFilters');
-                    sessionStorage.removeItem('returnFromPage');
-                    return JSON.parse(filters);
+            // ==================== FİLTRE VE SIRALAMA KAYDETME ====================
+            function saveStateToSession(filters, order) {
+                try {
+                    var state = {
+                        filters: filters || {},
+                        order: order || []
+                    };
+                    console.log('💾 Kaydedilen state:', state);
+                    sessionStorage.setItem('tableState', JSON.stringify(state));
+                    sessionStorage.setItem('returnFromPage', window.location.pathname);
+                    console.log('✅ State session\'a kaydedildi');
+                } catch (e) {
+                    console.error('❌ State kaydedilirken hata:', e);
                 }
-
-                return null;
             }
 
-            var previousPage = document.referrer;
+            function getStateFromSession() {
+                try {
+                    var state = sessionStorage.getItem('tableState');
+                    var returnFrom = sessionStorage.getItem('returnFromPage');
 
-            var isComingFromActionPage =
-                previousPage.includes('/Edit') ||
-                previousPage.includes('/Delete') ||
-                previousPage.includes('/Create');
+                    console.log('📂 Session\'dan okunan state:', state);
+                    console.log('📂 Session\'dan okunan sayfa:', returnFrom);
+                    console.log('📂 Mevcut sayfa:', window.location.pathname);
 
-            var savedFilters =
-                isComingFromActionPage
-                    ? getFiltersFromSession()
-                    : null;
+                    if (state && returnFrom === window.location.pathname) {
+                        var parsed = JSON.parse(state);
+                        console.log('✅ State bulundu ve parse edildi:', parsed);
+                        return parsed;
+                    } else {
+                        console.log('⚠️ State bulunamadı veya sayfa eşleşmiyor');
+                        return null;
+                    }
+                } catch (e) {
+                    console.error('❌ State okunurken hata:', e);
+                    return null;
+                }
+            }
+
+            // Session'dan state'i al
+            var savedState = getStateFromSession();
+            var savedFilters = savedState ? savedState.filters : null;
+            var savedOrder = savedState ? savedState.order : null;
+
+            console.log('🔄 savedFilters:', savedFilters);
+            console.log('🔄 savedOrder:', savedOrder);
+            // ========================================================
 
             var table = $('#myTable').DataTable({
                 processing: true,
@@ -519,7 +544,9 @@
                     [10, 25, 50, 100, "Tümü"]
                 ],
 
-                order: [],
+                // Sıralama ayarlarını geri yükle
+                order: savedOrder || [],
+
                 searching: true,
 
                 ajax: {
@@ -531,10 +558,13 @@
                     data: function (d) {
                         $('.column-filter').each(function () {
                             var columnIndex = $(this).data('column');
-
-                            d['columns[' + columnIndex + '][search][value]'] =
-                                $(this).val();
+                            d['columns[' + columnIndex + '][search][value]'] = $(this).val();
                         });
+
+                        // Sıralama bilgisini de gönder
+                        if (d.order && d.order.length > 0) {
+                            console.log('📊 Gönderilen sıralama:', d.order);
+                        }
 
                         return d;
                     }
@@ -546,136 +576,94 @@
                         className: 'details-control',
                         orderable: false,
                         searchable: false,
-                        defaultContent:
-                            '<span class="detail-toggle">' +
-                            '<i class="fa-solid fa-plus"></i>' +
-                            '</span>',
+                        defaultContent: '<span class="detail-toggle"><i class="fa-solid fa-plus"></i></span>',
                         width: '30px'
                     },
                     {
                         data: "brand",
                         name: "Brand",
-                        render: function (d) {
-                            return createCell("fa-solid fa-copyright", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-copyright", d); }
                     },
                     {
                         data: "model",
                         name: "Model",
-                        render: function (d) {
-                            return createCell("fa-solid fa-cube", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-cube", d); }
                     },
                     {
                         data: "serialNo",
                         name: "SerialNo",
-                        render: function (d) {
-                            return createCell("fa-solid fa-hashtag", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-hashtag", d); }
                     },
                     {
                         data: "username",
                         name: "Username",
-                        render: function (d) {
-                            return createCell("fa-solid fa-user", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-user", d); }
                     },
                     {
                         data: "categoryName",
                         name: "CategoryName",
-                        render: function (d) {
-                            return createCell("fa-solid fa-layer-group", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-layer-group", d); }
                     },
                     {
                         data: "departmentName",
                         name: "DepartmentName",
-                        render: function (d) {
-                            return createCell("fa-solid fa-building", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-building", d); }
                     },
                     {
                         data: "state",
                         name: "State",
-                        render: function (d) {
-                            return formatStatus(d);
-                        }
+                        render: function (d) { return formatStatus(d); }
                     },
                     {
                         data: "description",
                         name: "Description",
-                        render: function (d) {
-                            return createCell("fa-solid fa-align-left", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-align-left", d); }
                     },
                     {
                         data: "networkAddress",
                         name: "NetworkAddress",
-                        render: function (d) {
-                            return createCell("fa-solid fa-network-wired", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-network-wired", d); }
                     },
                     {
                         data: "networkName",
                         name: "NetworkName",
-                        render: function (d) {
-                            return createCell("fa-solid fa-globe", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-globe", d); }
                     },
                     {
                         data: "hardwareName",
                         name: "HardwareName",
-                        render: function (d) {
-                            return createCell("fa-solid fa-microchip", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-microchip", d); }
                     },
                     {
                         data: "feature",
                         name: "Feature",
-                        render: function (d) {
-                            return createCell("fa-solid fa-sliders", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-sliders", d); }
                     },
                     {
                         data: "created",
                         name: "Created",
-                        render: function (d) {
-                            return createCell("fa-solid fa-user-shield", d);
-                        }
+                        render: function (d) { return createCell("fa-solid fa-user-shield", d); }
                     },
                     {
                         data: "createdDate",
                         name: "CreatedDate",
-                        render: function (d) {
-                            return createCell("fa-regular fa-calendar", d);
-                        }
+                        render: function (d) { return createCell("fa-regular fa-calendar", d); }
                     },
                     {
                         data: null,
                         orderable: false,
                         searchable: false,
                         className: 'text-end',
-
                         render: function (data) {
-                            if (!data) {
-                                return '';
-                            }
-
+                            if (!data) return '';
                             return `
                                 <div class="d-inline-flex gap-1">
-                                    <a class="btn-action btn-action-edit btn-edit"
-                                       href="/urunguncelle/${data.id}"
-                                       title="Güncelle">
+                                    <a class="btn-action btn-action-edit btn-edit" href="/urunguncelle/${data.id}" title="Güncelle">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
-
-                                    <button type="button"
-                                            class="btn-action btn-action-delete btn-delete"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal"
-                                            data-file-id="${data.id}"
-                                            data-file-name="${data.brand}"
-                                            title="Sil">
+                                    <button type="button" class="btn-action btn-action-delete btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-file-id="${data.id}" data-file-name="${data.brand}" title="Sil">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -689,338 +677,324 @@
                 buttons: [
                     {
                         extend: 'excel',
-                        text:
-                            '<i class="fa-regular fa-file-excel me-2"></i>' +
-                            ' Excel Dışa Aktar',
-
-                        exportOptions: {
-                            columns: [
-                                1, 2, 3, 4, 5, 6, 7,
-                                8, 9, 10, 11, 12, 13, 14
-                            ]
-                        },
-
+                        text: '<i class="fa-regular fa-file-excel me-2"></i> Excel Dışa Aktar',
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
                         className: 'dt-btn-custom-excel'
                     }
                 ],
 
                 language: {
                     url: '/datatable/tr.json',
-                    processing:
-                        '<div class="spinner-border text-primary spinner-border-sm" role="status"></div>'
+                    processing: '<div class="spinner-border text-primary spinner-border-sm" role="status"></div>'
                 }
             });
 
+            // ==================== FİLTRELERİ GERİ YÜKLE ====================
+            console.log('🔄 Filtre geri yükleme başlıyor...');
 
             if (savedFilters && Object.keys(savedFilters).length > 0) {
-                for (var col in savedFilters) {
-                    $('.column-filter[data-column="' + col + '"]').val(savedFilters[col]);
+                console.log('✅ Filtreler bulundu, geri yükleniyor...');
 
-                    table
-                        .column(parseInt(col))
-                        .search(savedFilters[col]);
+                for (var col in savedFilters) {
+                    var value = savedFilters[col];
+                    var input = $('.column-filter[data-column="' + col + '"]');
+
+                    console.log(`🔍 Sütun ${col} için filtre: "${value}"`);
+
+                    if (input.length) {
+                        input.val(value);
+                        console.log(`✅ Input ${col} değeri ayarlandı: "${value}"`);
+                    } else {
+                        console.log(`❌ Input ${col} bulunamadı!`);
+                    }
+
+                    table.column(parseInt(col)).search(value);
                 }
 
                 table.draw();
+                console.log('✅ Tablo filtreleri ile yeniden çizildi');
+            } else {
+                console.log('⚠️ Geri yüklenecek filtre yok');
             }
 
+            console.log('📝 Mevcut input değerleri:');
+            $('.column-filter').each(function() {
+                console.log(`  Sütun ${$(this).data('column')}: "${$(this).val()}"`);
+            });
+            // =============================================================
+
+            // ==================== SIRALAMA DEĞİŞİKLİĞİNİ YAKALA ====================
+            // DataTable sıralama değiştiğinde state'i kaydet
+            table.on('order.dt', function (e, settings, order) {
+                console.log('🔄 Sıralama değişti:', order);
+
+                var filters = {};
+                $('.column-filter').each(function () {
+                    var val = $(this).val();
+                    if (val && val.trim() !== '') {
+                        filters[$(this).data('column')] = val.trim();
+                    }
+                });
+
+                // Sadece geçerli sıralamayı kaydet
+                var validOrder = order && order.length > 0 ? order : [];
+                saveStateToSession(filters, validOrder);
+            });
+
+            // Sayfa değiştiğinde (pagination) state'i koru
+            table.on('page.dt', function () {
+                console.log('📄 Sayfa değişti');
+            });
+            // =============================================================
+
+            // ==================== FİLTRE OLAYLARI ====================
             $('.column-filter').on('keyup change', function () {
                 var columnIndex = $(this).data('column');
+                var value = $(this).val();
+                console.log(`🔍 Filtre değişti - Sütun ${columnIndex}: "${value}"`);
 
-                table
-                    .column(columnIndex)
-                    .search($(this).val())
-                    .draw();
+                table.column(columnIndex).search(value).draw();
+
+                // Filtreleri ve mevcut sıralamayı kaydet
+                var filters = {};
+                $('.column-filter').each(function () {
+                    var val = $(this).val();
+                    if (val && val.trim() !== '') {
+                        filters[$(this).data('column')] = val.trim();
+                    }
+                });
+
+                // Mevcut sıralamayı al
+                var order = table.order();
+                console.log('📊 Mevcut sıralama:', order);
+
+                saveStateToSession(filters, order);
             });
 
             $('#clearAllFilters').on('click', function () {
+                console.log('🧹 Tüm filtreler temizleniyor...');
                 $('.column-filter').val('');
-
-                table
-                    .columns()
-                    .search('')
-                    .draw();
-
-                sessionStorage.removeItem('returnFilters');
+                table.columns().search('').draw();
+                sessionStorage.removeItem('tableState');
                 sessionStorage.removeItem('returnFromPage');
-
                 table.state.clear();
+                console.log('✅ Filtreler temizlendi');
+            });
+            // =========================================================
+
+            // ==================== STATE KAYDETME OLAYLARI ====================
+            function saveCurrentState() {
+                var filters = {};
+                $('.column-filter').each(function () {
+                    var val = $(this).val();
+                    if (val && val.trim() !== '') {
+                        filters[$(this).data('column')] = val.trim();
+                    }
+                });
+
+                var order = table.order();
+                console.log('📝 Kaydedilen state - Filtreler:', filters);
+                console.log('📝 Kaydedilen state - Sıralama:', order);
+                saveStateToSession(filters, order);
+            }
+
+            // Tüm buton tıklamalarında state'i kaydet
+            $(document).on('click', '.btn-edit, .btn-delete, #btnCreate, .btn-delete-detail', function () {
+                console.log('🔄 Buton tıklandı, state kaydediliyor...');
+                saveCurrentState();
             });
 
-            $('#btnCreate, #myTable tbody').on(
-                'click',
-                '.btn-edit, .btn-delete, #btnCreate',
-                function () {
+            // Sayfa kapatılmadan veya yenilenmeden önce state'i kaydet
+            $(window).on('beforeunload', function() {
+                console.log('🔄 Sayfa kapatılıyor, state kaydediliyor...');
+                saveCurrentState();
+            });
+            // =========================================================
 
-                    var filters = {};
+            // ==================== DETAY GÖSTERİMİ ====================
+            function format(rowData) {
+                return `
+                    <div class="detail-card">
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-copyright text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Marka</div>
+                                    <div class="detail-value">${rowData.brand || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-cube text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Model</div>
+                                    <div class="detail-value">${rowData.model || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-hashtag text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Seri No</div>
+                                    <div class="detail-value">${rowData.serialNo || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-user text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Kullanıcı</div>
+                                    <div class="detail-value">${rowData.username || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-layer-group text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Kategori</div>
+                                    <div class="detail-value">${rowData.categoryName || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-building text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Şube</div>
+                                    <div class="detail-value">${rowData.departmentName || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-circle-check text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Durum</div>
+                                    <div class="detail-value">${rowData.state || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-network-wired text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Ağ Adresi (IP)</div>
+                                    <div class="detail-value">${rowData.networkAddress || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-globe text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Ağ Adı</div>
+                                    <div class="detail-value">${rowData.networkName || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-microchip text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Donanım</div>
+                                    <div class="detail-value">${rowData.hardwareName || '-'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-sliders text-primary"></i>
+                                <div>
+                                    <div class="detail-label">Özellik</div>
+                                    <div class="detail-value">${rowData.feature || '-'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-top">
+                            <div class="detail-item w-100">
+                                <i class="fa-solid fa-align-left text-primary"></i>
+                                <div class="flex-grow-1">
+                                    <div class="detail-label">Açıklama</div>
+                                    <div class="detail-value">${rowData.description || '-'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">
+                                <i class="fa-solid fa-circle-info me-1"></i>
+                                Kaydeden: ${rowData.created || '-'} (${rowData.createdDate || '-'})
+                            </span>
+                            <div class="d-flex gap-2 ms-auto">
+                                <a class="btn btn-warning btn-sm px-3 rounded-2 fw-semibold" href="/urunguncelle/${rowData.id}" title="Güncelle">
+                                    <i class="fa-solid fa-pen me-1"></i> Güncelle
+                                </a>
+                                <button class="btn btn-danger btn-sm px-3 rounded-2 btn-delete-detail"
+                                        data-file-id="${rowData.id}" data-file-name="${rowData.username}" title="Sil">
+                                    <i class="fa-solid fa-trash me-1"></i> Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
 
-                    $('.column-filter').each(function () {
-                        var val = $(this).val();
+            $('#myTable tbody').on('click', 'td.details-control .detail-toggle', function (e) {
+                e.stopPropagation();
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
 
-                        if (val) {
-                            filters[$(this).data('column')] = val;
-                        }
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    table.rows('.shown').every(function () {
+                        this.child.hide();
+                        $(this.node()).removeClass('shown');
                     });
-
-                    saveFiltersToSession(filters);
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
                 }
-            );
+            });
 
-        function format(rowData) {
-            return `
-                <div class="detail-card">
-                    <div class="detail-grid">
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-copyright text-primary"></i>
-                            <div>
-                                <div class="detail-label">Marka</div>
-                                <div class="detail-value">${rowData.brand || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-cube text-primary"></i>
-                            <div>
-                                <div class="detail-label">Model</div>
-                                <div class="detail-value">${rowData.model || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-hashtag text-primary"></i>
-                            <div>
-                                <div class="detail-label">Seri No</div>
-                                <div class="detail-value">${rowData.serialNo || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-user text-primary"></i>
-                            <div>
-                                <div class="detail-label">Kullanıcı</div>
-                                <div class="detail-value">${rowData.username || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-layer-group text-primary"></i>
-                            <div>
-                                <div class="detail-label">Kategori</div>
-                                <div class="detail-value">${rowData.categoryName || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-building text-primary"></i>
-                            <div>
-                                <div class="detail-label">Şube</div>
-                                <div class="detail-value">${rowData.departmentName || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-circle-check text-primary"></i>
-                            <div>
-                                <div class="detail-label">Durum</div>
-                                <div class="detail-value">${rowData.state || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-network-wired text-primary"></i>
-                            <div>
-                                <div class="detail-label">Ağ Adresi (IP)</div>
-                                <div class="detail-value">${rowData.networkAddress || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-globe text-primary"></i>
-                            <div>
-                                <div class="detail-label">Ağ Adı</div>
-                                <div class="detail-value">${rowData.networkName || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-microchip text-primary"></i>
-                            <div>
-                                <div class="detail-label">Donanım</div>
-                                <div class="detail-value">${rowData.hardwareName || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="detail-item">
-                            <i class="fa-solid fa-sliders text-primary"></i>
-                            <div>
-                                <div class="detail-label">Özellik</div>
-                                <div class="detail-value">${rowData.feature || '-'}</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="mt-3 pt-3 border-top">
-                        <div class="detail-item w-100">
-                            <i class="fa-solid fa-align-left text-primary"></i>
-                            <div class="flex-grow-1">
-                                <div class="detail-label">Açıklama</div>
-                                <div class="detail-value">${rowData.description || '-'}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
-                        <span class="small text-muted">
-                            <i class="fa-solid fa-circle-info me-1"></i>
-                            Oluşturan:
-                            ${rowData.created || '-'}
-                            (${rowData.createdDate || '-'})
-                        </span>
-
-                        <div class="d-flex gap-2 ms-auto">
-                            <a class="btn btn-warning btn-sm px-3 rounded-2 fw-semibold"
-                               href="/urunguncelle/${rowData.id}"
-                               title="Güncelle">
-                                <i class="fa-solid fa-pen me-1"></i>
-                                Güncelle
-                            </a>
-
-                            <button class="btn btn-danger btn-sm px-3 rounded-2 btn-delete-detail"
-                                    data-file-id="${rowData.id}"
-                                    data-file-name="${rowData.username}"
-                                    title="Sil">
-                                <i class="fa-solid fa-trash me-1"></i>
-                                Sil
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-            $('#myTable tbody').on(
-                'click',
-                'td.details-control .detail-toggle',
-                function (e) {
-
-                    e.stopPropagation();
-
-                    var tr = $(this).closest('tr');
-                    var row = table.row(tr);
-
-                    if (row.child.isShown()) {
-                        row.child.hide();
-                        tr.removeClass('shown');
-                    }
-                    else {
-                        table.rows('.shown').every(function () {
-                            this.child.hide();
-                            $(this.node()).removeClass('shown');
-                        });
-
-                        row.child(format(row.data())).show();
-                        tr.addClass('shown');
-                    }
+            $('#myTable tbody').on('dblclick', 'tr', function (e) {
+                if ($(e.target).closest('.btn-action, .btn-edit, .btn-delete, .detail-toggle, input, button, a').length) {
+                    return;
                 }
-            );
-
-            $('#myTable tbody').on(
-                'dblclick',
-                'tr',
-                function (e) {
-
-                    if (
-                        $(e.target).closest(
-                            '.btn-action, .btn-edit, .btn-delete, .detail-toggle, input, button, a'
-                        ).length
-                    ) {
-                        return;
-                    }
-
-                    if ($(this).hasClass('child')) {
-                        return;
-                    }
-
-                    var tr = $(this);
-                    var row = table.row(tr);
-
-                    if (!row || !row.data()) {
-                        return;
-                    }
-
-                    var data = row.data();
-
-                    $('#detailModalTitle').text(
-                        (data.brand || '-') + ' ' + (data.model || '')
-                    );
-
-                    $('#detailModalSubtitle').text('Envanter kayıt detayları');
-
-                    $('#detailProductName').text(
-                        (data.brand || '-') + ' ' + (data.model || '-')
-                    );
-
-                    $('#detailProductSerial').text(
-                        'Seri No: ' + (data.serialNo || '-')
-                    );
-
-                    $('#detailProductStatus').html(
-                        formatStatus(data.state)
-                    );
-
-                    setDetailValue('#detailBrand', data.brand);
-                    setDetailValue('#detailModel', data.model);
-                    setDetailValue('#detailSerialNo', data.serialNo);
-                    setDetailValue('#detailUsername', data.username);
-                    setDetailValue('#detailCategory', data.categoryName);
-                    setDetailValue('#detailDepartment', data.departmentName);
-
-                    setDetailValue('#detailNetworkAddress', data.networkAddress);
-                    setDetailValue('#detailNetworkName', data.networkName);
-                    setDetailValue('#detailHardwareName', data.hardwareName);
-                    setDetailValue('#detailFeature', data.feature);
-
-                    setDetailValue('#detailDescription', data.description);
-
-                    setDetailValue('#detailCreated', data.created);
-                    setDetailValue('#detailCreatedDate', data.createdDate);
-
-                    $('#detailEditButton').attr(
-                        'href',
-                        '/urunguncelle/' + data.id
-                    );
-
-                    $('#detailDeleteButton')
-                        .attr('data-file-id', data.id)
-                        .attr('data-file-name', data.brand || 'Kayıt');
-
-                    $('#productDetailModal').modal('show');
+                if ($(this).hasClass('child')) {
+                    return;
                 }
-            );
+
+                var tr = $(this);
+                var row = table.row(tr);
+                if (!row || !row.data()) {
+                    return;
+                }
+
+                var data = row.data();
+
+                $('#detailModalTitle').text((data.brand || '-') + ' ' + (data.model || ''));
+                $('#detailModalSubtitle').text('Envanter kayıt detayları');
+                $('#detailProductName').text((data.brand || '-') + ' ' + (data.model || '-'));
+                $('#detailProductSerial').text('Seri No: ' + (data.serialNo || '-'));
+                $('#detailProductStatus').html(formatStatus(data.state));
+
+                setDetailValue('#detailBrand', data.brand);
+                setDetailValue('#detailModel', data.model);
+                setDetailValue('#detailSerialNo', data.serialNo);
+                setDetailValue('#detailUsername', data.username);
+                setDetailValue('#detailCategory', data.categoryName);
+                setDetailValue('#detailDepartment', data.departmentName);
+                setDetailValue('#detailNetworkAddress', data.networkAddress);
+                setDetailValue('#detailNetworkName', data.networkName);
+                setDetailValue('#detailHardwareName', data.hardwareName);
+                setDetailValue('#detailFeature', data.feature);
+                setDetailValue('#detailDescription', data.description);
+                setDetailValue('#detailCreated', data.created);
+                setDetailValue('#detailCreatedDate', data.createdDate);
+
+                $('#detailEditButton').attr('href', '/urunguncelle/' + data.id);
+                $('#detailDeleteButton').attr('data-file-id', data.id).attr('data-file-name', data.brand || 'Kayıt');
+
+                $('#productDetailModal').modal('show');
+            });
 
             function setDetailValue(selector, value) {
                 var text = value;
-
-                if (
-                    text === null ||
-                    text === undefined ||
-                    text === ''
-                ) {
+                if (text === null || text === undefined || text === '') {
                     text = '-';
                 }
-
                 $(selector).text(text);
             }
 
             $('#detailDeleteButton').on('click', function () {
-
                 var id = $(this).attr('data-file-id');
                 var name = $(this).attr('data-file-name');
 
                 $('#productDetailModal').modal('hide');
-
                 $('#fileId').val(id);
                 $('#fileName').text(name);
 
@@ -1029,24 +1003,12 @@
                 }, 250);
             });
 
-            $('#myTable tbody').on(
-                'click',
-                '.btn-delete, .btn-delete-detail',
-                function () {
-
-                    $('#fileId').val(
-                        $(this).data('file-id')
-                    );
-
-                    $('#fileName').text(
-                        $(this).data('file-name')
-                    );
-
-                    $('#deleteModal').modal('show');
-                }
-            );
+            $('#myTable tbody').on('click', '.btn-delete, .btn-delete-detail', function () {
+                $('#fileId').val($(this).data('file-id'));
+                $('#fileName').text($(this).data('file-name'));
+                $('#deleteModal').modal('show');
+            });
 
         });
     </script>
 }
-

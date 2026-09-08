@@ -350,6 +350,35 @@
     }
 }
 
+
+/* ==========================================================
+   TABLO ÇİFT TIKLAMA BİLGİ NOTU
+   ========================================================== */
+
+.table-info-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 7px 11px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 1.10rem;
+    width: fit-content;
+}
+
+    .table-info-note i {
+        color: #4B49AC;
+        font-size: 0.8rem;
+    }
+
+    .table-info-note strong {
+        color: #475569;
+        font-weight: 600;
+    }
+
 /*#clearFiltersBtn {
     transition: all 0.3s ease;
 }

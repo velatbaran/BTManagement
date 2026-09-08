@@ -31,7 +31,7 @@
                 Filtreleri Sıfırla
             </button>
 
-            <a asp-action="Create" class="btn btn-primary btn-sm fw-medium px-3 rounded-2" title="Yeni Ekle">
+            <a asp-action="Create" id="btnCreate" class="btn btn-primary btn-sm fw-medium px-3 rounded-2" title="Yeni Ekle">
                 <i class="fa-solid fa-plus me-1"></i>
                 Yeni Ekle
             </a>
@@ -42,6 +42,14 @@
                     ₺0,00
                 </span>
             </div>
+        </div>
+    </div>
+
+    <!-- BİLGİ NOTU -->
+    <div class="table-info-note mb-3">
+        <div class="d-flex align-items-center gap-2 text-muted small bg-light rounded-2 px-3 py-2 border-start border-3 border-primary shadow-sm">
+            <i class="fa-solid fa-circle-info text-primary"></i>
+            <span>💡 Detayları görüntülemek için satıra <strong class="text-dark">çift tıklayın</strong>.</span>
         </div>
     </div>
 
@@ -64,17 +72,18 @@
                             <th class="text-center" style="min-width:130px;">İşlemler</th>
                         </tr>
 
+                        <!-- Filtre Satırı: data-column eklendi -->
                         <tr>
-                            <th><input type="text" class="filter-input" placeholder="Dosya No..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="İşin Adı..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Firma..." /></th>
-                            <th><input type="text" class="filter-input text-end" placeholder="Fiyat..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tarih..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Şekil..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tür..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tip..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Açıklama..." /></th>
-                            <th><input type="text" class="filter-input" placeholder="Dosya Yolu..." /></th>
+                            <th><input type="text" class="filter-input" placeholder="Dosya No..." data-column="0" /></th>
+                            <th><input type="text" class="filter-input" placeholder="İşin Adı..." data-column="1" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Firma..." data-column="2" /></th>
+                            <th><input type="text" class="filter-input text-end" placeholder="Fiyat..." data-column="3" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tarih..." data-column="4" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Şekil..." data-column="5" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tür..." data-column="6" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Tip..." data-column="7" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Açıklama..." data-column="8" /></th>
+                            <th><input type="text" class="filter-input" placeholder="Dosya Yolu..." data-column="9" /></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -183,7 +192,7 @@
     </div>
 </div>
 
-<!-- Detay Modalı (Küçültülmüş) -->
+<!-- Detay Modalı -->
 <div class="modal fade" id="purchaseDetailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-3">
@@ -201,7 +210,7 @@
             </div>
 
             <div class="modal-body p-3">
-                <!-- Özet Kart (Küçültülmüş) -->
+                <!-- Özet Kart -->
                 <div class="bg-light rounded-2 p-2 mb-3 d-flex align-items-center gap-2">
                     <div class="bg-primary bg-opacity-10 rounded-circle p-2">
                         <i class="fa-solid fa-file-invoice text-primary"></i>
@@ -215,7 +224,7 @@
                     </div>
                 </div>
 
-                <!-- Bilgi Grid (Küçültülmüş) -->
+                <!-- Bilgi Grid -->
                 <div class="row g-2">
                     <div class="col-md-6">
                         <div class="border rounded-2 p-2">
@@ -396,7 +405,6 @@
             // Silme Modalı
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
-
                 $('#fileId').val(button.data('file-id'));
                 $('#fileName').text(button.data('file-name'));
             });
@@ -410,6 +418,56 @@
                 })
             );
 
+            // ==================== STATE YÖNETİMİ ====================
+            function saveStateToSession(filters, order) {
+                try {
+                    var state = {
+                        filters: filters || {},
+                        order: order || []
+                    };
+                    sessionStorage.setItem('purchaseTableState', JSON.stringify(state));
+                    sessionStorage.setItem('purchaseReturnPage', window.location.pathname);
+                    console.log('💾 State kaydedildi:', state);
+                } catch (e) {
+                    console.error('❌ State kaydedilirken hata:', e);
+                }
+            }
+
+            function getStateFromSession() {
+                try {
+                    var state = sessionStorage.getItem('purchaseTableState');
+                    var returnFrom = sessionStorage.getItem('purchaseReturnPage');
+
+                    console.log('📂 Session okuma - state:', state);
+                    console.log('📂 Session okuma - returnFrom:', returnFrom);
+                    console.log('📂 Mevcut sayfa:', window.location.pathname);
+
+                    if (state && returnFrom === window.location.pathname) {
+                        var parsed = JSON.parse(state);
+                        console.log('✅ State bulundu:', parsed);
+                        // Session'dan temizleme - ARTIK TEMİZLEMİYORUZ!
+                        // sessionStorage.removeItem('purchaseTableState');
+                        // sessionStorage.removeItem('purchaseReturnPage');
+                        return parsed;
+                    }
+                    console.log('⚠️ State bulunamadı');
+                    return null;
+                } catch (e) {
+                    console.error('❌ State okunurken hata:', e);
+                    return null;
+                }
+            }
+
+            // Session'dan state'i al
+            var savedState = getStateFromSession();
+            var savedFilters = savedState ? savedState.filters : null;
+            var savedOrder = savedState ? savedState.order : null;
+
+            console.log('🔄 savedFilters:', savedFilters);
+            console.log('🔄 savedOrder:', savedOrder);
+            // ========================================================
+
+            // ==================== DATATABLE ====================
             var table = $('#myTable').DataTable({
                 dom: '<"d-flex flex-wrap justify-content-between align-items-center p-3 border-bottom"B><"d-flex flex-wrap justify-content-between align-items-center p-3"l>rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>',
 
@@ -435,13 +493,11 @@
                 responsive: true,
 
                 columnDefs: [
-                    {
-                        orderable: false,
-                        targets: -1
-                    }
+                    { orderable: false, targets: [10] }
                 ],
 
-                order: [[0, 'desc']],
+                // Sıralamayı geri yükle
+                order: savedOrder || [[0, 'desc']],
 
                 pageLength: 25,
 
@@ -452,42 +508,130 @@
 
                 language: {
                     url: '/datatable/tr.json'
+                },
+
+                stateSave: false
+            });
+
+            // ==================== FİLTRELERİ GERİ YÜKLE (init.dt event'i ile) ====================
+            // DataTable tamamen başlatıldığında çalışır
+            table.on('init.dt', function () {
+                console.log('🔄 DataTable init event çalıştı');
+
+                if (savedFilters && Object.keys(savedFilters).length > 0) {
+                    console.log('✅ Filtreler geri yükleniyor...');
+
+                    // Input alanlarına değerleri yaz
+                    for (var col in savedFilters) {
+                        var value = savedFilters[col];
+                        var input = $('.filter-input[data-column="' + col + '"]');
+
+                        if (input.length) {
+                            input.val(value);
+                            console.log(`✅ Sütun ${col} input değeri ayarlandı: "${value}"`);
+                        } else {
+                            console.log(`❌ Sütun ${col} input bulunamadı!`);
+                        }
+                    }
+
+                    // DataTable'a filtreleri uygula
+                    for (var col in savedFilters) {
+                        table.column(parseInt(col)).search(savedFilters[col]);
+                        console.log(`✅ Sütun ${col} filtresi uygulandı: "${savedFilters[col]}"`);
+                    }
+
+                    // Tabloyu yeniden çiz
+                    table.draw();
+
+                    // Toplamı güncelle
+                    updateTotal();
+
+                    console.log('✅ Filtreler başarıyla uygulandı');
+                } else {
+                    console.log('⚠️ Geri yüklenecek filtre yok');
                 }
             });
 
-            // ===== FİLTRE INPUTLARINA TIKLANDIĞINDA SIRALAMANIN DEĞİŞMESİNİ ENGELLE =====
-            // Input alanlarına tıklama olaylarını durdur
+            // ===== FİLTRE INPUTLARI =====
             $('#myTable thead tr:eq(1) th input').on('mousedown click', function(e) {
                 e.stopPropagation();
             });
 
-            // Filtreleme işlemi
-            $('#myTable thead tr:eq(1) th input').on('keyup change clear', function () {
+            $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
                 var colIndex = $(this).closest('th').index();
                 var value = this.value;
 
-                // Mevcut sıralamayı kaydet
                 var currentOrder = table.order();
 
-                if (table.column(colIndex).search() !== value) {
-                    // Filtrele
-                    table
-                        .column(colIndex)
-                        .search(value)
-                        .draw();
+                table
+                    .column(colIndex)
+                    .search(value)
+                    .draw();
 
-                    // Sıralamayı geri yükle
-                    if (currentOrder && currentOrder.length > 0) {
-                        table.order(currentOrder).draw(false);
-                    }
-
-                    updateTotal();
+                if (currentOrder && currentOrder.length > 0) {
+                    table.order(currentOrder).draw(false);
                 }
+
+                updateTotal();
             });
 
-            // Toplam Güncelleme
-            function updateTotal() {
+            // ===== FİLTRELERİ TEMİZLE =====
+            $('#clearFiltersBtn').on('click', function () {
+                console.log('🧹 Filtreler temizleniyor...');
 
+                $('.filter-input').each(function () {
+                    $(this).val('');
+                });
+
+                table.columns().every(function () {
+                    this.search('');
+                });
+
+                var currentOrder = table.order();
+                table.draw();
+
+                if (currentOrder && currentOrder.length > 0) {
+                    table.order(currentOrder).draw(false);
+                }
+
+                updateTotal();
+
+                // Session'dan temizle
+                sessionStorage.removeItem('purchaseTableState');
+                sessionStorage.removeItem('purchaseReturnPage');
+
+                console.log('✅ Filtreler temizlendi');
+            });
+
+            // ==================== STATE KAYDETME ====================
+            function saveCurrentState() {
+                var filters = {};
+                $('.filter-input').each(function () {
+                    var val = $(this).val();
+                    if (val && val.trim() !== '') {
+                        filters[$(this).data('column')] = val.trim();
+                    }
+                });
+
+                var order = table.order();
+                console.log('📝 Kaydediliyor - Filtreler:', filters);
+                console.log('📝 Kaydediliyor - Sıralama:', order);
+                saveStateToSession(filters, order);
+            }
+
+            // Güncelle, Sil, Yeni Ekle butonlarına tıklandığında
+            $(document).on('click', '.btn-edit, .btn-delete, #btnCreate, .btn-delete-detail', function () {
+                console.log('🔄 Buton tıklandı, state kaydediliyor...');
+                saveCurrentState();
+            });
+
+            // Sayfa kapatılırken veya yenilenirken kaydet
+            $(window).on('beforeunload', function () {
+                saveCurrentState();
+            });
+
+            // ==================== TOPLAM GÜNCELLEME ====================
+            function updateTotal() {
                 var hasFilter = false;
 
                 table.columns().every(function () {
@@ -503,7 +647,6 @@
                             currency: "TRY"
                         })
                     );
-
                     return;
                 }
 
@@ -512,10 +655,7 @@
                     .nodes()
                     .toArray()
                     .reduce(function (total, node) {
-
-                        return total +
-                            (parseFloat($(node).data('value')) || 0);
-
+                        return total + (parseFloat($(node).data('value')) || 0);
                     }, 0);
 
                 $("#allTotalBtn").text(
@@ -526,165 +666,18 @@
                 );
             }
 
-            // Toast
+            // ==================== TOAST ====================
             var toastEl = document.getElementById('copyToast');
             var toastMessage = document.getElementById('toastMessage');
             var toastIcon = document.getElementById('toastIcon');
+            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
 
-            var toast = new bootstrap.Toast(toastEl, {
-                delay: 3000
-            });
-
-            // Kopyalama
+            // ==================== KOPYALAMA ====================
             $('#myTable').on('click', '.copy-path-btn', function (e) {
-
                 e.preventDefault();
-
                 var path = $(this).data('path');
 
-                if (!path) {
-                    return;
-                }
-
-                function notify(success) {
-
-                    if (success) {
-                        toastMessage.textContent =
-                            'Dosya yolu panoya kopyalandı!';
-
-                        toastEl.className =
-                            'toast align-items-center text-white bg-success border-0 shadow-lg';
-
-                        toastIcon.className =
-                            'fa-solid fa-check me-1';
-                    }
-                    else {
-                        toastMessage.textContent =
-                            'Kopyalama başarısız oldu!';
-
-                        toastEl.className =
-                            'toast align-items-center text-white bg-danger border-0 shadow-lg';
-
-                        toastIcon.className =
-                            'fa-solid fa-xmark me-1';
-                    }
-
-                    toast.show();
-                }
-
-                if (navigator.clipboard) {
-
-                    navigator.clipboard
-                        .writeText(path)
-                        .then(function () {
-                            notify(true);
-                        })
-                        .catch(function () {
-                            notify(false);
-                        });
-                }
-                else {
-
-                    var $temp = $("<input>");
-
-                    $("body").append($temp);
-
-                    $temp.val(path).select();
-
-                    var success = false;
-
-                    try {
-                        success = document.execCommand("copy");
-                    }
-                    catch (err) {
-                        success = false;
-                    }
-
-                    $temp.remove();
-
-                    notify(success);
-                }
-            });
-
-            // =============================================
-            // SATIRA ÇİFT TIKLAYINCA DETAY MODALI AÇMA
-            // =============================================
-
-            // Detay Modalı Gösterme
-            function showPurchaseDetail(rowData) {
-                // Özet Bilgiler
-                $('#detailFileNo').text(rowData.fileno || '-');
-                $('#detailWorkingName').text(rowData.workingname || '-');
-                $('#detailPrice').text(
-                    (parseFloat(rowData.price) || 0).toLocaleString("tr-TR", {
-                        style: "currency",
-                        currency: "TRY"
-                    })
-                );
-
-                // Temel Bilgiler
-                $('#detailFirm').text(rowData.firm || '-');
-                $('#detailPurchaseDate').text(rowData.purchasedate || '-');
-                $('#detailPurchaseForm').text(rowData.purchaseform || '-');
-                $('#detailPurchaseKind').text(rowData.purchasekind || '-');
-                $('#detailPurchaseType').text(rowData.purchasetype || '-');
-                $('#detailDescription').text(rowData.description || '-');
-
-                // Dosya Yolu
-                var filePath = rowData.filepath || '-';
-                $('#detailFilePathText').text(filePath);
-
-                // Modal Başlığı
-                $('#detailModalTitle').text(rowData.fileno || 'Satın Alma Detayı');
-                $('#detailModalSubtitle').text(rowData.workingname || 'Kayıt detayları');
-
-                // Güncelle Butonu
-                var editUrl = '/satinalimiguncelle/' + rowData.id;
-                $('#detailEditButton').attr('href', editUrl);
-
-                // Sil Butonu
-                $('#detailDeleteButton')
-                    .attr('data-file-id', rowData.id)
-                    .attr('data-file-name', rowData.workingname);
-
-                // Modalı Göster
-                $('#purchaseDetailModal').modal('show');
-            }
-
-            // Tablo satırına çift tıklama olayı
-            $('#myTable tbody').on('dblclick', 'tr', function (e) {
-                // Butonlara veya tıklanabilir elemanlara tıklandıysa çalışmasın
-                if ($(e.target).closest('.btn, .action-btn-group, a, button, input').length) {
-                    return;
-                }
-
-                var tr = $(this);
-
-                // DataTable satır verilerini al
-                var rowData = {
-                    id: tr.data('id'),
-                    fileno: tr.data('fileno'),
-                    workingname: tr.data('workingname'),
-                    firm: tr.data('firm'),
-                    price: tr.data('price'),
-                    purchasedate: tr.data('purchasedate'),
-                    purchaseform: tr.data('purchaseform'),
-                    purchasekind: tr.data('purchasekind'),
-                    purchasetype: tr.data('purchasetype'),
-                    description: tr.data('description'),
-                    filepath: tr.data('filepath')
-                };
-
-                showPurchaseDetail(rowData);
-            });
-
-            // Detay modalındaki kopyala butonu
-            $('#detailCopyPathBtn').on('click', function () {
-                var path = $('#detailFilePathText').text();
-
-                if (!path || path === '-') {
-                    return;
-                }
+                if (!path) return;
 
                 function notify(success) {
                     if (success) {
@@ -716,7 +709,97 @@
                 }
             });
 
-            // Detay modalındaki sil butonu
+            // ==================== DETAY MODALI ====================
+            function showPurchaseDetail(rowData) {
+                $('#detailFileNo').text(rowData.fileno || '-');
+                $('#detailWorkingName').text(rowData.workingname || '-');
+                $('#detailPrice').text(
+                    (parseFloat(rowData.price) || 0).toLocaleString("tr-TR", {
+                        style: "currency",
+                        currency: "TRY"
+                    })
+                );
+
+                $('#detailFirm').text(rowData.firm || '-');
+                $('#detailPurchaseDate').text(rowData.purchasedate || '-');
+                $('#detailPurchaseForm').text(rowData.purchaseform || '-');
+                $('#detailPurchaseKind').text(rowData.purchasekind || '-');
+                $('#detailPurchaseType').text(rowData.purchasetype || '-');
+                $('#detailDescription').text(rowData.description || '-');
+
+                var filePath = rowData.filepath || '-';
+                $('#detailFilePathText').text(filePath);
+
+                $('#detailModalTitle').text(rowData.fileno || 'Satın Alma Detayı');
+                $('#detailModalSubtitle').text(rowData.workingname || 'Kayıt detayları');
+
+                var editUrl = '/satinalimiguncelle/' + rowData.id;
+                $('#detailEditButton').attr('href', editUrl);
+
+                $('#detailDeleteButton')
+                    .attr('data-file-id', rowData.id)
+                    .attr('data-file-name', rowData.workingname);
+
+                $('#purchaseDetailModal').modal('show');
+            }
+
+            $('#myTable tbody').on('dblclick', 'tr', function (e) {
+                if ($(e.target).closest('.btn, .action-btn-group, a, button, input').length) {
+                    return;
+                }
+
+                var tr = $(this);
+                var rowData = {
+                    id: tr.data('id'),
+                    fileno: tr.data('fileno'),
+                    workingname: tr.data('workingname'),
+                    firm: tr.data('firm'),
+                    price: tr.data('price'),
+                    purchasedate: tr.data('purchasedate'),
+                    purchaseform: tr.data('purchaseform'),
+                    purchasekind: tr.data('purchasekind'),
+                    purchasetype: tr.data('purchasetype'),
+                    description: tr.data('description'),
+                    filepath: tr.data('filepath')
+                };
+
+                showPurchaseDetail(rowData);
+            });
+
+            $('#detailCopyPathBtn').on('click', function () {
+                var path = $('#detailFilePathText').text();
+                if (!path || path === '-') return;
+
+                function notify(success) {
+                    if (success) {
+                        toastMessage.textContent = 'Dosya yolu panoya kopyalandı!';
+                        toastEl.className = 'toast align-items-center text-white bg-success border-0 shadow-lg';
+                        toastIcon.className = 'fa-solid fa-check me-1';
+                    } else {
+                        toastMessage.textContent = 'Kopyalama başarısız oldu!';
+                        toastEl.className = 'toast align-items-center text-white bg-danger border-0 shadow-lg';
+                        toastIcon.className = 'fa-solid fa-xmark me-1';
+                    }
+                    toast.show();
+                }
+
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(path).then(() => notify(true)).catch(() => notify(false));
+                } else {
+                    var $temp = $("<input>");
+                    $("body").append($temp);
+                    $temp.val(path).select();
+                    var success = false;
+                    try {
+                        success = document.execCommand("copy");
+                    } catch (err) {
+                        success = false;
+                    }
+                    $temp.remove();
+                    notify(success);
+                }
+            });
+
             $('#detailDeleteButton').on('click', function () {
                 var id = $(this).data('file-id');
                 var name = $(this).data('file-name');
@@ -729,34 +812,6 @@
                     $('#deleteModal').modal('show');
                 }, 300);
             });
-
-                   // ===== FİLTRELERİ TEMİZLE BUTONU =====
-        $('#clearFiltersBtn').on('click', function () {
-            // Tüm input alanlarını temizle
-            $('#myTable thead tr:eq(1) th input').each(function () {
-                $(this).val('');
-            });
-
-            // DataTable'daki tüm filtreleri temizle
-            table.columns().every(function () {
-                this.search('');
-            });
-
-            // Mevcut sıralamayı koru
-            var currentOrder = table.order();
-
-            // Tabloyu yeniden çiz
-            table.draw();
-
-            // Sıralamayı geri yükle
-            if (currentOrder && currentOrder.length > 0) {
-                table.order(currentOrder).draw(false);
-            }
-
-            // Toplamı güncelle
-            updateTotal();
-
-        });
 
         });
     </script>
