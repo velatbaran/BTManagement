@@ -406,7 +406,7 @@
                 </div>
 
                 <div class="purchase-year-list">
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(m=>m.Year))
                     {
                         <div class="purchase-year-row">
                             <div class="d-flex align-items-center gap-2">
