@@ -1,5 +1,7 @@
 using BTManagement.Core.Entities.Inventory;
+using BTManagement.Core.Entities.Purchase;
 using BTManagement.Service.IRepository;
+using BTManagement.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,37 +13,30 @@ namespace BTManagement.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly IRepository<Products> _repoProducts;
-        private readonly IRepository<Categories> _repoCategories;
-        private readonly IRepository<Departments> _repoDepartments;
+        private readonly IRepository<Purchases> _repoPurcahes;
 
-        public HomeController(IRepository<Products> repoProducts, IRepository<Categories> repoCategories, IRepository<Departments> repoDepartments)
+        public HomeController(IRepository<Products> repoProducts, IRepository<Purchases> repoPurcahes)
         {
             _repoProducts = repoProducts;
-            _repoCategories = repoCategories;
-            _repoDepartments = repoDepartments;
+            _repoPurcahes = repoPurcahes;
         }
 
         [Route("anasayfa")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Envanter
             var productAIO = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "AIO").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalAIO = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "AIO" && x.State == "Faal").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalAIOAmbarda = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "AIO" && x.State == "Faal" && x.Username.ToLower() == "ambarda").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalAIOKullanimda = productFaalAIO - productFaalAIOAmbarda;
             var productArizaliAIO = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "AIO" && x.State == "Arýzalý").OrderByDescending(x => x.CreatedDate).Count();
             var productKayittanDusurulmusAIO = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "AIO" && x.State == "Kayýttan Düþürülmüþ").OrderByDescending(x => x.CreatedDate).Count();
-            //var productAmbardaAIO = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name== "AIO" && x.Username.ToLower() == "ambarda").OrderByDescending(x => x.CreatedDate).Count();
-            //var productKullanimdaAIO = productAIO - productAmbardaAIO;
-            //var productAmbardaFaalAIO = productAmbardaAIO - productArizaliAIO;
             var productLaptop = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "LAPTOP").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalLaptop = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "LAPTOP" && x.State == "Faal").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalLaptopAmbarda = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "LAPTOP" && x.State == "Faal" && x.Username.ToLower() == "ambarda").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalLaptopKullanimda = productFaalLaptop - productFaalLaptopAmbarda;
             var productArizaliLaptop = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "LAPTOP" && x.State == "Arýzalý").OrderByDescending(x => x.CreatedDate).Count();
             var productKayittanDusurulmusLaptop = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "LAPTOP" && x.State == "Kayýttan Düþürülmüþ").OrderByDescending(x => x.CreatedDate).Count();
-            //var productAmbardaLaptop = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "LAPTOP" && x.Username.ToLower() =="ambarda").OrderByDescending(x => x.CreatedDate).Count();
-            //var productKullanimdaLaptop = productLaptop - productAmbardaLaptop;
-            //var productAmbardaFaalLaptop = productAmbardaLaptop - productArizaliLaptop;
             var productMasaustu = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x=> x.Category.Name == "MASAÜSTÜ").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalMasaustu = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "MASAÜSTÜ" && x.State == "Faal").OrderByDescending(x => x.CreatedDate).Count();
             var productFaalMasaustuAmbarda = _repoProducts.GetQueryable().Include(p => p.Category).Include(p => p.Department).Where(x => x.Category.Name == "MASAÜSTÜ" && x.State == "Faal" && x.Username.ToLower() == "ambarda").OrderByDescending(x => x.CreatedDate).Count();
@@ -87,7 +82,20 @@ namespace BTManagement.WebUI.Controllers
             ViewData["ARIZALITABLET"] = productArizaliTablet;
             ViewData["KAYITTANDÜSMÜSTABLET"] = productKayittanDusurulmusTablet;
 
-            return View();
+
+            // Satýn Alýmlar
+            var yearlyTotals = await _repoPurcahes.GetQueryable()
+                .Where(x => x.FileNo != null && x.FileNo.Length >= 4)
+                .GroupBy(x => x.FileNo.Substring(0, 4))
+                .Select(g => new YearlyPurchaseTotalViewModel
+                {
+                    Year = g.Key,
+                    Total = g.Sum(x => x.Price)
+                })
+                .OrderBy(x => x.Year)
+                .ToListAsync();
+
+            return View(yearlyTotals);
         }
 
     }

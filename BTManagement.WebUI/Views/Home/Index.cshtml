@@ -1,249 +1,517 @@
-﻿@{
+﻿@model List<YearlyPurchaseTotalViewModel>
+@using System.Globalization
+@using System.Text.Json
+
+@{
     ViewData["Title"] = "Anasayfa";
+
+    var tr = new CultureInfo("tr-TR");
+    var totalAll = Model.Sum(x => x.Total);
+    var highestYear = Model.OrderByDescending(x => x.Total).FirstOrDefault();
+    var average = Model.Any() ? Model.Average(x => x.Total) : 0;
+
+    var yearsJson = JsonSerializer.Serialize(Model.Select(x => x.Year));
+    var totalsJson = JsonSerializer.Serialize(Model.Select(x => x.Total));
 }
 
 <link href="~/css/custom-theme.css" rel="stylesheet" />
 
 <div class="container-fluid px-0">
-    <!-- Stat Cards Row 1 -->
+
+    <!-- ENVANTER ÖZETİ -->
+    <div class="mb-3">
+        <h5 class="fw-bold mb-2" style="font-size:22px">
+            <i class="fa-solid fa-boxes-stacked me-2" style="color:#4B49AC;"></i>
+            Envanter Özeti
+        </h5>
+        <small class="text-muted" style="font-size:15px">Bilgi teknolojileri envanterinin mevcut durumu</small>
+    </div>
+
     <div class="row g-3 mb-4">
-        <!-- AIO Card -->
+
+        <!-- AIO -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="main-card h-100 shadow-sm border-0">
                 <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fa-solid fa-desktop me-2"></i>Toplam AIO Sayısı
+                        <i class="fa-solid fa-desktop me-2"></i>AIO Bilgisayarlar
                     </h6>
                     <span class="badge bg-white text-primary fw-bold fs-6">@ViewData["TOTALAIO"]</span>
                 </div>
+
                 <div class="main-card-body p-3">
                     <div class="d-flex flex-column gap-2">
-                        <!-- FAAL - Ana Başlık -->
-                        <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
+
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded"
+                             style="background:#e8f5e9;border-left:4px solid #4caf50;">
                             <span class="text-dark fw-bold">
-                                <i class="fa-solid fa-circle-check text-success me-2"></i> Faal
+                                <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALAIO"]</span>
                         </div>
 
-                        <!-- Faal altında Ambarda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #2196f3;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-warehouse text-info me-2"></i> ↳ Ambarda
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #2196f3;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-warehouse text-info me-2"></i>↳ Ambarda
                             </span>
                             <span class="badge bg-info text-white">@ViewData["FAALAIOAMBARDA"]</span>
                         </div>
 
-                        <!-- Faal altında Kullanımda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #4caf50;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-user-check text-success me-2"></i> ↳ Kullanımda
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #4caf50;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-user-check text-success me-2"></i>↳ Kullanımda
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALAIOKULLANIMDA"]</span>
                         </div>
 
-                        <!-- Arızalı -->
-                        <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: #fff3e0; border-left: 4px solid #ff9800;">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded"
+                             style="background:#fff3e0;border-left:4px solid #ff9800;">
                             <span class="text-dark fw-semibold">
-                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Arızalı
+                                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
                             </span>
                             <span class="badge bg-warning text-dark">@ViewData["ARIZALIAIO"]</span>
                         </div>
 
-                        <!-- Kayıttan Düşürülmüş -->
-                        <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: #fce4ec; border-left: 4px solid #f44336;">
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded"
+                             style="background:#fce4ec;border-left:4px solid #f44336;">
                             <span class="text-dark fw-semibold">
-                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i> Kayıttan Düşürülmüş
+                                <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
                             </span>
                             <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSAIO"]</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Laptop Card -->
+        <!-- LAPTOP -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="main-card h-100 shadow-sm border-0">
                 <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fa-solid fa-laptop me-2"></i>Toplam Laptop Sayısı
+                        <i class="fa-solid fa-laptop me-2"></i>Dizüstü Bilgisayarlar
                     </h6>
                     <span class="badge bg-white text-dark fw-bold fs-6">@ViewData["TOTALLAPTOP"]</span>
                 </div>
+
                 <div class="main-card-body p-3">
                     <div class="d-flex flex-column gap-2">
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALLAPTOP"]</span>
                         </div>
-                        <!-- Faal altında Ambarda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #2196f3;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-warehouse text-info me-2"></i> ↳ Ambarda
+
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #2196f3;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-warehouse text-info me-2"></i>↳ Ambarda
                             </span>
                             <span class="badge bg-info text-white">@ViewData["FAALLAPTOPAMBARDA"]</span>
                         </div>
 
-                        <!-- Faal altında Kullanımda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #4caf50;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-user-check text-success me-2"></i> ↳ Kullanımda
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #4caf50;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-user-check text-success me-2"></i>↳ Kullanımda
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALLAPTOPKULLANIMDA"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
                             </span>
                             <span class="badge bg-warning text-dark">@ViewData["ARIZALILAPTOP"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
                             </span>
                             <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSLAPTOP"]</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Desktop Card -->
+        <!-- MASAÜSTÜ -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="main-card h-100 shadow-sm border-0">
                 <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fa-solid fa-desktop me-2"></i>Toplam Masaüstü Sayısı
+                        <i class="fa-solid fa-desktop me-2"></i>Masaüstü Bilgisayarlar
                     </h6>
                     <span class="badge bg-white text-info fw-bold fs-6">@ViewData["TOTALMASAÜSTÜ"]</span>
                 </div>
+
                 <div class="main-card-body p-3">
                     <div class="d-flex flex-column gap-2">
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALMASAÜSTÜ"]</span>
                         </div>
-                        <!-- Faal altında Ambarda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #2196f3;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-warehouse text-info me-2"></i> ↳ Ambarda
+
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #2196f3;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-warehouse text-info me-2"></i>↳ Ambarda
                             </span>
                             <span class="badge bg-info text-white">@ViewData["FAALMASAÜSTÜAMBARDA"]</span>
                         </div>
 
-                        <!-- Faal altında Kullanımda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #4caf50;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-user-check text-success me-2"></i> ↳ Kullanımda
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #4caf50;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-user-check text-success me-2"></i>↳ Kullanımda
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALMASAÜSTÜKULLANIMDA"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
                             </span>
                             <span class="badge bg-warning text-dark">@ViewData["ARIZALIMASAÜSTÜ"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
                             </span>
                             <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSMASAÜSTÜ"]</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Stat Cards Row 2 -->
-    <div class="row g-3">
-        <!-- Network Printer Card -->
+        <!-- NETWORK YAZICI -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="main-card h-100 shadow-sm border-0">
                 <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fa-solid fa-print me-2"></i>Toplam Network Yazıcı
+                        <i class="fa-solid fa-print me-2"></i>Network Yazıcılar
                     </h6>
                     <span class="badge bg-white text-danger fw-bold fs-6">@ViewData["NETWORKYAZICI"]</span>
                 </div>
+
                 <div class="main-card-body p-3">
                     <div class="d-flex flex-column gap-2">
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
                             </span>
                             <span class="badge bg-success text-white">@ViewData["NETWORKYAZICIFAAl"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
                             </span>
                             <span class="badge bg-warning text-dark">@ViewData["NETWORKYAZICIARIZALI"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
                             </span>
                             <span class="badge bg-danger text-white">@ViewData["NETWORKYAZICIAYITTANDÜSMÜS"]</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tablet Card -->
+        <!-- TABLET -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="main-card h-100 shadow-sm border-0">
                 <div class="main-card-header bg-primary text-white d-flex align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fa-solid fa-tablet-screen-button me-2"></i>Toplam Tablet Sayısı
+                        <i class="fa-solid fa-tablet-screen-button me-2"></i>Tabletler
                     </h6>
                     <span class="badge bg-white text-secondary fw-bold fs-6">@ViewData["TOTALTABLET"]</span>
                 </div>
+
                 <div class="main-card-body p-3">
                     <div class="d-flex flex-column gap-2">
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-check text-success me-2"></i>Faal
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALTABLET"]</span>
                         </div>
-                        <!-- Faal altında Ambarda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #2196f3;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-warehouse text-info me-2"></i> ↳ Ambarda
+
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #2196f3;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-warehouse text-info me-2"></i>↳ Ambarda
                             </span>
                             <span class="badge bg-info text-white">@ViewData["FAALTABLETAMBARDA"]</span>
                         </div>
 
-                        <!-- Faal altında Kullanımda -->
-                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded" style="background: #f5f5f5; margin-left: 20px; border-left: 3px solid #4caf50;">
-                            <span class="text-dark" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-user-check text-success me-2"></i> ↳ Kullanımda
+                        <div class="d-flex justify-content-between align-items-center ps-4 pe-2 py-1 rounded"
+                             style="background:#f5f5f5;margin-left:20px;border-left:3px solid #4caf50;">
+                            <span class="text-dark" style="font-size:.9rem;">
+                                <i class="fa-solid fa-user-check text-success me-2"></i>↳ Kullanımda
                             </span>
                             <span class="badge bg-success text-white">@ViewData["FAALTABLETKULLANIMDA"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Arızalı
                             </span>
                             <span class="badge bg-warning text-dark">@ViewData["ARIZALITABLET"]</span>
                         </div>
+
                         <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light">
                             <span class="text-dark fw-semibold">
                                 <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Kayıttan Düşürülmüş
                             </span>
                             <span class="badge bg-danger text-white">@ViewData["KAYITTANDÜSMÜSTABLET"]</span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+    </div>
+
+</div>
+
+
+<!-- SATIN ALMA ANALİZİ -->
+<div class="container-fluid px-0 mt-5">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+            <h5 class="mb-1 fw-bold text-dark" style="font-size:22px">
+                <i class="fa-solid fa-chart-column me-2" style="color:#4B49AC;"></i>
+                Satın Alma Analizi
+            </h5>
+            <small class="text-muted" style="font-size:15px">Yıllara göre toplam satın alma tutarları</small>
+        </div>
+
+        <span class="badge rounded-pill px-3 py-2"
+              style="background:#f0efff;color:#4B49AC;">
+            <i class="fa-solid fa-calendar-days me-1"></i>
+            @Model.Count yıl
+        </span>
+    </div>
+
+    <!-- ÖZET KARTLAR -->
+    <div class="row g-3 mb-3">
+
+        <!-- TOPLAM -->
+        <div class="col-12 col-md-4">
+            <div class="purchase-summary-card">
+                <div class="purchase-icon" style="background:#f0efff;color:#4B49AC;">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                    <div class="purchase-label">Toplam Satın Alma</div>
+                    <div class="purchase-value">@totalAll.ToString("N2", tr) ₺</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EN YÜKSEK -->
+        <div class="col-12 col-md-4">
+            <div class="purchase-summary-card">
+                <div class="purchase-icon" style="background:#e8f5e9;color:#2e7d32;">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+                <div>
+                    <div class="purchase-label">En Yüksek Harcama</div>
+                    <div class="purchase-value">
+                        @(highestYear?.Total.ToString("N2", tr) ?? "0,00") ₺
+                    </div>
+                    @if (highestYear != null)
+                    {
+                        <small class="text-muted">@highestYear.Year yılı</small>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- ORTALAMA -->
+        <div class="col-12 col-md-4">
+            <div class="purchase-summary-card">
+                <div class="purchase-icon" style="background:#fff3e0;color:#ef6c00;">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div>
+                    <div class="purchase-label">Yıllık Ortalama</div>
+                    <div class="purchase-value">@average.ToString("N2", tr) ₺</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GRAFİK + YILLIK DETAY -->
+    <div class="row g-3">
+
+        <!-- GRAFİK -->
+        <div class="col-12 col-xl-8">
+            <div class="purchase-chart-card h-100">
+
+                <div class="purchase-card-header">
+                    <div>
+                        <h6 class="fw-bold mb-1">Yıllık Harcama Grafiği</h6>
+                        <small class="text-muted">Satın alma tutarlarının yıllara göre dağılımı</small>
+                    </div>
+
+                    <span class="purchase-header-icon">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </span>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="yearlyPurchaseChart"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- YILLIK DETAY -->
+        <div class="col-12 col-xl-4">
+            <div class="purchase-chart-card h-100">
+
+                <div class="purchase-card-header">
+                    <div>
+                        <h6 class="fw-bold mb-1">Yıllık Detay</h6>
+                        <small class="text-muted">Toplam satın alma tutarları</small>
+                    </div>
+
+                    <span class="purchase-header-icon">
+                        <i class="fa-solid fa-list"></i>
+                    </span>
+                </div>
+
+                <div class="purchase-year-list">
+                    @foreach (var item in Model)
+                    {
+                        <div class="purchase-year-row">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="year-circle">
+                                    @(item.Year.Length >= 4 ? item.Year.Substring(2) : item.Year)
+                                </div>
+                                <span class="fw-semibold">@item.Year</span>
+                            </div>
+
+                            <span class="fw-bold" style="color:#4B49AC;">
+                                @item.Total.ToString("N2", tr) ₺
+                            </span>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>
+
+
+<!-- SATIN ALMA ANALİZİ CSS -->
+<!-- CHART.JS -->
+<script src="~/js/chart.js"></script>
+<script>
+    const purchaseYears = @Html.Raw(yearsJson);
+    const purchaseTotals = @Html.Raw(totalsJson);
+    const purchaseChart = document.getElementById('yearlyPurchaseChart').getContext('2d');
+
+    new Chart(purchaseChart, {
+        type: 'bar',
+        data: {
+            labels: purchaseYears,
+            datasets: [{
+                label: 'Toplam Satın Alma',
+                data: purchaseTotals,
+                backgroundColor: '#4B49AC',
+                borderRadius: 7,
+                borderSkipped: false,
+                barPercentage: .65,
+                categoryPercentage: .75
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: '#252525',
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        label: function (context) {
+                            return new Intl.NumberFormat('tr-TR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(context.raw) + ' ₺';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    border: {
+                        display: false
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,.05)'
+                    },
+                    ticks: {
+                        color: '#888',
+                        callback: function (value) {
+                            return new Intl.NumberFormat('tr-TR', {
+                                notation: 'compact',
+                                maximumFractionDigits: 1
+                            }).format(value) + ' ₺';
+                        }
+                    }
+                },
+                x: {
+                    border: {
+                        display: false
+                    },
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: {
+                            weight: '600'
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
