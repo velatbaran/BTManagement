@@ -15,7 +15,6 @@
             <div class="page-header-icon">
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
-
             <div>
                 <h4 class="mb-0 fw-bold text-dark">Satın Alınanların Listesi</h4>
                 <p class="text-muted small mb-0">
@@ -24,71 +23,74 @@
             </div>
         </div>
 
-        <div class="d-flex align-items-center gap-3 ms-auto">
+```
+    <div class="d-flex align-items-center gap-3 ms-auto">
+        <button type="button"
+                id="clearFiltersBtn"
+                class="btn btn-warning btn-sm fw-medium px-3 rounded-2"
+                title="Filtreleri Sıfırla">
+            <i class="fa-solid fa-rotate-right me-1"></i>
+            Filtreleri Sıfırla
+        </button>
 
-            <button type="button" id="clearFiltersBtn" class="btn btn-warning btn-sm fw-medium px-3 rounded-2" title="Filtreleri Sıfırla">
-                <i class="fa-solid fa-rotate-right me-1"></i>
-                Filtreleri Sıfırla
-            </button>
+        <a asp-action="Create"
+           id="btnCreate"
+           class="btn btn-primary btn-sm fw-medium px-3 rounded-2"
+           title="Yeni Ekle">
+            <i class="fa-solid fa-plus me-1"></i>
+            Yeni Ekle
+        </a>
 
-            <a asp-action="Create" id="btnCreate" class="btn btn-primary btn-sm fw-medium px-3 rounded-2" title="Yeni Ekle">
-                <i class="fa-solid fa-plus me-1"></i>
-                Yeni Ekle
-            </a>
-
-            <div class="bg-white border rounded-3 px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
-                <span class="text-muted small fw-semibold">Alımların Toplamı:</span>
-                <span id="allTotalBtn" class="badge bg-success fs-6 fw-bold px-3 py-2 rounded-2">
-                    ₺0,00
-                </span>
-            </div>
+        <div class="bg-white border rounded-3 px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
+            <span class="text-muted small fw-semibold">Alımların Toplamı:</span>
+            <span id="allTotalBtn" class="badge bg-success fs-6 fw-bold px-3 py-2 rounded-2">
+                ₺0,00
+            </span>
         </div>
     </div>
+</div>
 
-    <!-- BİLGİ NOTU -->
-    <div class="table-info-note mb-3">
-        <div class="d-flex align-items-center gap-2 text-muted small bg-light rounded-2 px-3 py-2 border-start border-3 border-primary shadow-sm">
-            <i class="fa-solid fa-circle-info text-primary"></i>
-            <span>💡 Detayları görüntülemek için satıra <strong class="text-dark">çift tıklayın</strong>.</span>
-        </div>
+<div class="table-info-note mb-3">
+    <div class="d-flex align-items-center gap-2 text-muted small bg-light rounded-2 px-3 py-2 border-start border-3 border-primary shadow-sm">
+        <i class="fa-solid fa-circle-info text-primary"></i>
+        <span>💡 Detayları görüntülemek için satıra <strong class="text-dark">çift tıklayın</strong>.</span>
     </div>
+</div>
 
-    <div class="card table-card">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table custom-table align-middle w-100" id="myTable">
-                    <thead>
-                        <tr>
-                            <th>@Html.DisplayNameFor(m => m.FileNo)</th>
-                            <th>@Html.DisplayNameFor(m => m.WorkingName)</th>
-                            <th>@Html.DisplayNameFor(m => m.FirmId)</th>
-                            <th class="text-end">@Html.DisplayNameFor(m => m.Price)</th>
-                            <th>@Html.DisplayNameFor(m => m.PurchaseDate)</th>
-                            <th>@Html.DisplayNameFor(m => m.PurchaseForms.Name)</th>
-                            <th>@Html.DisplayNameFor(m => m.PurchaseKinds.Name)</th>
-                            <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
-                            <th>@Html.DisplayNameFor(m => m.Description)</th>
-                            <th>@Html.DisplayNameFor(m => m.FilePath)</th>
-                            <th class="text-center" style="min-width:130px;">İşlemler</th>
-                        </tr>
+<div class="card table-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle w-100" id="myTable">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.FileNo)</th>
+                        <th>@Html.DisplayNameFor(m => m.WorkingName)</th>
+                        <th>@Html.DisplayNameFor(m => m.FirmId)</th>
+                        <th class="text-end">@Html.DisplayNameFor(m => m.Price)</th>
+                        <th>@Html.DisplayNameFor(m => m.PurchaseDate)</th>
+                        <th>@Html.DisplayNameFor(m => m.PurchaseForms.Name)</th>
+                        <th>@Html.DisplayNameFor(m => m.PurchaseKinds.Name)</th>
+                        <th>@Html.DisplayNameFor(m => m.PurchaseTypes.Name)</th>
+                        <th>@Html.DisplayNameFor(m => m.Description)</th>
+                        <th>@Html.DisplayNameFor(m => m.FilePath)</th>
+                        <th class="text-center" style="min-width:130px;">İşlemler</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="filter-input" placeholder="Dosya No..." data-column="0" /></th>
+                        <th><input type="text" class="filter-input" placeholder="İşin Adı..." data-column="1" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Firma..." data-column="2" /></th>
+                        <th><input type="text" class="filter-input text-end" placeholder="Fiyat..." data-column="3" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Tarih..." data-column="4" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Şekil..." data-column="5" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Tür..." data-column="6" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Tip..." data-column="7" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Açıklama..." data-column="8" /></th>
+                        <th><input type="text" class="filter-input" placeholder="Dosya Yolu..." data-column="9" /></th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-                        <!-- Filtre Satırı: data-column eklendi -->
-                        <tr>
-                            <th><input type="text" class="filter-input" placeholder="Dosya No..." data-column="0" /></th>
-                            <th><input type="text" class="filter-input" placeholder="İşin Adı..." data-column="1" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Firma..." data-column="2" /></th>
-                            <th><input type="text" class="filter-input text-end" placeholder="Fiyat..." data-column="3" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tarih..." data-column="4" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Şekil..." data-column="5" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tür..." data-column="6" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Tip..." data-column="7" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Açıklama..." data-column="8" /></th>
-                            <th><input type="text" class="filter-input" placeholder="Dosya Yolu..." data-column="9" /></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
+                <tbody>
                         @foreach (var item in Model)
                         {
                             <tr data-id="@item.Id"
@@ -102,6 +104,7 @@
                                 data-purchasetype="@item.PurchaseTypes?.Name"
                                 data-description="@item.Description"
                                 data-filepath="@item.FilePath">
+
                                 <td class="fw-medium text-dark">
                                     @Html.DisplayFor(m => item.FileNo)
                                 </td>
@@ -185,14 +188,15 @@
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+```
 
-<!-- Detay Modalı -->
+</div>
+
 <div class="modal fade" id="purchaseDetailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-3">
@@ -206,146 +210,172 @@
                         <small class="opacity-75" id="detailModalSubtitle">Kayıt detayları</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
-            </div>
 
-            <div class="modal-body p-3">
-                <!-- Özet Kart -->
-                <div class="bg-light rounded-2 p-2 mb-3 d-flex align-items-center gap-2">
-                    <div class="bg-primary bg-opacity-10 rounded-circle p-2">
-                        <i class="fa-solid fa-file-invoice text-primary"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold fs-6" id="detailFileNo">-</div>
-                        <div class="text-muted small" id="detailWorkingName">-</div>
-                    </div>
-                    <div class="ms-auto">
-                        <span class="badge bg-success fs-6 p-1 px-2" id="detailPrice">₺0,00</span>
-                    </div>
+```
+            <button type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Kapat">
+            </button>
+        </div>
+
+        <div class="modal-body p-3">
+            <div class="bg-light rounded-2 p-2 mb-3 d-flex align-items-center gap-2">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                    <i class="fa-solid fa-file-invoice text-primary"></i>
                 </div>
 
-                <!-- Bilgi Grid -->
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-solid fa-building text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Firma</span>
-                            </div>
-                            <div class="fw-semibold small" id="detailFirm">-</div>
-                        </div>
-                    </div>
+                <div>
+                    <div class="fw-bold fs-6" id="detailFileNo">-</div>
+                    <div class="text-muted small" id="detailWorkingName">-</div>
+                </div>
 
-                    <div class="col-md-6">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-regular fa-calendar text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Tarih</span>
-                            </div>
-                            <div class="fw-semibold small" id="detailPurchaseDate">-</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-solid fa-shapes text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Şekil</span>
-                            </div>
-                            <div class="small" id="detailPurchaseForm">-</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-solid fa-tag text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Tür</span>
-                            </div>
-                            <div class="small" id="detailPurchaseKind">-</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-solid fa-list text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Tip</span>
-                            </div>
-                            <div class="small" id="detailPurchaseType">-</div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-solid fa-align-left text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Açıklama</span>
-                            </div>
-                            <div id="detailDescription" class="text-secondary small">-</div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="border rounded-2 p-2">
-                            <div class="d-flex align-items-center gap-1 mb-1">
-                                <i class="fa-regular fa-folder text-primary fa-xs"></i>
-                                <span class="text-muted small fw-semibold">Dosya Yolu</span>
-                            </div>
-                            <div id="detailFilePath" class="text-secondary small">
-                                <span id="detailFilePathText">-</span>
-                                <button type="button" class="btn btn-sm btn-outline-primary ms-1 py-0 px-2" id="detailCopyPathBtn">
-                                    <i class="fa-regular fa-copy fa-xs"></i> Kopyala
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ms-auto">
+                    <span class="badge bg-success fs-6 p-1 px-2" id="detailPrice">₺0,00</span>
                 </div>
             </div>
 
-            <div class="modal-footer border-0 pt-0 pb-2">
-                <button type="button" class="btn btn-light btn-sm fw-medium border" data-bs-dismiss="modal" title="Kapat">
-                    Kapat
-                </button>
-                <a href="#" id="detailEditButton" class="btn btn-info btn-sm fw-medium" title="Güncelle">
-                    <i class="fa-solid fa-pen me-1"></i> Güncelle
-                </a>
-                <button type="button" id="detailDeleteButton" class="btn btn-danger btn-sm fw-medium" title="Sil">
-                    <i class="fa-solid fa-trash me-1"></i> Sil
-                </button>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-solid fa-building text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Firma</span>
+                        </div>
+                        <div class="fw-semibold small" id="detailFirm">-</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-regular fa-calendar text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Tarih</span>
+                        </div>
+                        <div class="fw-semibold small" id="detailPurchaseDate">-</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-solid fa-shapes text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Şekil</span>
+                        </div>
+                        <div class="small" id="detailPurchaseForm">-</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-solid fa-tag text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Tür</span>
+                        </div>
+                        <div class="small" id="detailPurchaseKind">-</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-solid fa-list text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Tip</span>
+                        </div>
+                        <div class="small" id="detailPurchaseType">-</div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-solid fa-align-left text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Açıklama</span>
+                        </div>
+                        <div id="detailDescription">-</div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="border rounded-2 p-2">
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <i class="fa-regular fa-folder text-primary fa-xs"></i>
+                            <span class="text-muted small fw-semibold">Dosya Yolu</span>
+                        </div>
+
+                        <div id="detailFilePath">
+                            <span id="detailFilePathText">-</span>
+
+@*                             <button type="button"
+                                    class="btn btn-sm btn-outline-primary ms-1 py-0 px-2"
+                                    id="detailCopyPathBtn"
+                                    title="Dosya yolunu kopyala">
+                                <i class="fa-regular fa-copy fa-xs"></i>
+                                Kopyala
+                            </button> *@
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div class="modal-footer border-0 pt-0 pb-2">
+            <button type="button"
+                    class="btn btn-light btn-sm fw-medium border"
+                    data-bs-dismiss="modal"
+                    title="Kapat">
+                Kapat
+            </button>
+
+            <a href="#"
+               id="detailEditButton"
+               class="btn btn-info btn-sm fw-medium"
+               title="Güncelle">
+                <i class="fa-solid fa-pen me-1"></i>
+                Güncelle
+            </a>
+
+            <button type="button"
+                    id="detailDeleteButton"
+                    class="btn btn-danger btn-sm fw-medium"
+                    title="Sil">
+                <i class="fa-solid fa-trash me-1"></i>
+                Sil
+            </button>
         </div>
     </div>
 </div>
+```
 
-<!-- Toast Bildirimi -->
+</div>
+
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1100;">
     <div id="copyToast"
          class="toast align-items-center text-white bg-success border-0 shadow-lg"
          role="alert"
          aria-live="assertive"
          aria-atomic="true">
-
         <div class="d-flex">
             <div class="toast-body d-flex align-items-center gap-2">
                 <i id="toastIcon" class="fa-solid fa-check"></i>
                 <span id="toastMessage">Kopyalandı!</span>
             </div>
 
-            <button type="button"
-                    class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"
-                    aria-label="Close">
-            </button>
-        </div>
+```
+        <button type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close">
+        </button>
     </div>
 </div>
+```
 
-<!-- Silme Modalı -->
+</div>
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-3">
-
             <form method="post" asp-action="Delete">
                 <div class="modal-header border-bottom-0">
                     <h5 class="modal-title fw-bold text-danger">
@@ -353,56 +383,52 @@
                         Silme Onayı
                     </h5>
 
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close">
-                    </button>
-                </div>
+```
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
 
-                <div class="modal-body py-2">
-                    <p class="mb-0 text-secondary">
-                        <strong id="fileName" class="text-dark"></strong>
-                        kaydını silmek istediğinizden emin misiniz?
-                        Bu işlem geri alınamaz.
-                    </p>
+            <div class="modal-body py-2">
+                <p class="mb-0 text-secondary">
+                    <strong id="fileName" class="text-dark"></strong>
+                    kaydını silmek istediğinizden emin misiniz?
+                    Bu işlem geri alınamaz.
+                </p>
 
-                    <input type="hidden" name="id" id="fileId" />
-                </div>
+                <input type="hidden" name="id" id="fileId" />
+            </div>
 
-                <div class="modal-footer border-top-0 pt-3">
-                    <button type="button"
-                            class="btn btn-light btn-sm fw-medium border"
-                            data-bs-dismiss="modal" title="İptal">
-                        İptal
-                    </button>
+            <div class="modal-footer border-top-0 pt-3">
+                <button type="button"
+                        class="btn btn-light btn-sm fw-medium border"
+                        data-bs-dismiss="modal"
+                        title="İptal">
+                    İptal
+                </button>
 
-                    <button type="submit"
-                            class="btn btn-danger btn-sm fw-medium" title="Sil">
-                        <i class="fa-solid fa-trash me-1"></i>
-                        Sil
-                    </button>
-                </div>
-            </form>
-
-        </div>
+                <button type="submit"
+                        class="btn btn-danger btn-sm fw-medium"
+                        title="Sil">
+                    <i class="fa-solid fa-trash me-1"></i>
+                    Sil
+                </button>
+            </div>
+        </form>
     </div>
+</div>
+```
+
 </div>
 
 @section Scripts {
-    <script src="~/datatable/datatables.min.js"></script>
-    <script src="~/datatable/datatables.responsive.min.js"></script>
-    <script src="~/datatable/datatables.buttons.min.js"></script>
-    <script src="~/datatable/buttons.html5.min.js"></script>
-    <script src="~/datatable/buttons.print.min.js"></script>
-    <script src="~/datatable/jszip.min.js"></script>
-    <script src="~/datatable/pdfmake.min.js"></script>
-    <script src="~/datatable/vfs_fonts.js"></script>
+     <script src="~/datatable/datatables.min.js"></script> <script src="~/datatable/datatables.responsive.min.js"></script> <script src="~/datatable/datatables.buttons.min.js"></script> <script src="~/datatable/buttons.html5.min.js"></script> <script src="~/datatable/buttons.print.min.js"></script> <script src="~/datatable/jszip.min.js"></script> <script src="~/datatable/pdfmake.min.js"></script> <script src="~/datatable/vfs_fonts.js"></script>
 
+    ```
     <script>
         $(document).ready(function () {
-
-            // Silme Modalı
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 $('#fileId').val(button.data('file-id'));
@@ -411,25 +437,31 @@
 
             var totalAll = @Html.Raw(Json.Serialize(ViewBag.TotalAll ?? 0));
 
-            $("#allTotalBtn").text(
-                totalAll.toLocaleString("tr-TR", {
-                    style: "currency",
-                    currency: "TRY"
+            $('#allTotalBtn').text(
+                totalAll.toLocaleString('tr-TR', {
+                    style: 'currency',
+                    currency: 'TRY'
                 })
             );
 
-            // ==================== STATE YÖNETİMİ ====================
             function saveStateToSession(filters, order) {
                 try {
                     var state = {
                         filters: filters || {},
                         order: order || []
                     };
-                    sessionStorage.setItem('purchaseTableState', JSON.stringify(state));
-                    sessionStorage.setItem('purchaseReturnPage', window.location.pathname);
-                    console.log('💾 State kaydedildi:', state);
+
+                    sessionStorage.setItem(
+                        'purchaseTableState',
+                        JSON.stringify(state)
+                    );
+
+                    sessionStorage.setItem(
+                        'purchaseReturnPage',
+                        window.location.pathname
+                    );
                 } catch (e) {
-                    console.error('❌ State kaydedilirken hata:', e);
+                    console.error('State kaydedilirken hata:', e);
                 }
             }
 
@@ -438,39 +470,23 @@
                     var state = sessionStorage.getItem('purchaseTableState');
                     var returnFrom = sessionStorage.getItem('purchaseReturnPage');
 
-                    console.log('📂 Session okuma - state:', state);
-                    console.log('📂 Session okuma - returnFrom:', returnFrom);
-                    console.log('📂 Mevcut sayfa:', window.location.pathname);
-
                     if (state && returnFrom === window.location.pathname) {
-                        var parsed = JSON.parse(state);
-                        console.log('✅ State bulundu:', parsed);
-                        // Session'dan temizleme - ARTIK TEMİZLEMİYORUZ!
-                        // sessionStorage.removeItem('purchaseTableState');
-                        // sessionStorage.removeItem('purchaseReturnPage');
-                        return parsed;
+                        return JSON.parse(state);
                     }
-                    console.log('⚠️ State bulunamadı');
+
                     return null;
                 } catch (e) {
-                    console.error('❌ State okunurken hata:', e);
+                    console.error('State okunurken hata:', e);
                     return null;
                 }
             }
 
-            // Session'dan state'i al
             var savedState = getStateFromSession();
             var savedFilters = savedState ? savedState.filters : null;
             var savedOrder = savedState ? savedState.order : null;
 
-            console.log('🔄 savedFilters:', savedFilters);
-            console.log('🔄 savedOrder:', savedOrder);
-            // ========================================================
-
-            // ==================== DATATABLE ====================
             var table = $('#myTable').DataTable({
                 dom: '<"d-flex flex-wrap justify-content-between align-items-center p-3 border-bottom"B><"d-flex flex-wrap justify-content-between align-items-center p-3"l>rt<"d-flex flex-wrap justify-content-between align-items-center p-3"ip>',
-
                 buttons: [
                     {
                         extend: 'copy',
@@ -489,84 +505,55 @@
                         className: 'btn btn-outline-dark btn-sm'
                     }
                 ],
-
                 responsive: true,
-
                 columnDefs: [
-                    { orderable: false, targets: [10] }
+                    {
+                        orderable: false,
+                        targets: [10]
+                    }
                 ],
-
-                // Sıralamayı geri yükle
                 order: savedOrder || [[0, 'desc']],
-
                 pageLength: 25,
-
                 lengthMenu: [
                     [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "Tümü"]
+                    [10, 25, 50, 100, 'Tümü']
                 ],
-
                 language: {
                     url: '/datatable/tr.json'
                 },
-
                 stateSave: false
             });
 
-            // ==================== FİLTRELERİ GERİ YÜKLE (init.dt event'i ile) ====================
-            // DataTable tamamen başlatıldığında çalışır
             table.on('init.dt', function () {
-                console.log('🔄 DataTable init event çalıştı');
-
                 if (savedFilters && Object.keys(savedFilters).length > 0) {
-                    console.log('✅ Filtreler geri yükleniyor...');
-
-                    // Input alanlarına değerleri yaz
                     for (var col in savedFilters) {
                         var value = savedFilters[col];
                         var input = $('.filter-input[data-column="' + col + '"]');
 
                         if (input.length) {
                             input.val(value);
-                            console.log(`✅ Sütun ${col} input değeri ayarlandı: "${value}"`);
-                        } else {
-                            console.log(`❌ Sütun ${col} input bulunamadı!`);
                         }
                     }
 
-                    // DataTable'a filtreleri uygula
                     for (var col in savedFilters) {
                         table.column(parseInt(col)).search(savedFilters[col]);
-                        console.log(`✅ Sütun ${col} filtresi uygulandı: "${savedFilters[col]}"`);
                     }
 
-                    // Tabloyu yeniden çiz
                     table.draw();
-
-                    // Toplamı güncelle
                     updateTotal();
-
-                    console.log('✅ Filtreler başarıyla uygulandı');
-                } else {
-                    console.log('⚠️ Geri yüklenecek filtre yok');
                 }
             });
 
-            // ===== FİLTRE INPUTLARI =====
-            $('#myTable thead tr:eq(1) th input').on('mousedown click', function(e) {
+            $('#myTable thead tr:eq(1) th input').on('mousedown click', function (e) {
                 e.stopPropagation();
             });
 
             $('#myTable thead tr:eq(1) th input').on('keyup change', function () {
                 var colIndex = $(this).closest('th').index();
                 var value = this.value;
-
                 var currentOrder = table.order();
 
-                table
-                    .column(colIndex)
-                    .search(value)
-                    .draw();
+                table.column(colIndex).search(value).draw();
 
                 if (currentOrder && currentOrder.length > 0) {
                     table.order(currentOrder).draw(false);
@@ -575,10 +562,7 @@
                 updateTotal();
             });
 
-            // ===== FİLTRELERİ TEMİZLE =====
             $('#clearFiltersBtn').on('click', function () {
-                console.log('🧹 Filtreler temizleniyor...');
-
                 $('.filter-input').each(function () {
                     $(this).val('');
                 });
@@ -588,6 +572,7 @@
                 });
 
                 var currentOrder = table.order();
+
                 table.draw();
 
                 if (currentOrder && currentOrder.length > 0) {
@@ -596,41 +581,36 @@
 
                 updateTotal();
 
-                // Session'dan temizle
                 sessionStorage.removeItem('purchaseTableState');
                 sessionStorage.removeItem('purchaseReturnPage');
-
-                console.log('✅ Filtreler temizlendi');
             });
 
-            // ==================== STATE KAYDETME ====================
             function saveCurrentState() {
                 var filters = {};
+
                 $('.filter-input').each(function () {
                     var val = $(this).val();
+
                     if (val && val.trim() !== '') {
                         filters[$(this).data('column')] = val.trim();
                     }
                 });
 
-                var order = table.order();
-                console.log('📝 Kaydediliyor - Filtreler:', filters);
-                console.log('📝 Kaydediliyor - Sıralama:', order);
-                saveStateToSession(filters, order);
+                saveStateToSession(filters, table.order());
             }
 
-            // Güncelle, Sil, Yeni Ekle butonlarına tıklandığında
-            $(document).on('click', '.btn-edit, .btn-delete, #btnCreate, .btn-delete-detail', function () {
-                console.log('🔄 Buton tıklandı, state kaydediliyor...');
-                saveCurrentState();
-            });
+            $(document).on(
+                'click',
+                '.btn-edit, .btn-delete, #btnCreate, .btn-delete-detail',
+                function () {
+                    saveCurrentState();
+                }
+            );
 
-            // Sayfa kapatılırken veya yenilenirken kaydet
             $(window).on('beforeunload', function () {
                 saveCurrentState();
             });
 
-            // ==================== TOPLAM GÜNCELLEME ====================
             function updateTotal() {
                 var hasFilter = false;
 
@@ -641,12 +621,13 @@
                 });
 
                 if (!hasFilter) {
-                    $("#allTotalBtn").text(
-                        totalAll.toLocaleString("tr-TR", {
-                            style: "currency",
-                            currency: "TRY"
+                    $('#allTotalBtn').text(
+                        totalAll.toLocaleString('tr-TR', {
+                            style: 'currency',
+                            currency: 'TRY'
                         })
                     );
+
                     return;
                 }
 
@@ -658,65 +639,114 @@
                         return total + (parseFloat($(node).data('value')) || 0);
                     }, 0);
 
-                $("#allTotalBtn").text(
-                    filteredTotal.toLocaleString("tr-TR", {
-                        style: "currency",
-                        currency: "TRY"
+                $('#allTotalBtn').text(
+                    filteredTotal.toLocaleString('tr-TR', {
+                        style: 'currency',
+                        currency: 'TRY'
                     })
                 );
             }
 
-            // ==================== TOAST ====================
             var toastEl = document.getElementById('copyToast');
             var toastMessage = document.getElementById('toastMessage');
             var toastIcon = document.getElementById('toastIcon');
-            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            var toast = null;
 
-            // ==================== KOPYALAMA ====================
-            $('#myTable').on('click', '.copy-path-btn', function (e) {
-                e.preventDefault();
-                var path = $(this).data('path');
+            if (toastEl && typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                toast = new bootstrap.Toast(toastEl, {
+                    delay: 3000
+                });
+            }
 
-                if (!path) return;
+            function showCopyNotification(success) {
+                if (!toastEl || !toastMessage || !toastIcon) {
+                    return;
+                }
 
-                function notify(success) {
-                    if (success) {
-                        toastMessage.textContent = 'Dosya yolu panoya kopyalandı!';
-                        toastEl.className = 'toast align-items-center text-white bg-success border-0 shadow-lg';
-                        toastIcon.className = 'fa-solid fa-check me-1';
-                    } else {
-                        toastMessage.textContent = 'Kopyalama başarısız oldu!';
-                        toastEl.className = 'toast align-items-center text-white bg-danger border-0 shadow-lg';
-                        toastIcon.className = 'fa-solid fa-xmark me-1';
-                    }
+                if (success) {
+                    toastMessage.textContent = 'Dosya yolu panoya kopyalandı!';
+                    toastEl.className = 'toast align-items-center text-white bg-success border-0 shadow-lg';
+                    toastIcon.className = 'fa-solid fa-check me-1';
+                } else {
+                    toastMessage.textContent = 'Kopyalama başarısız oldu!';
+                    toastEl.className = 'toast align-items-center text-white bg-danger border-0 shadow-lg';
+                    toastIcon.className = 'fa-solid fa-xmark me-1';
+                }
+
+                if (toast) {
                     toast.show();
                 }
+            }
 
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(path).then(() => notify(true)).catch(() => notify(false));
-                } else {
-                    var $temp = $("<input>");
-                    $("body").append($temp);
-                    $temp.val(path).select();
-                    var success = false;
-                    try {
-                        success = document.execCommand("copy");
-                    } catch (err) {
-                        success = false;
-                    }
-                    $temp.remove();
-                    notify(success);
+            function copyTextToClipboard(text) {
+                if (
+                    text === null ||
+                    text === undefined ||
+                    String(text).trim() === ''
+                ) {
+                    return false;
                 }
+
+                var textArea = document.createElement('textarea');
+
+                textArea.value = String(text);
+                textArea.setAttribute('readonly', '');
+                textArea.style.position = 'fixed';
+                textArea.style.left = '0';
+                textArea.style.top = '0';
+                textArea.style.width = '1px';
+                textArea.style.height = '1px';
+                textArea.style.padding = '0';
+                textArea.style.margin = '0';
+                textArea.style.border = '0';
+                textArea.style.outline = '0';
+                textArea.style.boxShadow = 'none';
+                textArea.style.background = 'transparent';
+                textArea.style.opacity = '0';
+                textArea.style.zIndex = '-1';
+
+                document.body.appendChild(textArea);
+
+                textArea.focus();
+                textArea.select();
+
+                var success = false;
+
+                try {
+                    success = document.execCommand('copy');
+                } catch (error) {
+                    success = false;
+                }
+
+                document.body.removeChild(textArea);
+
+                return success;
+            }
+
+            $('#myTable').on('click', '.copy-path-btn', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var path = $(this).attr('data-path');
+
+                if (!path || path.trim() === '') {
+                    showCopyNotification(false);
+                    return;
+                }
+
+                var success = copyTextToClipboard(path);
+
+                showCopyNotification(success);
             });
 
-            // ==================== DETAY MODALI ====================
             function showPurchaseDetail(rowData) {
                 $('#detailFileNo').text(rowData.fileno || '-');
                 $('#detailWorkingName').text(rowData.workingname || '-');
+
                 $('#detailPrice').text(
-                    (parseFloat(rowData.price) || 0).toLocaleString("tr-TR", {
-                        style: "currency",
-                        currency: "TRY"
+                    (parseFloat(rowData.price) || 0).toLocaleString('tr-TR', {
+                        style: 'currency',
+                        currency: 'TRY'
                     })
                 );
 
@@ -728,12 +758,20 @@
                 $('#detailDescription').text(rowData.description || '-');
 
                 var filePath = rowData.filepath || '-';
-                $('#detailFilePathText').text(filePath);
 
-                $('#detailModalTitle').text(rowData.fileno || 'Satın Alma Detayı');
-                $('#detailModalSubtitle').text(rowData.workingname || 'Kayıt detayları');
+                $('#detailFilePathText').text(filePath);
+                $('#detailCopyPathBtn').attr('data-path', filePath);
+
+                $('#detailModalTitle').text(
+                    rowData.fileno || 'Satın Alma Detayı'
+                );
+
+                $('#detailModalSubtitle').text(
+                    rowData.workingname || 'Kayıt detayları'
+                );
 
                 var editUrl = '/satinalimiguncelle/' + rowData.id;
+
                 $('#detailEditButton').attr('href', editUrl);
 
                 $('#detailDeleteButton')
@@ -744,65 +782,56 @@
             }
 
             $('#myTable tbody').on('dblclick', 'tr', function (e) {
-                if ($(e.target).closest('.btn, .action-btn-group, a, button, input').length) {
+                if (
+                    $(e.target).closest(
+                        '.btn, .action-btn-group, a, button, input'
+                    ).length
+                ) {
                     return;
                 }
 
                 var tr = $(this);
+
                 var rowData = {
-                    id: tr.data('id'),
-                    fileno: tr.data('fileno'),
-                    workingname: tr.data('workingname'),
-                    firm: tr.data('firm'),
-                    price: tr.data('price'),
-                    purchasedate: tr.data('purchasedate'),
-                    purchaseform: tr.data('purchaseform'),
-                    purchasekind: tr.data('purchasekind'),
-                    purchasetype: tr.data('purchasetype'),
-                    description: tr.data('description'),
-                    filepath: tr.data('filepath')
+                    id: tr.attr('data-id'),
+                    fileno: tr.attr('data-fileno'),
+                    workingname: tr.attr('data-workingname'),
+                    firm: tr.attr('data-firm'),
+                    price: tr.attr('data-price'),
+                    purchasedate: tr.attr('data-purchasedate'),
+                    purchaseform: tr.attr('data-purchaseform'),
+                    purchasekind: tr.attr('data-purchasekind'),
+                    purchasetype: tr.attr('data-purchasetype'),
+                    description: tr.attr('data-description'),
+                    filepath: tr.attr('data-filepath')
                 };
 
                 showPurchaseDetail(rowData);
             });
 
-            $('#detailCopyPathBtn').on('click', function () {
-                var path = $('#detailFilePathText').text();
-                if (!path || path === '-') return;
+            $('#detailCopyPathBtn').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-                function notify(success) {
-                    if (success) {
-                        toastMessage.textContent = 'Dosya yolu panoya kopyalandı!';
-                        toastEl.className = 'toast align-items-center text-white bg-success border-0 shadow-lg';
-                        toastIcon.className = 'fa-solid fa-check me-1';
-                    } else {
-                        toastMessage.textContent = 'Kopyalama başarısız oldu!';
-                        toastEl.className = 'toast align-items-center text-white bg-danger border-0 shadow-lg';
-                        toastIcon.className = 'fa-solid fa-xmark me-1';
-                    }
-                    toast.show();
+                var path = $(this).attr('data-path');
+
+                if (!path || path === '-' || path.trim() === '') {
+                    path = $('#detailFilePathText').text();
                 }
 
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(path).then(() => notify(true)).catch(() => notify(false));
-                } else {
-                    var $temp = $("<input>");
-                    $("body").append($temp);
-                    $temp.val(path).select();
-                    var success = false;
-                    try {
-                        success = document.execCommand("copy");
-                    } catch (err) {
-                        success = false;
-                    }
-                    $temp.remove();
-                    notify(success);
+                if (!path || path === '-' || path.trim() === '') {
+                    showCopyNotification(false);
+                    return;
                 }
+
+                var success = copyTextToClipboard(path);
+
+                showCopyNotification(success);
             });
 
             $('#detailDeleteButton').on('click', function () {
-                var id = $(this).data('file-id');
-                var name = $(this).data('file-name');
+                var id = $(this).attr('data-file-id');
+                var name = $(this).attr('data-file-name');
 
                 $('#purchaseDetailModal').modal('hide');
 
@@ -812,7 +841,6 @@
                     $('#deleteModal').modal('show');
                 }, 300);
             });
-
         });
     </script>
 }
